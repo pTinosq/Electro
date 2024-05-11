@@ -23,12 +23,25 @@ namespace ElectroImageViewer
 
     public partial class TerminalControl : UserControl
     {
-        public static readonly DependencyProperty ImageSourceProperty = DependencyProperty.Register(
+        public static readonly DependencyProperty? ImageSourceProperty = DependencyProperty.Register(
             "ImageSource",
             typeof(ImageSource),
             typeof(TerminalControl),
             new PropertyMetadata(default(ImageSource))
         );
+
+        public static readonly DependencyProperty? ControlVisibilityProperty = DependencyProperty.Register(
+        "ControlVisibility",
+        typeof(Visibility),
+        typeof(TerminalControl),
+        new PropertyMetadata(Visibility.Visible));
+
+        public Visibility ControlVisibility
+        {
+            get { return (Visibility)GetValue(ControlVisibilityProperty); }
+            set { SetValue(ControlVisibilityProperty, value); }
+        }
+
 
         public ImageSource ImageSource
         {
@@ -45,28 +58,27 @@ namespace ElectroImageViewer
         {
             if (e.Key == Key.Enter)
             {
-                string command = terminalInput.Text;
+                string? command = terminalInput.Text;
                 terminalOutput.Text += "> " + command + "\n";
                 terminalInput.Text = "";
 
                 if (command.ToLower() == "load")
                 {
-                    OpenFileDialog op = new OpenFileDialog
-                    {
-                        Title = "Select a picture",
-                        Filter = "All supported graphics|*.jpg;*.jpeg;*.png|JPEG (*.jpg;*.jpeg)|*.jpg;*.jpeg|Portable Network Graphic (*.png)|*.png"
-                    };
-                    if (op.ShowDialog() == true)
-                    {
-                        ImageSource = new BitmapImage(new Uri(op.FileName)); // Sets the Dependency Property
-                    }
-
-                    terminalOutput.Text += "Loaded " + op.FileName;
+                    OpenFile();
+                    terminalOutput.Text += "Loaded";
                 }
 
                 if (command == "clear")
                 {
+                    // Clear the terminal output
                     terminalOutput.Text = "";
+                }
+
+                if (command == "close")
+                {
+                    // Hide the terminal
+                    //this.Visibility = Visibility.Collapsed;
+                    this.ControlVisibility = Visibility.Collapsed;
                 }
 
                 if (command == "exit")
@@ -81,6 +93,19 @@ namespace ElectroImageViewer
             // Reset the terminal output and input
             terminalOutput.Text = "";
             terminalInput.Text = "";
+        }
+
+        private void OpenFile()
+        {
+            OpenFileDialog openFileDialog = new();
+            if (openFileDialog.ShowDialog() == true)
+            {
+                if (DataContext is MainViewModel viewModel)
+                {
+                    viewModel.CurrentImagePath = openFileDialog.FileName;
+                    viewModel.CurrentImage = new BitmapImage(new Uri(openFileDialog.FileName));
+                }
+            }
         }
     }
 }

@@ -5,10 +5,18 @@
     xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
     xmlns:local="clr-namespace:ElectroImageViewer"
     mc:Ignorable="d"
-    Title="MainWindow" Height="450" Width="800">
+    Title="MainWindow" Height="450" Width="800"
+    KeyDown="Window_KeyDown">
+
+    <Window.DataContext>
+        <local:MainViewModel />
+    </Window.DataContext>
+
+
     <Grid Background="White">
-        <local:TerminalControl x:Name="terminalControl" Margin="0,0,0,0" Panel.ZIndex="5" />
-        <Image x:Name="electroImage" Source="{Binding ImageSource, ElementName=terminalControl}"
+        <local:TerminalControl x:Name="terminalControl" Margin="0,0,0,0" Panel.ZIndex="5"
+            Visibility="{Binding ControlVisibility, RelativeSource={RelativeSource Self}}" />
+        <Image x:Name="electroImage" Source="{Binding CurrentImage}"
             Panel.ZIndex="2" />
     </Grid>
 </Window>
