@@ -11,13 +11,13 @@
                 IsEnabled="True"
                 BorderThickness="0"
                 IsReadOnly="True"
-                TextWrapping="Wrap" Foreground="#FF42FF00" Text="textOutput" Background="#aa000000"
-                MinHeight="128" SelectionBrush="#FF85868C" Loaded="TerminalOutput_Loaded"
+                TextWrapping="Wrap" Foreground="#FF42FF00" Text="" Background="#aa000000"
+                MinHeight="128" SelectionBrush="#FF85868C"
                 FontFamily="OCR A Extended"
             />
 
         </ScrollViewer>
-        <TextBox TextWrapping="Wrap" Text="textInput" Background="#cc000000" BorderBrush="#FF043ADE"
+        <TextBox TextWrapping="Wrap" Text="" Background="#cc000000" BorderBrush="#FF043ADE"
             Foreground="Lime" FontFamily="OCR A Extended"
             x:Name="terminalInput"
             PreviewKeyDown="TerminalInput_KeyDown"
