@@ -7,8 +7,12 @@ namespace ElectroImageViewer
     public class MainViewModel : INotifyPropertyChanged
 
     {
+        // Image data
         private BitmapImage? _currentImage;
         private string? _currentImagePath;
+
+        // Terminal data
+        private CommandHistory _cmdHistory = new();
 
         public BitmapImage? CurrentImage
         {
@@ -29,6 +33,18 @@ namespace ElectroImageViewer
                 OnPropertyChanged(nameof(CurrentImagePath));
             }
         }
+
+        public CommandHistory CmdHistory
+        {
+            get { return _cmdHistory; }
+            set
+            {
+                _cmdHistory = value;
+                OnPropertyChanged(nameof(CmdHistory));
+            }
+        }
+
+
 
         public event PropertyChangedEventHandler? PropertyChanged;
         protected virtual void OnPropertyChanged(string propertyName)

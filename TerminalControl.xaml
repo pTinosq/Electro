@@ -20,7 +20,7 @@
         <TextBox TextWrapping="Wrap" Text="textInput" Background="#cc000000" BorderBrush="#FF043ADE"
             Foreground="Lime" FontFamily="OCR A Extended"
             x:Name="terminalInput"
-            KeyDown="TerminalInput_KeyDown"
+            PreviewKeyDown="TerminalInput_KeyDown"
             Padding="4,6"
         />
     </StackPanel>
