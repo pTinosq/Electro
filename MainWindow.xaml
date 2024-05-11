@@ -1,13 +1,14 @@
 ﻿<Window x:Name="window" x:Class="ElectroImageViewer.MainWindow"
-        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
-        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
-        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
-        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
-        xmlns:local="clr-namespace:ElectroImageViewer"
-        mc:Ignorable="d"
-        Title="MainWindow" Height="450" Width="800">
+    xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+    xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+    xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+    xmlns:local="clr-namespace:ElectroImageViewer"
+    mc:Ignorable="d"
+    Title="MainWindow" Height="450" Width="800">
     <Grid Background="White">
-        <local:TerminalControl Margin="0,0,0,0" Panel.ZIndex="5" />
-        <Button Click="Button_Click" Content="Budtton" HorizontalAlignment="Left" Margin="50,276,0,0" VerticalAlignment="Top" Height="20" Width="47"/>
+        <local:TerminalControl x:Name="terminalControl" Margin="0,0,0,0" Panel.ZIndex="5" />
+        <Image x:Name="electroImage" Source="{Binding ImageSource, ElementName=terminalControl}"
+            Panel.ZIndex="2" />
     </Grid>
 </Window>

@@ -8,4 +8,12 @@
     <UseWPF>true</UseWPF>
   </PropertyGroup>
 
+  <ItemGroup>
+    <None Remove="123A1971-Edit%281%29.jpg" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <Resource Include="123A1971-Edit(1).jpg" />
+  </ItemGroup>
+
 </Project>

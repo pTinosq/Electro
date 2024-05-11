@@ -12,9 +12,9 @@
                 BorderThickness="0"
                 IsReadOnly="True"
                 TextWrapping="Wrap" Foreground="#FF42FF00" Text="textOutput" Background="#aa000000"
-                MinHeight="128" SelectionBrush="#FF85868C" Loaded="terminalOutput_Loaded"
+                MinHeight="128" SelectionBrush="#FF85868C" Loaded="TerminalOutput_Loaded"
                 FontFamily="OCR A Extended"
-                />
+            />
 
         </ScrollViewer>
         <TextBox TextWrapping="Wrap" Text="textInput" Background="#cc000000" BorderBrush="#FF043ADE"

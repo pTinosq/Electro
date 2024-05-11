@@ -1,4 +1,5 @@
-﻿using System;
+﻿using Microsoft.Win32;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -18,8 +19,23 @@ namespace ElectroImageViewer
     /// <summary>
     /// Interaction logic for TerminalControl.xaml
     /// </summary>
+    /// 
+
     public partial class TerminalControl : UserControl
     {
+        public static readonly DependencyProperty ImageSourceProperty = DependencyProperty.Register(
+            "ImageSource",
+            typeof(ImageSource),
+            typeof(TerminalControl),
+            new PropertyMetadata(default(ImageSource))
+        );
+
+        public ImageSource ImageSource
+        {
+            get { return (ImageSource)GetValue(ImageSourceProperty); }
+            set { SetValue(ImageSourceProperty, value); }
+        }
+
         public TerminalControl()
         {
             InitializeComponent();
@@ -29,14 +45,38 @@ namespace ElectroImageViewer
         {
             if (e.Key == Key.Enter)
             {
-
-
-                terminalOutput.Text += "> " + terminalInput.Text + "\n";
+                string command = terminalInput.Text;
+                terminalOutput.Text += "> " + command + "\n";
                 terminalInput.Text = "";
 
+                if (command.ToLower() == "load")
+                {
+                    OpenFileDialog op = new OpenFileDialog
+                    {
+                        Title = "Select a picture",
+                        Filter = "All supported graphics|*.jpg;*.jpeg;*.png|JPEG (*.jpg;*.jpeg)|*.jpg;*.jpeg|Portable Network Graphic (*.png)|*.png"
+                    };
+                    if (op.ShowDialog() == true)
+                    {
+                        ImageSource = new BitmapImage(new Uri(op.FileName)); // Sets the Dependency Property
+                    }
+
+                    terminalOutput.Text += "Loaded " + op.FileName;
+                }
+
+                if (command == "clear")
+                {
+                    terminalOutput.Text = "";
+                }
+
+                if (command == "exit")
+                {
+                    // Close the app
+                    Application.Current.Shutdown();
+                }
             }
         }
-        private void terminalOutput_Loaded(object sender, RoutedEventArgs e)
+        private void TerminalOutput_Loaded(object sender, RoutedEventArgs e)
         {
             // Reset the terminal output and input
             terminalOutput.Text = "";
