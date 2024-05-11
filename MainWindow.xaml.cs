@@ -26,7 +26,7 @@ namespace ElectroImageViewer
               "Portable Network Graphic (*.png)|*.png";
             if (op.ShowDialog() == true)
             {
-                jo.Source = new BitmapImage(new Uri(op.FileName));
+                //jo.Source = new BitmapImage(new Uri(op.FileName));
             }
         }
     }

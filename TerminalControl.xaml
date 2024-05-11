@@ -1,21 +1,27 @@
 ﻿<UserControl x:Class="ElectroImageViewer.TerminalControl"
-             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
-             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
-             xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
-             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
-             mc:Ignorable="d" d:DesignWidth="365.827">
+    xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+    xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+    xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+    mc:Ignorable="d" d:DesignWidth="365.827">
     <StackPanel>
-        <ScrollViewer Height="100" Background="#7F000000" VerticalScrollBarVisibility="Auto">
-            <TextBox Background="Transparent"
-                     x:Name="terminalOutput"
-                     Text="> fart"
-         BorderThickness="0"
-         IsReadOnly="True"
-         TextWrapping="Wrap" Foreground="#FF42FF00" />
+        <ScrollViewer VerticalScrollBarVisibility="Auto" MaxHeight="128" MinHeight="128">
+            <TextBox
+                x:Name="terminalOutput"
+                IsEnabled="True"
+                BorderThickness="0"
+                IsReadOnly="True"
+                TextWrapping="Wrap" Foreground="#FF42FF00" Text="textOutput" Background="#aa000000"
+                MinHeight="128" SelectionBrush="#FF85868C" Loaded="terminalOutput_Loaded"
+                FontFamily="OCR A Extended"
+                />
 
         </ScrollViewer>
-        <TextBox TextWrapping="Wrap" Text="TextBox" Height="24" Background="Black" BorderBrush="#FF043ADE" Foreground="Lime" FontFamily="OCR A Extended"
-                    KeyDown="TerminalInput_KeyDown"
-                 />
+        <TextBox TextWrapping="Wrap" Text="textInput" Background="#cc000000" BorderBrush="#FF043ADE"
+            Foreground="Lime" FontFamily="OCR A Extended"
+            x:Name="terminalInput"
+            KeyDown="TerminalInput_KeyDown"
+            Padding="4,6"
+        />
     </StackPanel>
 </UserControl>

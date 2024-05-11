@@ -29,9 +29,18 @@ namespace ElectroImageViewer
         {
             if (e.Key == Key.Enter)
             {
-                terminalOutput.Text += "> New command output here...\n";
+
+
+                terminalOutput.Text += "> " + terminalInput.Text + "\n";
+                terminalInput.Text = "";
 
             }
+        }
+        private void terminalOutput_Loaded(object sender, RoutedEventArgs e)
+        {
+            // Reset the terminal output and input
+            terminalOutput.Text = "";
+            terminalInput.Text = "";
         }
     }
 }
