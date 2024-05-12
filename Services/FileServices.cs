@@ -39,19 +39,19 @@ namespace ElectroImageViewer.Services
             return null;
         }
 
-        public static bool RenameFile(string originalPath, string newName)
+        public static string? RenameFile(string originalPath, string newName)
         {
             try
             {
                 string directory = Path.GetDirectoryName(originalPath) ?? "./";
                 string newPath = Path.Combine(directory, newName);
                 File.Move(originalPath, newPath);
-                return true;
+                return newPath;
             }
             catch (Exception ex)
             {
                 Debug.WriteLine("Failed to rename file: " + ex.Message);
-                return false;
+                return null;
             }
         }
 

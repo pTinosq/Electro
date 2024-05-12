@@ -16,8 +16,6 @@ namespace ElectroImageViewer
 
         private void Window_KeyDown(object sender, System.Windows.Input.KeyEventArgs e)
         {
-            Trace.WriteLine(e);
-
             if (e.Key == Key.F1)
             {
                 // Toggle the visibility of the TerminalControl

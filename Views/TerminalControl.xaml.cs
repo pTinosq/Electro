@@ -1,23 +1,7 @@
-﻿using ElectroImageViewer.Services;
-using Microsoft.Win32;
-using System;
-using System.Collections.Generic;
-using System.Diagnostics;
-using System.IO;
-using System.IO.Packaging;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+﻿using ElectroImageViewer.Commands;
 using System.Windows;
 using System.Windows.Controls;
-using System.Windows.Data;
-using System.Windows.Documents;
 using System.Windows.Input;
-using System.Windows.Media;
-using System.Windows.Media.Imaging;
-using System.Windows.Navigation;
-using System.Windows.Shapes;
-using Path = System.IO.Path;
 
 namespace ElectroImageViewer
 {
@@ -25,7 +9,6 @@ namespace ElectroImageViewer
     /// Interaction logic for TerminalControl.xaml
     /// </summary>
     /// 
-
     public partial class TerminalControl : UserControl
     {
         public static readonly DependencyProperty? ControlVisibilityProperty = DependencyProperty.Register(
@@ -45,16 +28,45 @@ namespace ElectroImageViewer
             InitializeComponent();
         }
 
+
         private void TerminalInput_KeyDown(object sender, KeyEventArgs e)
         {
             if (DataContext is MainViewModel viewModel)
             {
                 if (e.Key == Key.Enter)
                 {
-                    string command = terminalInput.Text;
-                    terminalOutput.Text += "> " + command + "\n";
+
+                    string inputText = terminalInput.Text.Trim();
+                    terminalOutput.Text += "> " + inputText + "\n";
+
+                    if (string.IsNullOrEmpty(inputText))
+                    {
+                        terminalInput.Text = "";
+                        return;
+                    }
+
+
+                    CommandParser commandParser = new(inputText);
+                    List<ParsedCommand> parsedCommands = commandParser.Parse();
+                    foreach (ParsedCommand parsedCommand in parsedCommands)
+                    {
+                        // Find the Command to execute based on the parsedCommand.Command
+                        Command? execCmd = CommandRegistry.Instance.GetCommand(parsedCommand.Command);
+
+                        if (execCmd != null)
+                        {
+                            execCmd.Execute(viewModel, terminalOutput, parsedCommand.Parameters);
+                        }
+                        else
+                        {
+                            terminalOutput.Text += "Command `" + parsedCommand.Command + "` not found.\n";
+                        }
+                    }
+
+
+                    // Flush terminal input text box and add to history
                     terminalInput.Text = "";
-                    ExecuteCommand(command, viewModel);
+                    viewModel.CmdHistory.AddCommand(inputText);
                 }
 
                 if (e.Key == Key.Down)
@@ -70,52 +82,21 @@ namespace ElectroImageViewer
             }
         }
 
-        private void ExecuteCommand(string command, MainViewModel viewModel)
-        {
-            switch (command.Split(' ')[0].ToLower())
-            {
-                case "load":
-                    string? filePath = FileService.OpenFileDialog();
-                    if (!string.IsNullOrEmpty(filePath))
-                    {
-                        viewModel.CurrentImagePath = filePath;
-                        viewModel.CurrentImage = FileService.OpenFile(filePath);
-                        terminalOutput.Text += "Loaded " + viewModel.CurrentImagePath;
-                    } else
-                    {
-                        terminalOutput.Text += "No file loaded";
-                    }
-                    break;
-                case "rename":
-                    if (viewModel.CurrentImagePath == null) break;
-                    if (FileService.RenameFile(viewModel.CurrentImagePath, command[7..]))
-                    {
-                        terminalOutput.Text += "Renamed successfully.";
-                    }
-                    break;
-                case "copy":
-                    if (viewModel.CurrentImagePath == null) break;
-                    string destPath = command[5..];
-                    if (FileService.CopyFile(viewModel.CurrentImagePath, destPath))
-                    {
-                        terminalOutput.Text += "Copied successfully.";
-                    }
-                    break;
-                case "exit":
-                    Application.Current.Shutdown();
-                    break;
-
-                case "clear":
-                    terminalOutput.Text = "";
-                    break;
-
-                default:
-                    terminalOutput.Text += "Command not recognized.";
-                    break;
-            }
-            
-            terminalOutput.Text += "\n";
-            viewModel.CmdHistory.AddCommand(command);
-        }
+        //private void ExecuteCommand(string commandLine, MainViewModel viewModel)
+        //{
+        //    if (commandLine != null && commandLine != "")
+        //    {
+        //        var parts = commandLine.Split(' ', 2, StringSplitOptions.RemoveEmptyEntries);
+        //        var command = _commandFactory.GetCommand(parts[0]);
+        //        if (command != null)
+        //        {
+        //            command.Execute(viewModel, parts.Length > 1 ? parts[1].Split(' ') : []);
+        //        }
+        //        else
+        //        {
+        //            terminalOutput.Text += "Command not recognized\n";
+        //        }
+        //    }
+        //}
     }
 }

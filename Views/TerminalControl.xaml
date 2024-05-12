@@ -11,16 +11,25 @@
                 IsEnabled="True"
                 BorderThickness="0"
                 IsReadOnly="True"
-                TextWrapping="Wrap" Foreground="#FF42FF00" Text="" Background="#aa000000"
-                MinHeight="128" SelectionBrush="#FF85868C"
-                FontFamily="OCR A Extended"
+                TextWrapping="Wrap"
+                Foreground="#FF42FF00"
+                Background="#aa000000"
+                MinHeight="128"
+                SelectionBrush="#FF85868C"
+                FontFamily="Courier New"
+                Text=""
             />
 
         </ScrollViewer>
-        <TextBox TextWrapping="Wrap" Text="" Background="#cc000000" BorderBrush="#FF043ADE"
-            Foreground="Lime" FontFamily="OCR A Extended"
+        <TextBox
+            TextWrapping="Wrap"
+            Text=""
+            Background="#cc000000"
+            BorderBrush="#FF043ADE"
+            Foreground="Lime"
             x:Name="terminalInput"
             PreviewKeyDown="TerminalInput_KeyDown"
+            FontFamily="Courier New"
             Padding="4,6"
         />
     </StackPanel>
