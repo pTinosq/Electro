@@ -14,7 +14,8 @@ namespace ElectroImageViewer.Commands
             Command[] cmds = [
                 new RenameCommand(),
                 new LoadCommand(),
-                new ClearCommand()
+                new ClearCommand(),
+                new CopyCommand()
             ];
 
             foreach (Command c in cmds)

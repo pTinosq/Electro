@@ -50,23 +50,28 @@ namespace ElectroImageViewer.Services
             }
             catch (Exception ex)
             {
-                Debug.WriteLine("Failed to rename file: " + ex.Message);
                 return null;
             }
         }
 
-        public static bool CopyFile(string sourcePath, string destination)
+        public static string? CopyFile(string sourcePath, string destination)
         {
             try
             {
-                string fullPath = Path.GetFullPath(destination);
+                // Resolve the full path of the target based on the sourcePath's directory
+                string? sourceDirectory = Path.GetDirectoryName(sourcePath);
+                if (string.IsNullOrEmpty(sourceDirectory))
+                {
+                    sourceDirectory = "./"; // Fallback to current directory if sourcePath has no directory
+                }
+                string fullPath = Path.GetFullPath(Path.Combine(sourceDirectory, destination));
+
                 File.Copy(sourcePath, fullPath, overwrite: true);
-                return true;
+                return fullPath;
             }
             catch (Exception ex)
             {
-                Debug.WriteLine("Failed to copy file: " + ex.Message);
-                return false;
+                return null;
             }
         }
     }
