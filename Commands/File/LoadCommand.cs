@@ -1,10 +1,11 @@
 ﻿using System.Collections.Generic;
 using System.Diagnostics;
+using System.Drawing;
 using System.Windows.Controls;
 using System.Windows.Media.Imaging;
 using ElectroImageViewer.Services;
 
-namespace ElectroImageViewer.Commands
+namespace ElectroImageViewer.Commands.File
 {
     public class LoadCommand() : Command("Load", "Description of the load command", ["load"], CommandCategory.FILE)
     {
@@ -36,7 +37,7 @@ namespace ElectroImageViewer.Commands
             else
             {
                 // Attempt to load the image from the given directory
-                BitmapImage? img = FileService.OpenFile(parameters[0]);
+                Bitmap? img = FileService.OpenFile(parameters[0]);
                 if (img != null)
                 {
                     viewModel.CurrentImage = img;

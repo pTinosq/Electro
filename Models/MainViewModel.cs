@@ -1,26 +1,47 @@
 ﻿using System;
 using System.Windows.Media.Imaging;
 using System.ComponentModel;
+using System.Drawing;
+using System.IO;
+using System.Drawing.Imaging;
+using System.Diagnostics;
+using ElectroImageViewer.Services;
 
 namespace ElectroImageViewer
 {
     public class MainViewModel : INotifyPropertyChanged
-
     {
-        // Image data
-        private BitmapImage? _currentImage;
+        private BitmapImage? _workspaceDisplayImage;
+        private Bitmap? _workspaceImage;
+        private Bitmap? _bufferImage;
+        private Bitmap? _currentImage;
         private string? _currentImagePath;
-
-        // Terminal data
         private CommandHistory _cmdHistory = new();
 
-        public BitmapImage? CurrentImage
+        public Bitmap? CurrentImage
         {
             get { return _currentImage; }
             set
             {
-                _currentImage = value;
-                OnPropertyChanged(nameof(CurrentImage));
+                if (_currentImage != value)
+                {
+                    _currentImage = value;
+                    OnPropertyChanged(nameof(CurrentImage));
+                    WorkspaceDisplayImage = FileService.BitmapToImageSource(value);  // Convert and update display image
+                }
+            }
+        }
+
+        public BitmapImage? WorkspaceDisplayImage
+        {
+            get { return _workspaceDisplayImage; }
+            private set  // Make setter private if only VM should update this
+            {
+                if (_workspaceDisplayImage != value)
+                {
+                    _workspaceDisplayImage = value;
+                    OnPropertyChanged(nameof(WorkspaceDisplayImage));
+                }
             }
         }
 
@@ -29,8 +50,11 @@ namespace ElectroImageViewer
             get { return _currentImagePath; }
             set
             {
-                _currentImagePath = value;
-                OnPropertyChanged(nameof(CurrentImagePath));
+                if (_currentImagePath != value)
+                {
+                    _currentImagePath = value;
+                    OnPropertyChanged(nameof(CurrentImagePath));
+                }
             }
         }
 
@@ -43,8 +67,7 @@ namespace ElectroImageViewer
                 OnPropertyChanged(nameof(CmdHistory));
             }
         }
-
-
+        
 
         public event PropertyChangedEventHandler? PropertyChanged;
         protected virtual void OnPropertyChanged(string propertyName)

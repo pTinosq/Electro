@@ -2,30 +2,91 @@
 using System.IO;
 using Microsoft.Win32;
 using System.Windows.Media.Imaging;
+using System.Drawing;
+using System.Drawing.Imaging;
 
 namespace ElectroImageViewer.Services
 {
     public class FileService
     {
-        public static BitmapImage? OpenFile(string filePath)
+        private static ImageFormat GetImageFormat(string filePath)
+        {
+            string extension = Path.GetExtension(filePath).ToLower();
+            return extension switch
+            {
+                ".jpg" or ".jpeg" => ImageFormat.Jpeg,
+                ".bmp" => ImageFormat.Bmp,
+                ".gif" => ImageFormat.Gif,
+                ".png" => ImageFormat.Png,
+                _ => ImageFormat.Png // Default to PNG if unsure
+            };
+        }
+
+        public static Bitmap ConvertToPixelFormat(Bitmap source, System.Drawing.Imaging.PixelFormat format)
+        {
+            Bitmap clone = new Bitmap(source.Width, source.Height, format);
+            using (Graphics gr = Graphics.FromImage(clone))
+            {
+                gr.DrawImage(source, new Rectangle(0, 0, clone.Width, clone.Height));
+            }
+            return clone;
+        }
+        public static BitmapImage BitmapToImageSource(Bitmap bitmap)
         {
             try
             {
-                BitmapImage bi = new();
-                using (FileStream stream = File.OpenRead(filePath))
+                using (MemoryStream memory = new MemoryStream())
                 {
-                    bi.BeginInit();
-                    bi.CacheOption = BitmapCacheOption.OnLoad; // Load the image with a FileStream to avoid file locking
-                    bi.StreamSource = stream;
-                    bi.EndInit();
+                    Bitmap bmp = ConvertToPixelFormat(bitmap, System.Drawing.Imaging.PixelFormat.Format24bppRgb);
+                    bmp.Save(memory, System.Drawing.Imaging.ImageFormat.Bmp);
+                    memory.Position = 0;
+                    BitmapImage bitmapImage = new BitmapImage();
+                    bitmapImage.BeginInit();
+                    bitmapImage.StreamSource = memory;
+                    bitmapImage.CacheOption = BitmapCacheOption.OnLoad;
+                    bitmapImage.EndInit();
+                    bitmapImage.Freeze(); // Ensure the bitmap is usable across threads
+                    return bitmapImage;
                 }
-                bi.Freeze(); // Make the BitmapImage thread-safe
-                return bi;
+            }
+            catch (Exception ex)
+            {
+                Debug.WriteLine("Failed to convert Bitmap to BitmapImage: " + ex.Message);
+                return null;
+            }
+        }
+
+
+        public static Bitmap? OpenFile(string filePath)
+        {
+            try
+            {
+                // Directly return a new Bitmap from the file
+                using FileStream stream = File.OpenRead(filePath);
+                return new Bitmap(stream);
             }
             catch (Exception ex)
             {
                 Debug.WriteLine("Error opening file: " + ex.Message);
                 return null;
+            }
+        }
+
+        public static bool WriteFile(Bitmap bitmap, string filePath)
+        {
+            try
+            {
+                // Determine image format from file extension
+                ImageFormat format = GetImageFormat(filePath);
+                if (File.Exists(filePath))
+                    File.Delete(filePath);
+                bitmap.Save(filePath, format);
+                return true; // Return true if the file is saved successfully
+            }
+            catch (Exception ex)
+            {
+                Debug.WriteLine("Error writing file: " + ex.Message);
+                return false;
             }
         }
 

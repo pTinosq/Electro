@@ -3,7 +3,7 @@ using System.Diagnostics;
 using System.Windows.Controls;
 using ElectroImageViewer.Services;
 
-namespace ElectroImageViewer.Commands
+namespace ElectroImageViewer.Commands.File
 {
     public class CopyCommand() : Command("Copy", "Description of the copy command", ["copy", "cp"], CommandCategory.FILE)
     {

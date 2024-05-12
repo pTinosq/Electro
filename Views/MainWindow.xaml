@@ -7,8 +7,6 @@
     mc:Ignorable="d"
     Title="MainWindow" Height="450" Width="800"
     KeyDown="Window_KeyDown"
-    MouseWheel="Window_MouseWheel"
-    MouseDown="Window_MouseDown" MouseUp="Window_MouseUp" MouseMove="Window_MouseMove"
     Cursor="ScrollAll"
         >
 
@@ -20,17 +18,9 @@
     <Grid Background="White" x:Name="electroMain" >
         <local:TerminalControl x:Name="terminalControl" Margin="0,0,0,0" Panel.ZIndex="5"
             Visibility="{Binding ControlVisibility, RelativeSource={RelativeSource Self}}" RenderTransformOrigin="0.497,0.531" />
-        <local:ZoomBorder x:Name="border" ClipToBounds="True" Background="#FFE8E8E8">
-            <Image x:Name="electroImage" Source="{Binding CurrentImage}"
-            Panel.ZIndex="2" RenderTransformOrigin="0,0"  >
-                <Image.RenderTransform>
-                    <TransformGroup>
-                        <ScaleTransform ScaleX="1" ScaleY="1"/>
-                        <SkewTransform/>
-                        <RotateTransform/>
-                        <TranslateTransform/>
-                    </TransformGroup>
-                </Image.RenderTransform>
+        <local:ZoomBorder x:Name="border" ClipToBounds="True" Background="#FFAFAFAF">
+            <Image x:Name="electroImage" Source="{Binding WorkspaceDisplayImage}"
+            Panel.ZIndex="2"  >
             </Image>
         </local:ZoomBorder>
     </Grid>

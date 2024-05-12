@@ -1,4 +1,6 @@
-﻿using System.Collections.Generic;
+﻿using ElectroImageViewer.Commands.Effects;
+using ElectroImageViewer.Commands.File;
+using System.Collections.Generic;
 using System.Diagnostics;
 
 namespace ElectroImageViewer.Commands
@@ -15,7 +17,9 @@ namespace ElectroImageViewer.Commands
                 new RenameCommand(),
                 new LoadCommand(),
                 new ClearCommand(),
-                new CopyCommand()
+                new CopyCommand(),
+                new SaturateCommand(),
+                new WriteCommand()
             ];
 
             foreach (Command c in cmds)

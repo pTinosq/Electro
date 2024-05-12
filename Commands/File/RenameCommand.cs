@@ -3,7 +3,7 @@ using System.Diagnostics;
 using System.Windows.Controls;
 using ElectroImageViewer.Services;
 
-namespace ElectroImageViewer.Commands
+namespace ElectroImageViewer.Commands.File
 {
     public class RenameCommand() : Command("Rename", "desci", ["rename"], CommandCategory.FILE)
     {
