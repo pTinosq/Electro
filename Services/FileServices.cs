@@ -4,6 +4,9 @@ using Microsoft.Win32;
 using System.Windows.Media.Imaging;
 using System.Drawing;
 using System.Drawing.Imaging;
+using System.Drawing.Drawing2D;
+using System;
+using System.Threading.Tasks;
 
 namespace ElectroImageViewer.Services
 {
@@ -31,23 +34,24 @@ namespace ElectroImageViewer.Services
             }
             return clone;
         }
-        public static BitmapImage BitmapToImageSource(Bitmap bitmap)
+        public static BitmapImage? BitmapToImageSource(Bitmap bitmap)
         {
+            Stopwatch stopwatch = Stopwatch.StartNew();
             try
             {
-                using (MemoryStream memory = new MemoryStream())
-                {
-                    Bitmap bmp = ConvertToPixelFormat(bitmap, System.Drawing.Imaging.PixelFormat.Format24bppRgb);
-                    bmp.Save(memory, System.Drawing.Imaging.ImageFormat.Bmp);
-                    memory.Position = 0;
-                    BitmapImage bitmapImage = new BitmapImage();
-                    bitmapImage.BeginInit();
-                    bitmapImage.StreamSource = memory;
-                    bitmapImage.CacheOption = BitmapCacheOption.OnLoad;
-                    bitmapImage.EndInit();
-                    bitmapImage.Freeze(); // Ensure the bitmap is usable across threads
-                    return bitmapImage;
-                }
+                using MemoryStream memory = new();
+                Bitmap bmp = ConvertToPixelFormat(bitmap, System.Drawing.Imaging.PixelFormat.Format24bppRgb);
+                bmp.Save(memory, System.Drawing.Imaging.ImageFormat.Bmp);
+                memory.Position = 0;
+                BitmapImage bitmapImage = new();
+                bitmapImage.BeginInit();
+                bitmapImage.StreamSource = memory;
+                bitmapImage.CacheOption = BitmapCacheOption.OnLoad;
+                bitmapImage.EndInit();
+                bitmapImage.Freeze(); // Ensure the bitmap is usable across threads
+                stopwatch.Stop();
+                Trace.WriteLine('a' + stopwatch.ElapsedMilliseconds);
+                return bitmapImage;
             }
             catch (Exception ex)
             {
@@ -63,7 +67,9 @@ namespace ElectroImageViewer.Services
             {
                 // Directly return a new Bitmap from the file
                 using FileStream stream = File.OpenRead(filePath);
-                return new Bitmap(stream);
+                using Bitmap loadedBitmap = new(stream);
+                Bitmap memoryBitmap = new(loadedBitmap);
+                return memoryBitmap;
             }
             catch (Exception ex)
             {

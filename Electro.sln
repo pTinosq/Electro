@@ -1,0 +1,29 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio Version 17
+VisualStudioVersion = 17.9.34728.123
+MinimumVisualStudioVersion = 10.0.40219.1
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Electro", "Electro.csproj", "{C17F3069-B1B4-467A-A073-472339C33429}"
+EndProject
+Project("{54435603-DBB4-11D2-8724-00A0C9A8B90C}") = "Electro Installer", "..\Electro Installer\Electro Installer.vdproj", "{69443E02-3A59-4538-A163-D757808AB074}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Release|Any CPU = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{C17F3069-B1B4-467A-A073-472339C33429}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{C17F3069-B1B4-467A-A073-472339C33429}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{C17F3069-B1B4-467A-A073-472339C33429}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{C17F3069-B1B4-467A-A073-472339C33429}.Release|Any CPU.Build.0 = Release|Any CPU
+		{69443E02-3A59-4538-A163-D757808AB074}.Debug|Any CPU.ActiveCfg = Debug
+		{69443E02-3A59-4538-A163-D757808AB074}.Release|Any CPU.ActiveCfg = Release
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(ExtensibilityGlobals) = postSolution
+		SolutionGuid = {14AD640C-7252-4828-8821-7A4F6A65BB07}
+	EndGlobalSection
+EndGlobal

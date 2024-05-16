@@ -1,12 +1,7 @@
 ﻿using System.Collections.Generic;
-using System.Diagnostics;
 using System.Drawing;
 using System.Drawing.Imaging;
-using System.IO;
 using System.Windows.Controls;
-using System.Windows.Media.Effects;
-using System.Windows.Media.Imaging;
-using ElectroImageViewer.Services;
 
 namespace ElectroImageViewer.Commands.Effects
 {

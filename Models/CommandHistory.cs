@@ -1,4 +1,6 @@
-﻿namespace ElectroImageViewer
+﻿using System.Collections.Generic;
+
+namespace ElectroImageViewer
 {
     public class CommandHistory
     {

@@ -1,4 +1,5 @@
-﻿using System.Windows.Controls;
+﻿using System.Collections.Generic;
+using System.Windows.Controls;
 using ElectroImageViewer.Services;
 
 namespace ElectroImageViewer.Commands.File
@@ -43,6 +44,9 @@ viewModel.CurrentImage
     Tag: null
     VerticalResolution: 96
     Width: 1920*/
+
+            // XXX: NOTE TO SELF -
+            // I THINK THERE'S AN ISSUE BECAUSE IF U LOOK AT THE RAWFORMAT EVERYTHING SEEMS 2 WORK WHEN ITS MEMORYBMP BUT IT FAILS WHEN JPEG - WE NEED TO MAINTAIN THE MEMORYBMP FORMAT THROUGHOUT OPERATIONS 
             bool success = FileService.WriteFile(viewModel.CurrentImage, viewModel.CurrentImagePath);
             if (success)
             {
