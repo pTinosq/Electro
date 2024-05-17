@@ -34,23 +34,25 @@ namespace ElectroImageViewer.Services
             }
             return clone;
         }
+
         public static BitmapImage? BitmapToImageSource(Bitmap bitmap)
         {
-            Stopwatch stopwatch = Stopwatch.StartNew();
+            if (bitmap is null)
+            {
+                throw new ArgumentNullException(nameof(bitmap));
+            }
+
             try
             {
                 using MemoryStream memory = new();
-                Bitmap bmp = ConvertToPixelFormat(bitmap, System.Drawing.Imaging.PixelFormat.Format24bppRgb);
-                bmp.Save(memory, System.Drawing.Imaging.ImageFormat.Bmp);
+                Bitmap bmp = ConvertToPixelFormat(bitmap, PixelFormat.Format24bppRgb);
+                bmp.Save(memory, ImageFormat.Bmp);
                 memory.Position = 0;
                 BitmapImage bitmapImage = new();
                 bitmapImage.BeginInit();
                 bitmapImage.StreamSource = memory;
                 bitmapImage.CacheOption = BitmapCacheOption.OnLoad;
                 bitmapImage.EndInit();
-                bitmapImage.Freeze(); // Ensure the bitmap is usable across threads
-                stopwatch.Stop();
-                Trace.WriteLine('a' + stopwatch.ElapsedMilliseconds);
                 return bitmapImage;
             }
             catch (Exception ex)
@@ -58,18 +60,18 @@ namespace ElectroImageViewer.Services
                 Debug.WriteLine("Failed to convert Bitmap to BitmapImage: " + ex.Message);
                 return null;
             }
+            finally
+            {
+                bitmap.Dispose(); // Explicitly dispose the bitmap
+            }
         }
-
 
         public static Bitmap? OpenFile(string filePath)
         {
             try
             {
-                // Directly return a new Bitmap from the file
                 using FileStream stream = File.OpenRead(filePath);
-                using Bitmap loadedBitmap = new(stream);
-                Bitmap memoryBitmap = new(loadedBitmap);
-                return memoryBitmap;
+                return new Bitmap(stream); // Directly create the Bitmap from the stream
             }
             catch (Exception ex)
             {
@@ -78,16 +80,16 @@ namespace ElectroImageViewer.Services
             }
         }
 
+
         public static bool WriteFile(Bitmap bitmap, string filePath)
         {
             try
             {
-                // Determine image format from file extension
                 ImageFormat format = GetImageFormat(filePath);
                 if (File.Exists(filePath))
                     File.Delete(filePath);
                 bitmap.Save(filePath, format);
-                return true; // Return true if the file is saved successfully
+                return true;
             }
             catch (Exception ex)
             {
@@ -125,11 +127,10 @@ namespace ElectroImageViewer.Services
         {
             try
             {
-                // Resolve the full path of the target based on the sourcePath's directory
                 string? sourceDirectory = Path.GetDirectoryName(sourcePath);
                 if (string.IsNullOrEmpty(sourceDirectory))
                 {
-                    sourceDirectory = "./"; // Fallback to current directory if sourcePath has no directory
+                    sourceDirectory = "./";
                 }
                 string fullPath = Path.GetFullPath(Path.Combine(sourceDirectory, destination));
 

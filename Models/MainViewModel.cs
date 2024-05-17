@@ -2,8 +2,6 @@
 using System.Windows.Media.Imaging;
 using System.ComponentModel;
 using System.Drawing;
-using System.IO;
-using System.Drawing.Imaging;
 using System.Diagnostics;
 using ElectroImageViewer.Services;
 
@@ -12,8 +10,6 @@ namespace ElectroImageViewer
     public class MainViewModel : INotifyPropertyChanged
     {
         private BitmapImage? _workspaceDisplayImage;
-        private Bitmap? _workspaceImage;
-        private Bitmap? _bufferImage;
         private Bitmap? _currentImage;
         private string? _currentImagePath;
         private CommandHistory _cmdHistory = new();
@@ -25,9 +21,11 @@ namespace ElectroImageViewer
             {
                 if (_currentImage != value)
                 {
+                    DisposeCurrentImage(); // Dispose of the old image
                     _currentImage = value;
                     OnPropertyChanged(nameof(CurrentImage));
                     WorkspaceDisplayImage = FileService.BitmapToImageSource(value);  // Convert and update display image
+                    ForceGarbageCollection(); // Force garbage collection
                 }
             }
         }
@@ -35,7 +33,7 @@ namespace ElectroImageViewer
         public BitmapImage? WorkspaceDisplayImage
         {
             get { return _workspaceDisplayImage; }
-            private set  // Make setter private if only VM should update this
+            private set
             {
                 if (_workspaceDisplayImage != value)
                 {
@@ -67,12 +65,27 @@ namespace ElectroImageViewer
                 OnPropertyChanged(nameof(CmdHistory));
             }
         }
-        
 
         public event PropertyChangedEventHandler? PropertyChanged;
         protected virtual void OnPropertyChanged(string propertyName)
         {
             PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(propertyName));
+        }
+
+        private void DisposeCurrentImage()
+        {
+            if (_currentImage != null)
+            {
+                _currentImage.Dispose();
+                _currentImage = null;
+            }
+        }
+
+        private void ForceGarbageCollection()
+        {
+            GC.Collect();
+            GC.WaitForPendingFinalizers();
+            GC.Collect();
         }
     }
 }
