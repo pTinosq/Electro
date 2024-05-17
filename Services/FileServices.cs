@@ -12,7 +12,7 @@ namespace ElectroImageViewer.Services
 {
     public class FileService
     {
-        private static ImageFormat GetImageFormat(string filePath)
+        public static ImageFormat GetImageFormat(string filePath)
         {
             string extension = Path.GetExtension(filePath).ToLower();
             return extension switch
@@ -25,7 +25,7 @@ namespace ElectroImageViewer.Services
             };
         }
 
-        public static Bitmap ConvertToPixelFormat(Bitmap source, System.Drawing.Imaging.PixelFormat format)
+        public static Bitmap ConvertToPixelFormat(Bitmap source, PixelFormat format)
         {
             Bitmap clone = new Bitmap(source.Width, source.Height, format);
             using (Graphics gr = Graphics.FromImage(clone))
@@ -35,7 +35,7 @@ namespace ElectroImageViewer.Services
             return clone;
         }
 
-        public static BitmapImage? BitmapToImageSource(Bitmap bitmap)
+        public static BitmapImage? BitmapToImageSource(Bitmap bitmap, ImageFormat format)
         {
             if (bitmap is null)
             {
@@ -45,8 +45,7 @@ namespace ElectroImageViewer.Services
             try
             {
                 using MemoryStream memory = new();
-                Bitmap bmp = ConvertToPixelFormat(bitmap, PixelFormat.Format24bppRgb);
-                bmp.Save(memory, ImageFormat.Bmp);
+                bitmap.Save(memory, format);
                 memory.Position = 0;
                 BitmapImage bitmapImage = new();
                 bitmapImage.BeginInit();

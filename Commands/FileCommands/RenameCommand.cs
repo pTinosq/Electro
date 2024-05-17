@@ -1,9 +1,10 @@
 ﻿using System.Collections.Generic;
 using System.Diagnostics;
+using System.IO;
 using System.Windows.Controls;
 using ElectroImageViewer.Services;
 
-namespace ElectroImageViewer.Commands.File
+namespace ElectroImageViewer.Commands.FileCommands
 {
     public class RenameCommand() : Command("Rename", "desci", ["rename"], CommandCategory.FILE)
     {
@@ -16,13 +17,19 @@ namespace ElectroImageViewer.Commands.File
                 return;
             }
 
-            if (viewModel.CurrentImagePath != null)
+            if (viewModel.ActiveBuffer == ElectroBuffers.ELECTROBUFFERSPACE)
             {
-                string? newPath = FileService.RenameFile(viewModel.CurrentImagePath, parameters[0]);
+                terminalOutput.Text += "File operations cannot be performed in Electro Buffer Space (EBS).\n";
+                terminalOutput.Text += "You must either `buf pop` to push your EBS to your workspace buffer or `buf switch` to temporarily switch to your workspace buffer\n";
+                return;
+            }
+
+            if (viewModel.WorkspaceImagePath != null)
+            {
+                string? newPath = FileService.RenameFile(viewModel.WorkspaceImagePath, parameters[0]);
                 if (newPath != null)
                 {
-                    viewModel.CurrentImagePath = newPath;
-                    viewModel.CurrentImage = FileService.OpenFile(newPath);
+                    viewModel.WorkspaceImagePath = newPath;
                     terminalOutput.Text += "Renamed file successfully. New path: " + newPath + "\n";
                 }
                 else

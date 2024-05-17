@@ -19,7 +19,7 @@
         <local:TerminalControl x:Name="terminalControl" Margin="0,0,0,0" Panel.ZIndex="5"
             Visibility="{Binding ControlVisibility, RelativeSource={RelativeSource Self}}" RenderTransformOrigin="0.497,0.531" />
         <local:ZoomBorder x:Name="border" ClipToBounds="True" Background="#FFAFAFAF">
-            <Image x:Name="electroImage" Source="{Binding WorkspaceDisplayImage}"
+            <Image x:Name="electroImage" Source="{Binding WorkspaceDisplayImage, Mode=OneWay}"
             Panel.ZIndex="2"  >
             </Image>
         </local:ZoomBorder>

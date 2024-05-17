@@ -1,5 +1,5 @@
-﻿using ElectroImageViewer.Commands.Effects;
-using ElectroImageViewer.Commands.File;
+﻿using ElectroImageViewer.Commands.EffectsCommands;
+using ElectroImageViewer.Commands.FileCommands;
 using System.Collections.Generic;
 using System.Diagnostics;
 

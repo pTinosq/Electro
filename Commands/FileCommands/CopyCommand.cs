@@ -1,9 +1,10 @@
 ﻿using System.Collections.Generic;
 using System.Diagnostics;
+using System.IO;
 using System.Windows.Controls;
 using ElectroImageViewer.Services;
 
-namespace ElectroImageViewer.Commands.File
+namespace ElectroImageViewer.Commands.FileCommands
 {
     public class CopyCommand() : Command("Copy", "Description of the copy command", ["copy", "cp"], CommandCategory.FILE)
     {
@@ -16,9 +17,17 @@ namespace ElectroImageViewer.Commands.File
                 return;
             }
 
-            if (viewModel.CurrentImagePath != null)
+            if (viewModel.ActiveBuffer == ElectroBuffers.ELECTROBUFFERSPACE)
             {
-                string? newPath = FileService.CopyFile(viewModel.CurrentImagePath, parameters[0]);
+                terminalOutput.Text += "File operations cannot be performed in Electro Buffer Space (EBS).\n";
+                terminalOutput.Text += "You must either `buf pop` to push your EBS to your workspace buffer or `buf switch` to temporarily switch to your workspace buffer\n";
+                return;
+            }
+
+            if (viewModel.WorkspaceImagePath != null)
+            {
+                string? newPath = FileService.CopyFile(viewModel.WorkspaceImagePath, parameters[0]);
+
                 if (newPath != null)
                 {
                     terminalOutput.Text += "Copied file to " + newPath + " successfully\n";
@@ -29,8 +38,8 @@ namespace ElectroImageViewer.Commands.File
                         // Handle switch flag (cp ./ex.jpg -s)
                         if (parameters[1] == "-s")
                         {
-                            viewModel.CurrentImagePath = newPath;
-                            viewModel.CurrentImage = FileService.OpenFile(newPath);
+                            viewModel.WorkspaceImagePath = newPath;
+                            viewModel.WorkspaceBuffer = File.ReadAllBytes(newPath);
                             terminalOutput.Text += "Switched active image to copied image\n";
                         }
                     }

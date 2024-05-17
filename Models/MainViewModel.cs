@@ -4,31 +4,24 @@ using System.ComponentModel;
 using System.Drawing;
 using System.Diagnostics;
 using ElectroImageViewer.Services;
+using System.IO;
 
 namespace ElectroImageViewer
 {
+    public enum ElectroBuffers
+    {
+        WORKSPACEBUFFERSPACE,
+        ELECTROBUFFERSPACE
+    }
+
     public class MainViewModel : INotifyPropertyChanged
     {
         private BitmapImage? _workspaceDisplayImage;
-        private Bitmap? _currentImage;
-        private string? _currentImagePath;
+        private byte[] _workspaceBuffer;
+        private string? _workspaceImagePath;
+        private byte[] _electrospaceBuffer;
         private CommandHistory _cmdHistory = new();
-
-        public Bitmap? CurrentImage
-        {
-            get { return _currentImage; }
-            set
-            {
-                if (_currentImage != value)
-                {
-                    DisposeCurrentImage(); // Dispose of the old image
-                    _currentImage = value;
-                    OnPropertyChanged(nameof(CurrentImage));
-                    WorkspaceDisplayImage = FileService.BitmapToImageSource(value);  // Convert and update display image
-                    ForceGarbageCollection(); // Force garbage collection
-                }
-            }
-        }
+        private ElectroBuffers _activeBuffer = ElectroBuffers.WORKSPACEBUFFERSPACE;
 
         public BitmapImage? WorkspaceDisplayImage
         {
@@ -43,16 +36,50 @@ namespace ElectroImageViewer
             }
         }
 
-        public string? CurrentImagePath
+        public ElectroBuffers ActiveBuffer
         {
-            get { return _currentImagePath; }
+            get { return _activeBuffer; }
+            private set
+            {
+                if (_activeBuffer != value)
+                {
+                    _activeBuffer = value;
+                    OnPropertyChanged(nameof(ActiveBuffer));
+                }
+            }
+        }
+
+        public byte[] WorkspaceBuffer
+        {
+            get { return _workspaceBuffer; }
             set
             {
-                if (_currentImagePath != value)
+                _workspaceBuffer = value;
+                WorkspaceDisplayImage = ConvertToImageSource(value);
+                OnPropertyChanged(nameof(WorkspaceBuffer));
+            }
+        }
+
+        public string? WorkspaceImagePath
+        {
+            get { return _workspaceImagePath; }
+            set
+            {
+                if (_workspaceImagePath != value)
                 {
-                    _currentImagePath = value;
-                    OnPropertyChanged(nameof(CurrentImagePath));
+                    _workspaceImagePath = value;
+                    OnPropertyChanged(nameof(WorkspaceImagePath));
                 }
+            }
+        }
+
+        public byte[] ElectrospaceBuffer
+        {
+            get { return _electrospaceBuffer; }
+            set
+            {
+                _electrospaceBuffer = value;
+                OnPropertyChanged(nameof(ElectrospaceBuffer));
             }
         }
 
@@ -72,20 +99,18 @@ namespace ElectroImageViewer
             PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(propertyName));
         }
 
-        private void DisposeCurrentImage()
+        private BitmapImage ConvertToImageSource(byte[] imageData)
         {
-            if (_currentImage != null)
+            using (MemoryStream ms = new(imageData))
             {
-                _currentImage.Dispose();
-                _currentImage = null;
+                BitmapImage image = new BitmapImage();
+                image.BeginInit();
+                image.StreamSource = ms;
+                image.CacheOption = BitmapCacheOption.OnLoad;
+                image.EndInit();
+                return image;
             }
-        }
-
-        private void ForceGarbageCollection()
-        {
-            GC.Collect();
-            GC.WaitForPendingFinalizers();
-            GC.Collect();
         }
     }
 }
+

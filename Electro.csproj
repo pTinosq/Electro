@@ -27,6 +27,7 @@
     <DefineConstants>DEBUG;TRACE</DefineConstants>
     <ErrorReport>prompt</ErrorReport>
     <WarningLevel>4</WarningLevel>
+    <AllowUnsafeBlocks>true</AllowUnsafeBlocks>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
     <PlatformTarget>AnyCPU</PlatformTarget>
@@ -36,6 +37,7 @@
     <DefineConstants>TRACE</DefineConstants>
     <ErrorReport>prompt</ErrorReport>
     <WarningLevel>4</WarningLevel>
+    <AllowUnsafeBlocks>true</AllowUnsafeBlocks>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)' == 'Debug|x64'">
     <DebugSymbols>true</DebugSymbols>
@@ -46,6 +48,7 @@
     <LangVersion>12.0</LangVersion>
     <ErrorReport>prompt</ErrorReport>
     <Prefer32Bit>true</Prefer32Bit>
+    <AllowUnsafeBlocks>true</AllowUnsafeBlocks>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)' == 'Release|x64'">
     <OutputPath>bin\x64\Release\</OutputPath>
@@ -56,6 +59,7 @@
     <LangVersion>12.0</LangVersion>
     <ErrorReport>prompt</ErrorReport>
     <Prefer32Bit>true</Prefer32Bit>
+    <AllowUnsafeBlocks>true</AllowUnsafeBlocks>
   </PropertyGroup>
   <ItemGroup>
     <Reference Include="System" />
@@ -99,11 +103,11 @@
     <Compile Include="Commands\Command.cs" />
     <Compile Include="Commands\CommandParser.cs" />
     <Compile Include="Commands\CommandRegistry.cs" />
-    <Compile Include="Commands\Effects\SaturateCommand.cs" />
-    <Compile Include="Commands\File\CopyCommand.cs" />
-    <Compile Include="Commands\File\LoadCommand.cs" />
-    <Compile Include="Commands\File\RenameCommand.cs" />
-    <Compile Include="Commands\File\WriteCommand.cs" />
+    <Compile Include="Commands\EffectsCommmands\SaturateCommand.cs" />
+    <Compile Include="Commands\FileCommands\CopyCommand.cs" />
+    <Compile Include="Commands\FileCommands\LoadCommand.cs" />
+    <Compile Include="Commands\FileCommands\RenameCommand.cs" />
+    <Compile Include="Commands\FileCommands\WriteCommand.cs" />
     <Compile Include="MainWindow.xaml.cs">
       <DependentUpon>MainWindow.xaml</DependentUpon>
       <SubType>Code</SubType>
