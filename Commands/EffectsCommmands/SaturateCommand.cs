@@ -39,8 +39,6 @@ namespace ElectroImageViewer.Commands.EffectsCommands
          */
         public static byte[] AdjustSaturation(byte[] imageData, int saturationPercentage)
         {
-            Stopwatch s = new();
-            s.Start();
             using var ms = new MemoryStream(imageData);
             using var original = new Bitmap(ms);
             int width = original.Width;
@@ -93,8 +91,6 @@ namespace ElectroImageViewer.Commands.EffectsCommands
             // Convert back to byte array
             using var stream = new MemoryStream();
             original.Save(stream, ImageFormat.Png);
-            s.Stop();
-            Trace.WriteLine(s.ElapsedMilliseconds);
             return stream.ToArray();
         }
 
