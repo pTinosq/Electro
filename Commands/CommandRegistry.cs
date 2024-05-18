@@ -1,7 +1,7 @@
 ﻿using ElectroImageViewer.Commands.EffectsCommands;
 using ElectroImageViewer.Commands.FileCommands;
+using ElectroImageViewer.Commands.SystemCommands;
 using System.Collections.Generic;
-using System.Diagnostics;
 
 namespace ElectroImageViewer.Commands
 {
@@ -19,7 +19,8 @@ namespace ElectroImageViewer.Commands
                 new ClearCommand(),
                 new CopyCommand(),
                 new SaturateCommand(),
-                new WriteCommand()
+                new WriteCommand(),
+                new BufferCommand()
             ];
 
             foreach (Command c in cmds)

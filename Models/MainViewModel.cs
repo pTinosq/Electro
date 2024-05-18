@@ -39,7 +39,7 @@ namespace ElectroImageViewer
         public ElectroBuffers ActiveBuffer
         {
             get { return _activeBuffer; }
-            private set
+            set
             {
                 if (_activeBuffer != value)
                 {

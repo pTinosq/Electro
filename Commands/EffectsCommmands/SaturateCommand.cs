@@ -31,11 +31,12 @@ namespace ElectroImageViewer.Commands.EffectsCommands
                     viewModel.WorkspaceBuffer = AdjustSaturation(viewModel.WorkspaceBuffer, amount);
 
                 }
-
-
             }
         }
 
+        /*
+         * Not a great implementation - should look into matrix transformations
+         */
         public static byte[] AdjustSaturation(byte[] imageData, int saturationPercentage)
         {
             Stopwatch s = new();

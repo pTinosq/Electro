@@ -39,7 +39,9 @@ namespace ElectroImageViewer
                 {
 
                     string inputText = terminalInput.Text.Trim();
-                    terminalOutput.Text += "> " + inputText + "\n";
+                    string preCursor = viewModel.ActiveBuffer == ElectroBuffers.ELECTROBUFFERSPACE ? "@" : "";
+
+                    terminalOutput.Text += $"{preCursor}> " + inputText + "\n";
 
                     if (string.IsNullOrEmpty(inputText))
                     {
