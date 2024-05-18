@@ -19,11 +19,18 @@ namespace ElectroImageViewer
         {
             if (e.Key == Key.F1)
             {
-                // Toggle the visibility of the TerminalControl
-                terminalControl.ControlVisibility = terminalControl.ControlVisibility == Visibility.Visible
-                                                    ? Visibility.Collapsed
-                                                    : Visibility.Visible;
-                terminalControl.terminalInput.Focus();
+                if (DataContext is MainViewModel viewModel)
+                {
+                    viewModel.TerminalVisibility = viewModel.TerminalVisibility == Visibility.Visible
+                                                   ? Visibility.Collapsed
+                                                   : Visibility.Visible;
+
+                    // Optionally, focus the terminal input if the terminal is visible
+                    if (viewModel.TerminalVisibility == Visibility.Visible)
+                    {
+                        terminalControl.terminalInput.Focus();
+                    }
+                }
             }
         }
     }

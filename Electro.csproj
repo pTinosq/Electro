@@ -84,6 +84,8 @@
       <SubType>Designer</SubType>
     </ApplicationDefinition>
     <Compile Include="Commands\SystemCommands\BufferCommand.cs" />
+    <Compile Include="Commands\SystemCommands\CloseCommand.cs" />
+    <Compile Include="Commands\SystemCommands\QuitCommand.cs" />
     <Compile Include="Services\FileServices.cs" />
     <Compile Include="Views\MainWindow.xaml.cs">
       <DependentUpon>MainWindow.xaml</DependentUpon>
@@ -100,7 +102,7 @@
       <DependentUpon>App.xaml</DependentUpon>
       <SubType>Code</SubType>
     </Compile>
-    <Compile Include="Commands\ClearCommand.cs" />
+    <Compile Include="Commands\SystemCommands\ClearCommand.cs" />
     <Compile Include="Commands\Command.cs" />
     <Compile Include="Commands\CommandParser.cs" />
     <Compile Include="Commands\CommandRegistry.cs" />

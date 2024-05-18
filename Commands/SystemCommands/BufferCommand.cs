@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Diagnostics;
 using System.IO;
 using System.Runtime.InteropServices;
 using System.Windows.Controls;
@@ -12,7 +13,7 @@ namespace ElectroImageViewer.Commands.SystemCommands
         public override void Execute(MainViewModel viewModel, TextBox terminalOutput, List<string> parameters)
         {
             // Show active buffer if no params provided
-            if (parameters.Count == 0)
+            if (parameters == null || parameters.Count == 0)
             {
                 if (viewModel.ActiveBuffer == ElectroBuffers.WORKSPACEBUFFERSPACE)
                 {
@@ -34,13 +35,25 @@ namespace ElectroImageViewer.Commands.SystemCommands
             if (subCommand == "switch")
             {
                 SwitchBuffer(viewModel, terminalOutput);
+                return;
             }
 
             if (subCommand == "stash")
             {
+
                 if (viewModel.ActiveBuffer == ElectroBuffers.WORKSPACEBUFFERSPACE)
                 {
-                    viewModel.ElectrospaceBuffer = (byte[])viewModel.WorkspaceBuffer.Clone();
+                    if (viewModel.WorkspaceBuffer != null)
+                    {
+
+                        viewModel.ElectrospaceBuffer = (byte[])viewModel.WorkspaceBuffer.Clone();
+                    }
+                    else
+                    {
+                        terminalOutput.Text += "Nothing to stash - please load an image first.";
+                        return;
+                    }
+
                     terminalOutput.Text += "WBS stashed into EBS\n";
                     SwitchBuffer(viewModel, terminalOutput);
 
@@ -49,6 +62,8 @@ namespace ElectroImageViewer.Commands.SystemCommands
                 {
                     terminalOutput.Text += "Buffer can only be stashed downstream (WBS->EBS)\n";
                 }
+
+                return;
             }
 
             if (subCommand == "pop")
@@ -65,7 +80,15 @@ namespace ElectroImageViewer.Commands.SystemCommands
                     terminalOutput.Text += "EBS stashed into WBS\n";
                     SwitchBuffer(viewModel, terminalOutput);
                 }
+
+                return;
             }
+
+
+            // Handle unknown command.
+            terminalOutput.Text += "Unrecognized buffer command.\n";
+            terminalOutput.Text += "Available commands: `stash`, `pop`, `switch`\n";
+
         }
 
         private void SwitchBuffer(MainViewModel viewModel, TextBox terminalOutput)

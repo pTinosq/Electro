@@ -4,7 +4,7 @@ using System.Windows.Controls;
 using System.Windows.Media.Imaging;
 using ElectroImageViewer.Services;
 
-namespace ElectroImageViewer.Commands
+namespace ElectroImageViewer.Commands.SystemCommands
 {
     public class ClearCommand() : Command("Clear", "Description of the clear command", ["clear", "cls"], CommandCategory.SYSTEM)
     {

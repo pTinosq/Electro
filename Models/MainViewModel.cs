@@ -5,6 +5,7 @@ using System.Drawing;
 using System.Diagnostics;
 using ElectroImageViewer.Services;
 using System.IO;
+using System.Windows;
 
 namespace ElectroImageViewer
 {
@@ -22,6 +23,7 @@ namespace ElectroImageViewer
         private byte[] _electrospaceBuffer;
         private CommandHistory _cmdHistory = new();
         private ElectroBuffers _activeBuffer = ElectroBuffers.WORKSPACEBUFFERSPACE;
+        private Visibility _terminalVisibility = Visibility.Visible;
 
         public BitmapImage? WorkspaceDisplayImage
         {
@@ -90,6 +92,19 @@ namespace ElectroImageViewer
             {
                 _cmdHistory = value;
                 OnPropertyChanged(nameof(CmdHistory));
+            }
+        }
+
+        public Visibility TerminalVisibility
+        {
+            get { return _terminalVisibility; }
+            set
+            {
+                if (_terminalVisibility != value)
+                {
+                    _terminalVisibility = value;
+                    OnPropertyChanged(nameof(TerminalVisibility));
+                }
             }
         }
 

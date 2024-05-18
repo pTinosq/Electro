@@ -20,7 +20,9 @@ namespace ElectroImageViewer.Commands
                 new CopyCommand(),
                 new SaturateCommand(),
                 new WriteCommand(),
-                new BufferCommand()
+                new BufferCommand(),
+                new QuitCommand(),
+                new CloseCommand()
             ];
 
             foreach (Command c in cmds)
