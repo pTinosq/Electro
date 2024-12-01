@@ -1,0 +1,50 @@
+{
+	"$schema": "https://schema.tauri.app/config/2",
+	"productName": "electro",
+	"version": "0.1.0",
+	"identifier": "com.pTinosq.electro",
+	"build": {
+		"beforeDevCommand": "npm run dev",
+		"devUrl": "http://localhost:1420",
+		"beforeBuildCommand": "npm run build",
+		"frontendDist": "../dist"
+	},
+	"app": {
+		"withGlobalTauri": true,
+		"windows": [
+			{
+				"title": "electro",
+				"width": 800,
+				"height": 600
+			}
+		],
+		"security": {
+			"csp": "default-src 'self' ipc: http://ipc.localhost; img-src 'self' asset: http://asset.localhost",
+			"assetProtocol": {
+				"enable": true,
+				"scope": ["**/*"]
+			}
+		}
+	},
+	"bundle": {
+		"active": true,
+		"targets": "all",
+		"icon": [
+			"icons/32x32.png",
+			"icons/128x128.png",
+			"icons/128x128@2x.png",
+			"icons/icon.icns",
+			"icons/icon.ico"
+		],
+		"windows": {
+			"nsis": {
+				"installerHooks": "./windows/hooks.nsi"
+			}
+		}
+	},
+	"plugins": {
+		"cli": {
+			"args": [{ "name": "source", "index": 1, "takesValue": true }]
+		}
+	}
+}
