@@ -1,7 +1,42 @@
-# Tauri + Vanilla TS
+<div align="center">
+  <img src="./.github/README_content/README_Banner.jpg">
+  <br>
+  <br>
+  <h1>Electro</h1>
+A lightning-fast image viewer built with Rust. Free, open-source, and designed for speed.
+</div>
 
-This template should help get you started developing with Tauri in vanilla HTML, CSS and Typescript.
 
-## Recommended IDE Setup
 
-- [VS Code](https://code.visualstudio.com/) + [Tauri](https://marketplace.visualstudio.com/items?itemName=tauri-apps.tauri-vscode) + [rust-analyzer](https://marketplace.visualstudio.com/items?itemName=rust-lang.rust-analyzer)
+## Features
+
+
+### ⚡ Hyper-performant
+Built from the ground up with Rust, designed for speed
+
+### 🤓 Integrated Terminal
+Access a terminal within the image viewer for seamless multitasking
+
+### 💪 Built for power users
+The vim of image viewers. Navigate and manipulate images at the speed of light with shortcuts & the terminal
+
+
+## Installation
+
+W.I.P
+
+## Getting Started
+
+W.I.P
+
+## Screenshots
+
+W.I.P
+
+## Contributing
+
+W.I.P
+
+## License
+
+W.I.P
