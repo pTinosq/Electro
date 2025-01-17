@@ -7,6 +7,8 @@ import {
 } from "./types/ImageTransform";
 import { CanvasController } from "./canvas/canvasController";
 import { initializeDragDropListener } from "./listeners/dragDropListener";
+import { initializeKeyPressListener } from "./keybinds/keypressListener";
+
 const canvas = document.getElementById("canvas") as HTMLCanvasElement;
 const canvasController = new CanvasController(canvas);
 
@@ -31,7 +33,6 @@ window.addEventListener("resize", () => {
 	}
 });
 
-
 // Handle image source
 initializeImageSourceListener(async (imageUri) => {
 	try {
@@ -51,7 +52,7 @@ initializeImageSourceListener(async (imageUri) => {
 	}
 });
 
-// Handle drag and drop 
+// Handle drag and drop
 initializeDragDropListener(async (imageUri: string) => {
 	try {
 		const image = await loadImage(imageUri);
@@ -67,5 +68,8 @@ initializeDragDropListener(async (imageUri: string) => {
 		console.error("Error loading image:", error);
 	}
 });
+
+// Handle key presses
+initializeKeyPressListener();
 
 canvasController.start();
