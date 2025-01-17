@@ -1,10 +1,10 @@
 export interface ImageTransform {
-	x: number; // Position on X-axis
-	y: number; // Position on Y-axis
-	width: number; // Scaled width
-	height: number; // Scaled height
-	offsetX: number; // Pan offset X
-	offsetY: number; // Pan offset Y
+	x: number;
+	y: number;
+	width: number;
+	height: number;
+	offsetX: number;
+	offsetY: number;
 }
 
 export const DEFAULT_IMAGE_TRANSFORM: ImageTransform = {
