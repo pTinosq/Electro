@@ -7,7 +7,9 @@ import {
 } from "./types/ImageTransform";
 import { CanvasController } from "./canvas/canvasController";
 import { initializeDragDropListener } from "./listeners/dragDropListener";
-import { initializeKeyPressListener } from "./keybinds/keypressListener";
+import KeybindListener from "./keybinds/KeybindListener";
+import KeybindProcessor from "./keybinds/KeybindProcessor";
+import { loadAllCommands } from "./commands/loadCommands";
 
 const canvas = document.getElementById("canvas") as HTMLCanvasElement;
 const canvasController = new CanvasController(canvas);
@@ -69,7 +71,16 @@ initializeDragDropListener(async (imageUri: string) => {
 	}
 });
 
-// Handle key presses
-initializeKeyPressListener();
+// Initialize the KeybindProcessor
+const keybindProcessor = new KeybindProcessor();
+
+// Initialize the KeybindListener with the processor
+const keybindListener = new KeybindListener(keybindProcessor);
+
+// Load the keybinds into state
+console.log("Loading keybinds...");
+loadAllCommands();
+
+keybindListener.start();
 
 canvasController.start();

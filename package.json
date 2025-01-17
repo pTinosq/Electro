@@ -10,9 +10,11 @@
     "tauri": "tauri"
   },
   "dependencies": {
+    "@reduxjs/toolkit": "^2.5.0",
     "@tauri-apps/api": "^2",
     "@tauri-apps/plugin-cli": "^2.0.0",
-    "@tauri-apps/plugin-shell": "^2"
+    "@tauri-apps/plugin-shell": "^2",
+    "redux": "^5.0.1"
   },
   "devDependencies": {
     "@tauri-apps/cli": "^2",

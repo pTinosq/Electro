@@ -1,14 +1,21 @@
-import { registerCommand } from ".";
+import store from "../store";
 import Command from "./Command";
 
-const testCommand = new Command(
-	"Test",
-	"A test command used for testing",
-	"terminal.test",
-	"p",
-	() => {
-		console.log("Test command executed");
-	},
-);
+const terminalCommands = [
+	new Command(
+		"terminal.test",
+		"Test command",
+		"terminal.test",
+		"t",
+		() => {
+			console.log("Test command executed");
+		},
+		() => {
+			// test - ignore
+			const state = store.getState();
+			return true;
+		},
+	),
+];
 
-registerCommand("terminal.test", testCommand);
+export default terminalCommands;
