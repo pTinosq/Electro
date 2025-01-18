@@ -1,0 +1,25 @@
+#terminal {
+  background: black;
+  color: white;
+  font: monospace;
+  padding: 10px;
+  height: 100px;
+  overflow: hidden;
+}
+
+.line {
+  display: flex;
+  width: 100%;
+}
+
+.terminal span {
+  width: 1px;
+}
+
+#terminal-input {
+  width: 100%;
+  border: none;
+  background: black;
+  color: white;
+  outline: none;
+}
