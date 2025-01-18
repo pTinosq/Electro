@@ -10,7 +10,9 @@ import { initializeDragDropListener } from "./listeners/dragDropListener";
 import KeybindListener from "./keybinds/KeybindListener";
 import KeybindProcessor from "./keybinds/KeybindProcessor";
 import { loadAllCommands } from "./commands/loadCommands";
+import { UIProcessor } from "./ui/UIProcessor";
 
+// Canvas and related logic
 const canvas = document.getElementById("canvas") as HTMLCanvasElement;
 const canvasController = new CanvasController(canvas);
 
@@ -20,7 +22,6 @@ canvas.height = window.innerHeight;
 let currentImage: HTMLImageElement | null = null;
 let currentTransform: ImageTransform = DEFAULT_IMAGE_TRANSFORM;
 
-// Handle window resizing
 window.addEventListener("resize", () => {
 	canvas.width = window.innerWidth;
 	canvas.height = window.innerHeight;
@@ -35,7 +36,7 @@ window.addEventListener("resize", () => {
 	}
 });
 
-// Handle image source
+// Image source listener
 initializeImageSourceListener(async (imageUri) => {
 	try {
 		const defaultImage = "/src/assets/electro-default.jpg";
@@ -47,14 +48,13 @@ initializeImageSourceListener(async (imageUri) => {
 			.center(canvas)
 			.build();
 
-		// Use setImage instead of creating a new controller
 		canvasController.setImage(image, currentTransform);
 	} catch (error) {
 		console.error("Error loading image:", error);
 	}
 });
 
-// Handle drag and drop
+// Drag and drop listener
 initializeDragDropListener(async (imageUri: string) => {
 	try {
 		const image = await loadImage(imageUri);
@@ -71,16 +71,17 @@ initializeDragDropListener(async (imageUri: string) => {
 	}
 });
 
-// Initialize the KeybindProcessor
+// Keybind logic
 const keybindProcessor = new KeybindProcessor();
-
-// Initialize the KeybindListener with the processor
 const keybindListener = new KeybindListener(keybindProcessor);
-
-// Load the keybinds into state
 console.log("Loading keybinds...");
 loadAllCommands();
-
 keybindListener.start();
 
+// Start the canvas controller
 canvasController.start();
+
+// Initialize and start the UIProcessor
+const uiProcessor = new UIProcessor();
+uiProcessor.initialize();
+uiProcessor.start();

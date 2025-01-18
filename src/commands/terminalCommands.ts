@@ -1,18 +1,17 @@
 import store from "../store";
+import { toggleTerminal } from "../store/slices/terminalSlice";
 import Command from "./Command";
 
 const terminalCommands = [
 	new Command(
-		"terminal.test",
-		"Test command",
-		"terminal.test",
+		"terminal.toggle",
+		"Toggle the terminal",
+		"terminal.toggle",
 		"t",
 		() => {
-			console.log("Test command executed");
+			store.dispatch(toggleTerminal());
 		},
 		() => {
-			// test - ignore
-			const state = store.getState();
 			return true;
 		},
 	),
