@@ -1,5 +1,5 @@
 import type { BaseComponent } from "../components/baseComponent";
-import { Terminal } from "../components/terminal";
+import Terminal from "../components/terminal";
 
 export class UIProcessor {
 	private components: BaseComponent[] = [];

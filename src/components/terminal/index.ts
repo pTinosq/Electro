@@ -1,6 +1,6 @@
-import { BaseComponent } from "./baseComponent";
+import { BaseComponent } from "../baseComponent";
 
-export class Terminal extends BaseComponent {
+export default class Terminal extends BaseComponent {
 	constructor(selector: string) {
 		super(selector);
 		this.element.classList.add("open");
