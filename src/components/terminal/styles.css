@@ -4,10 +4,10 @@
   font: monospace;
   padding: 10px;
   height: 100px;
-  overflow: hidden;
+  overflow-y: auto;
 }
 
-.line {
+.terminal-line {
   display: flex;
   width: 100%;
 }
