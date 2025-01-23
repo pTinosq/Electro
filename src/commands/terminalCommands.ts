@@ -1,5 +1,8 @@
 import store from "../store";
-import { toggleTerminal } from "../store/slices/terminalSlice";
+import {
+	setTerminalOpenState,
+	toggleTerminal,
+} from "../store/slices/terminalSlice";
 import Command from "./Command";
 
 const terminalCommands = [
@@ -12,7 +15,21 @@ const terminalCommands = [
 			store.dispatch(toggleTerminal());
 		},
 		() => {
-			return true;
+			const isTerminalInputFocused =
+				store.getState().terminal.isTerminalInputFocused;
+			return !isTerminalInputFocused;
+		},
+	),
+	new Command(
+		"terminal.close",
+		"Close the terminal",
+		"terminal.close",
+		"esc",
+		() => {
+			store.dispatch(setTerminalOpenState(false));
+		},
+		() => {
+			return store.getState().terminal.isOpen;
 		},
 	),
 ];

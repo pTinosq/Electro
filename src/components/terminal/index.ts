@@ -1,3 +1,5 @@
+import store from "../../store";
+import { setTerminalInputFocus } from "../../store/slices/terminalSlice";
 import { BaseComponent } from "../baseComponent";
 
 export default class Terminal extends BaseComponent {
@@ -33,6 +35,16 @@ export default class Terminal extends BaseComponent {
 		this.inputElement.addEventListener("keydown", (e: KeyboardEvent) =>
 			this.handleInput(e),
 		);
+
+		this.inputElement.addEventListener("focus", () => {
+			store.dispatch(setTerminalInputFocus(true));
+			console.debug("Terminal input focused");
+		});
+
+		this.inputElement.addEventListener("blur", () => {
+			store.dispatch(setTerminalInputFocus(false));
+			console.debug("Terminal input blurred");
+		});
 	}
 
 	private handleInput(e: KeyboardEvent) {
@@ -45,18 +57,28 @@ export default class Terminal extends BaseComponent {
 		}
 	}
 
+	// Appends a new entry to the terminal history
 	private appendToHistory(text: string) {
 		const newEntry = document.createElement("div");
 
 		// Add a placeholder if the text is empty
 		newEntry.innerHTML = text || "&nbsp;";
 		this.historyElement.appendChild(newEntry);
+
+		// scroll to the bottom of history element
+		this.historyElement.scrollTo(0, this.historyElement.scrollHeight);
 	}
 
 	protected updateUI() {
-		const isOpen = this.getState((state) => state.terminal.isOpen);
-		if (isOpen) {
+		const terminalState = this.getState((state) => state.terminal);
+
+		if (terminalState.isOpen) {
 			this.element.classList.add("open");
+
+			// Focus input when terminal is first opened
+			if (document.activeElement !== this.inputElement) {
+				this.inputElement.focus();
+			}
 		} else {
 			this.element.classList.remove("open");
 		}

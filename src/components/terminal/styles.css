@@ -1,15 +1,28 @@
 #terminal {
+  display: none;
+  position: fixed;
+  height: 20%;
+  min-height: 75px;
+  width: 100%;
+  overflow: auto;
   background: black;
   color: white;
-  font: monospace;
+  font-family: monospace;
   padding: 10px;
-  height: 100px;
-  overflow-y: auto;
+  padding-bottom: 0;
+  box-sizing: border-box;
+}
+
+#terminal.open {
+  display: flex;
+  flex-direction: column;
+
 }
 
 .terminal-line {
   display: flex;
   width: 100%;
+  border-top: 1px dotted white;
 }
 
 .terminal span {
@@ -22,4 +35,13 @@
   background: black;
   color: white;
   outline: none;
+  margin-top: auto;
+}
+
+#terminal-history {
+  display: flex;
+  flex-direction: column;
+  width: 100%;
+  height: 100%;
+  overflow: auto;
 }

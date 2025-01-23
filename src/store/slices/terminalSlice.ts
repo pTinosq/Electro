@@ -2,26 +2,31 @@ import { createSlice, type PayloadAction } from "@reduxjs/toolkit";
 
 interface TerminalState {
 	isOpen: boolean;
+	isTerminalInputFocused: boolean;
 }
 
 const initialState: TerminalState = {
 	isOpen: false,
+	isTerminalInputFocused: false,
 };
 
 const terminalSlice = createSlice({
 	name: "terminal",
 	initialState,
 	reducers: {
-		setTerminalState: (state, action: PayloadAction<boolean>) => {
+		setTerminalOpenState: (state, action: PayloadAction<boolean>) => {
 			state.isOpen = action.payload;
 		},
-
 		toggleTerminal: (state) => {
 			state.isOpen = !state.isOpen;
+		},
+		setTerminalInputFocus: (state, action: PayloadAction<boolean>) => {
+			state.isTerminalInputFocused = action.payload;
 		},
 	},
 });
 
-export const { setTerminalState, toggleTerminal } = terminalSlice.actions;
+export const { setTerminalOpenState, toggleTerminal, setTerminalInputFocus } =
+	terminalSlice.actions;
 
 export default terminalSlice.reducer;
