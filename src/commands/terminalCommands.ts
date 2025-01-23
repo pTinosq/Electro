@@ -24,7 +24,7 @@ const terminalCommands = [
 		"terminal.close",
 		"Close the terminal",
 		"terminal.close",
-		"esc",
+		"Escape",
 		() => {
 			store.dispatch(setTerminalOpenState(false));
 		},

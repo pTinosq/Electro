@@ -49,8 +49,8 @@ export default class Terminal extends BaseComponent {
 
 	private handleInput(e: KeyboardEvent) {
 		if (e.key === "Enter") {
-			const inputValue = this.inputElement.value.trim();
-
+			let inputValue = this.inputElement.value.trim();
+			inputValue = `> ${inputValue}`; // Add a prompt to the input value
 			this.appendToHistory(inputValue);
 
 			this.inputElement.value = "";
