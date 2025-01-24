@@ -4,7 +4,7 @@ import { getCommand } from "../../commands/CommandRegistry";
 export default class CLIProcessor {
 	findCommand(commandText: string): Command | undefined {
 		const command = getCommand(commandText);
-		console.debug("952003", command);
+
 		if (!command) {
 			console.log(`Command not found: ${commandText}`);
 			return;

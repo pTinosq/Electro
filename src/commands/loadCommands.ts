@@ -2,7 +2,7 @@ import store from "../store";
 import { registerKeybind } from "../store/slices/keybindSlice";
 import { addCommand } from "./CommandRegistry";
 import terminalCommands from "./terminalCommands";
-import CLICommands from "./cliCommands";
+import CLICommands from "./CLICommands";
 
 export function loadAllCommands() {
 	console.log("Loading all commands...");

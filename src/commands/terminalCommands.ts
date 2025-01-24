@@ -12,7 +12,6 @@ const terminalCommands = [
 		"terminal.toggle",
 		() => {
 			store.dispatch(toggleTerminal());
-			return "null";
 		},
 		() => {
 			const isTerminalInputFocused =

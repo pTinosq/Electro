@@ -41,12 +41,10 @@ export default class Terminal extends BaseComponent {
 
 		this.inputElement.addEventListener("focus", () => {
 			store.dispatch(setTerminalInputFocus(true));
-			console.debug("Terminal input focused");
 		});
 
 		this.inputElement.addEventListener("blur", () => {
 			store.dispatch(setTerminalInputFocus(false));
-			console.debug("Terminal input blurred");
 		});
 	}
 
