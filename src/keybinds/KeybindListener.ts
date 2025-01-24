@@ -8,11 +8,11 @@ export default class KeybindListener {
 	}
 
 	start() {
-		window.addEventListener("keydown", this.handleKeypress);
+		window.addEventListener("keyup", this.handleKeypress);
 	}
 
 	stop() {
-		window.removeEventListener("keydown", this.handleKeypress);
+		window.removeEventListener("keyup", this.handleKeypress);
 	}
 
 	private handleKeypress = (event: KeyboardEvent) => {

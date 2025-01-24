@@ -5,24 +5,24 @@ export default class Command<TArgs extends unknown[] = [], TReturn = void> {
 	name: string;
 	description: string;
 	id: string;
-	keybind: string;
 	callback: (...args: TArgs) => TReturn | Promise<TReturn>;
 	when: (state: RootState) => boolean;
+	keybind?: string;
 
 	constructor(
 		name: string,
 		description: string,
 		id: string,
-		keybind: string,
 		callback: (...args: TArgs) => TReturn | Promise<TReturn>,
 		when: () => boolean = () => true,
+		keybind?: string,
 	) {
 		this.name = name;
 		this.description = description;
 		this.id = id;
-		this.keybind = keybind;
 		this.callback = callback;
 		this.when = when;
+		this.keybind = keybind;
 	}
 
 	async execute(...args: TArgs): Promise<TReturn | null> {

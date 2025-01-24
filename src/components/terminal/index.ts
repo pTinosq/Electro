@@ -1,11 +1,14 @@
+import type Command from "../../commands/Command";
 import store from "../../store";
 import { setTerminalInputFocus } from "../../store/slices/terminalSlice";
 import { BaseComponent } from "../baseComponent";
+import CLIProcessor from "./CLIProcessor";
 
 export default class Terminal extends BaseComponent {
 	private inputElement: HTMLInputElement;
 	private historyElement: HTMLElement;
 	private pathElement: HTMLElement;
+	private CLIProcessor: CLIProcessor = new CLIProcessor();
 
 	constructor(selector: string) {
 		super(selector);
@@ -32,9 +35,9 @@ export default class Terminal extends BaseComponent {
 			this.inputElement.focus();
 		});
 
-		this.inputElement.addEventListener("keydown", (e: KeyboardEvent) =>
-			this.handleInput(e),
-		);
+		this.inputElement.addEventListener("keyup", (e: KeyboardEvent) => {
+			this.handleInput(e);
+		});
 
 		this.inputElement.addEventListener("focus", () => {
 			store.dispatch(setTerminalInputFocus(true));
@@ -49,11 +52,29 @@ export default class Terminal extends BaseComponent {
 
 	private handleInput(e: KeyboardEvent) {
 		if (e.key === "Enter") {
-			let inputValue = this.inputElement.value.trim();
-			inputValue = `> ${inputValue}`; // Add a prompt to the input value
-			this.appendToHistory(inputValue);
+			const inputValue = this.inputElement.value.trim();
 
+			// Add a prompt to the input value
+			const formattedInputValue = `> ${inputValue}`;
+			this.appendToHistory(formattedInputValue);
 			this.inputElement.value = "";
+
+			// Process the input value
+			const inputtedCommand = this.CLIProcessor.findCommand(inputValue);
+
+			if (inputtedCommand) {
+				this.CLIProcessor.processCommand(inputtedCommand)
+					.then((result) => {
+						this.appendToHistory(result);
+					})
+					.catch((error) => {
+						this.appendToHistory(error);
+					});
+			} else {
+				if (inputValue) {
+					this.appendToHistory(`Command not found: ${inputValue}`);
+				}
+			}
 		}
 	}
 

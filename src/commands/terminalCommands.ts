@@ -10,27 +10,28 @@ const terminalCommands = [
 		"terminal.toggle",
 		"Toggle the terminal",
 		"terminal.toggle",
-		"t",
 		() => {
 			store.dispatch(toggleTerminal());
+			return "null";
 		},
 		() => {
 			const isTerminalInputFocused =
 				store.getState().terminal.isTerminalInputFocused;
 			return !isTerminalInputFocused;
 		},
+		"t",
 	),
 	new Command(
 		"terminal.close",
 		"Close the terminal",
 		"terminal.close",
-		"Escape",
 		() => {
 			store.dispatch(setTerminalOpenState(false));
 		},
 		() => {
 			return store.getState().terminal.isOpen;
 		},
+		"Escape",
 	),
 ];
 

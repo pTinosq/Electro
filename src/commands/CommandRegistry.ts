@@ -1,6 +1,6 @@
 import type Command from "./Command";
 
-const commandRegistry: Record<string, Command> = {};
+export const commandRegistry: Record<string, Command> = {};
 
 export function addCommand(command: Command) {
 	if (!commandRegistry[command.id]) {
