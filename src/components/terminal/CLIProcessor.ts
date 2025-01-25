@@ -1,5 +1,5 @@
 import type Command from "../../commands/Command";
-import { getCommand } from "../../commands/CommandRegistry";
+import { commandRegistry, getCommand } from "../../commands/CommandRegistry";
 
 export default class CLIProcessor {
 	findCommand(commandText: string): Command | undefined {
@@ -27,5 +27,10 @@ export default class CLIProcessor {
 				console.error(error);
 				return Promise.reject(error);
 			});
+	}
+
+	autocompleteCommand(commandText: string): string {
+		console.log(commandRegistry);
+		return "";
 	}
 }

@@ -32,6 +32,18 @@ const terminalCommands = [
 		},
 		"Escape",
 	),
+	new Command(
+		"terminal.autocomplete",
+		"Autocomplete the current command",
+		"terminal.autocomplete",
+		() => {
+			console.log("Autocompleting...");
+		},
+		() => {
+			return store.getState().terminal.isOpen && store.getState().terminal.isTerminalInputFocused;
+		},
+		"Tab",
+	)
 ];
 
 export default terminalCommands;

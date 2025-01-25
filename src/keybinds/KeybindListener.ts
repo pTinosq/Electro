@@ -8,15 +8,15 @@ export default class KeybindListener {
 	}
 
 	start() {
-		window.addEventListener("keyup", this.handleKeypress);
+		window.addEventListener("keydown", this.handleKeypress);
 	}
 
 	stop() {
-		window.removeEventListener("keyup", this.handleKeypress);
+		window.removeEventListener("keydown", this.handleKeypress);
 	}
 
 	private handleKeypress = (event: KeyboardEvent) => {
 		const key = event.key;
-		this.keybindProcessor.processKeypress(key);
+		this.keybindProcessor.processKeypress(event, key);
 	};
 }

@@ -6,7 +6,7 @@ export class UIProcessor {
 
 	initialize() {
 		// Initialize UI components here
-		this.components.push(new Terminal("#terminal", "#terminal-input"));
+		this.components.push(new Terminal("#terminal"));
 	}
 
 	start() {

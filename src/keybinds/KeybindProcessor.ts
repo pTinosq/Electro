@@ -2,7 +2,7 @@ import store from "../store";
 import { getCommand } from "../commands/CommandRegistry";
 
 export default class KeybindProcessor {
-	processKeypress(keypress: string): void {
+	processKeypress(event: KeyboardEvent, keypress: string): void {
 		// Access the Redux state to get the keybindRegistry
 		const state = store.getState();
 		const commandIds: string[] =
@@ -14,6 +14,8 @@ export default class KeybindProcessor {
 				if (command) {
 					// Check if the command can execute
 					if (command.when(state)) {
+						// Prevent the default keypress action
+						event.preventDefault();
 						command.execute();
 					} else {
 						console.warn(
