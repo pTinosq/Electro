@@ -15,5 +15,18 @@ export const terminalKeybinds = [
       // Do not open the terminal if it is already open
       return !store.getState().terminal.isOpen;
     }
-  )
+  ),
+  new Keybind(
+    "Close terminal",
+    "Escape",
+    "Closes the terminal",
+    (e) => {
+      e.preventDefault();
+      store.dispatch(setTerminalOpenState(false));
+    },
+    () => {
+      // Only close the terminal if it is open
+      return store.getState().terminal.isOpen;
+    }
+  ),
 ]
