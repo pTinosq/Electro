@@ -1,3 +1,4 @@
+import { invoke } from "@tauri-apps/api/core";
 import CLICommand from "../CLICommand";
 
 export const terminalCommands = [
@@ -12,8 +13,16 @@ export const terminalCommands = [
         console.log("Test command executed");
       }
     },
-    () => {
-      return Math.random() > 0.5;
-    }
+    () => Math.random() > 0.5
+  ),
+  new CLICommand(
+    "quit",
+    "Quit Electro",
+    "quit",
+    async () => {
+      console.log("Quitting Electro...");
+      await invoke("exit_app");
+    },
+    () => true
   )
-]
+];

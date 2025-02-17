@@ -17,13 +17,21 @@ fn on_image_source_listener_ready(app: AppHandle) {
     }
 }
 
+#[tauri::command]
+fn exit_app() {
+    std::process::exit(0x0);
+}
+
 // Main entry point
 #[cfg_attr(mobile, tauri::mobile_entry_point)]
 pub fn run() {
     tauri::Builder::default()
         .plugin(tauri_plugin_shell::init())
         .plugin(tauri_plugin_cli::init())
-        .invoke_handler(tauri::generate_handler![on_image_source_listener_ready])
+        .invoke_handler(tauri::generate_handler![
+            on_image_source_listener_ready,
+            exit_app
+        ])
         .run(tauri::generate_context!())
         .expect("error while running tauri application");
 }

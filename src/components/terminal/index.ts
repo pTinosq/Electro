@@ -1,7 +1,6 @@
 import store from "../../store";
 import { setTerminalInputFocus } from "../../store/slices/terminalSlice";
 import { BaseComponent } from "../baseComponent";
-import CLIProcessor from "./CLIProcessor";
 import CommandRegistry from "./CommandRegistry";
 import { terminalCommands } from "./commands/terminalCommands";
 
@@ -9,7 +8,6 @@ export default class Terminal extends BaseComponent {
 	private inputElement: HTMLInputElement;
 	private historyElement: HTMLElement;
 	private pathElement: HTMLElement;
-	private CLIProcessor: CLIProcessor = new CLIProcessor();
 	private commandRegistry: CommandRegistry = CommandRegistry.getInstance();
 
 	constructor(selector: string) {
