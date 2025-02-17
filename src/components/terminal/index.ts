@@ -64,7 +64,9 @@ export default class Terminal extends BaseComponent {
 			if (command) {
 				command.execute(...inputTokens.slice(1));
 			} else {
-				this.appendToHistory(`Command not found: ${inputTokens[0]}`);
+				if (inputTokens[0].trim() !== "") {
+					this.appendToHistory(`Command not found: ${inputTokens[0]}`);
+				}
 			}
 		}
 	}
