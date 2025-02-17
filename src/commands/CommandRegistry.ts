@@ -1,10 +1,12 @@
 import type Command from "./Command";
 
-export const commandRegistry: Record<string, Command> = {};
+export const commandRegistry: Record<string, Command<unknown[], unknown>> = {};
 
-export function addCommand(command: Command) {
+export function addCommand<TArgs extends unknown[], TReturn>(
+	command: Command<TArgs, TReturn>,
+) {
 	if (!commandRegistry[command.id]) {
-		commandRegistry[command.id] = command;
+		commandRegistry[command.id] = command as Command<unknown[], unknown>; // Type assertion
 	}
 }
 
@@ -12,6 +14,8 @@ export function removeCommand(commandId: string) {
 	delete commandRegistry[commandId];
 }
 
-export function getCommand(commandId: string): Command | undefined {
+export function getCommand(
+	commandId: string,
+): Command<unknown[], unknown> | undefined {
 	return commandRegistry[commandId];
 }

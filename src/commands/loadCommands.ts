@@ -3,11 +3,15 @@ import { registerKeybind } from "../store/slices/keybindSlice";
 import { addCommand } from "./CommandRegistry";
 import terminalCommands from "./terminalCommands";
 import CLICommands from "./CLICommands";
+import type Command from "./Command";
 
 export function loadAllCommands() {
 	console.log("Loading all commands...");
 
-	const allCommands = [...terminalCommands, ...CLICommands];
+	const allCommands: Command<unknown[], unknown>[] = [
+		...terminalCommands,
+		...CLICommands,
+	];
 
 	for (const command of allCommands) {
 		addCommand(command);
