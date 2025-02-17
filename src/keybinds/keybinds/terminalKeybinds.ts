@@ -1,3 +1,5 @@
+import store from "../../store";
+import { setTerminalOpenState } from "../../store/slices/terminalSlice";
 import Keybind from "../Keybind";
 
 export const terminalKeybinds = [
@@ -5,11 +7,13 @@ export const terminalKeybinds = [
     "Open terminal",
     "t",
     "Opens the terminal",
-    () => {
-      console.log("Opening terminal");
+    (e) => {
+      e.preventDefault();
+      store.dispatch(setTerminalOpenState(true));
     },
     () => {
-      return true;
+      // Do not open the terminal if it is already open
+      return !store.getState().terminal.isOpen;
     }
   )
 ]
