@@ -10,6 +10,7 @@ export default class Terminal extends BaseComponent {
 	private historyElement: HTMLElement;
 	private pathElement: HTMLElement;
 	private CLIProcessor: CLIProcessor = new CLIProcessor();
+	private commandRegistry: CommandRegistry = CommandRegistry.getInstance();
 
 	constructor(selector: string) {
 		super(selector);
@@ -53,21 +54,19 @@ export default class Terminal extends BaseComponent {
 	private handleInput(e: KeyboardEvent) {
 		if (e.key === "Enter") {
 			const inputValue = this.inputElement.value.trim();
+			const inputTokens = inputValue.split(" ");
 
 			// Add a prompt to the input value
 			const formattedInputValue = `> ${inputValue}`;
 			this.appendToHistory(formattedInputValue);
 			this.inputElement.value = "";
 
-			// Process the input value
-			const inputtedCommand = this.CLIProcessor.findCommand(inputValue);
+			const command = this.commandRegistry.getCommand(inputTokens[0]);
 
-			if (inputtedCommand) {
-				this.CLIProcessor.processCommand(inputtedCommand);
+			if (command) {
+				command.execute(...inputTokens.slice(1));
 			} else {
-				if (inputValue) {
-					this.appendToHistory(`Command not found: ${inputValue}`);
-				}
+				this.appendToHistory(`Command not found: ${inputTokens[0]}`);
 			}
 		}
 	}

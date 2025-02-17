@@ -2,10 +2,16 @@ export default class CLICommand {
   name: string;
   description: string;
   commandString: string;
-  callback: () => void;
+  callback: (canExecute: boolean, ...args: string[]) => void;
   when: () => boolean;
 
-  constructor(name: string, description: string, commandString: string, callback: () => void, when: () => boolean) {
+  constructor(
+    name: string,
+    description: string,
+    commandString: string,
+    callback: (isAllowed: boolean, ...args: string[]) => void,
+    when: () => boolean
+  ) {
     this.name = name;
     this.description = description;
     this.commandString = commandString;
@@ -13,11 +19,8 @@ export default class CLICommand {
     this.when = when;
   }
 
-  execute() {
-    if (this.when()) {
-      this.callback();
-    } else {
-      console.warn(`Command "${this.name}" cannot be executed due to unmet conditions.`);
-    }
+  execute(...args: string[]) {
+    const isAllowed = this.when();
+    this.callback(isAllowed, ...args);
   }
 }

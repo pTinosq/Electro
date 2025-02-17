@@ -5,11 +5,15 @@ export const terminalCommands = [
     "test",
     "Test command",
     "test",
-    () => {
-      console.log("Test command executed");
+    (isAllowed) => {
+      if (!isAllowed) {
+        console.log("Command is not allowed");
+      } else {
+        console.log("Test command executed");
+      }
     },
     () => {
-      return true;
+      return Math.random() > 0.5;
     }
   )
 ]
