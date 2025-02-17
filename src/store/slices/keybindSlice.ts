@@ -14,7 +14,7 @@ const keybindSlice = createSlice({
 	reducers: {
 		registerKeybind: (
 			state,
-			action: PayloadAction<{ keybind: string; commandId: string }>
+			action: PayloadAction<{ keybind: string; commandId: string }>,
 		) => {
 			const { keybind, commandId } = action.payload;
 			if (!state.keybinds[keybind]) {
@@ -26,11 +26,11 @@ const keybindSlice = createSlice({
 		},
 		unregisterKeybind: (
 			state,
-			action: PayloadAction<{ keybind: string; commandId: string }>
+			action: PayloadAction<{ keybind: string; commandId: string }>,
 		) => {
 			const { keybind, commandId } = action.payload;
 			state.keybinds[keybind] = state.keybinds[keybind]?.filter(
-				(id) => id !== commandId
+				(id) => id !== commandId,
 			);
 			if (state.keybinds[keybind]?.length === 0) {
 				delete state.keybinds[keybind];
@@ -42,6 +42,7 @@ const keybindSlice = createSlice({
 	},
 });
 
-export const { registerKeybind, unregisterKeybind, clearKeybinds } = keybindSlice.actions;
+export const { registerKeybind, unregisterKeybind, clearKeybinds } =
+	keybindSlice.actions;
 
 export default keybindSlice.reducer;

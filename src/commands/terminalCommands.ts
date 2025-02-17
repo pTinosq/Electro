@@ -40,10 +40,13 @@ const terminalCommands = [
 			console.log("Autocompleting...");
 		},
 		() => {
-			return store.getState().terminal.isOpen && store.getState().terminal.isTerminalInputFocused;
+			return (
+				store.getState().terminal.isOpen &&
+				store.getState().terminal.isTerminalInputFocused
+			);
 		},
 		"Tab",
-	)
+	),
 ];
 
 export default terminalCommands;
