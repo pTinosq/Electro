@@ -1,8 +1,9 @@
-import type Command from "../../commands/Command";
 import store from "../../store";
 import { setTerminalInputFocus } from "../../store/slices/terminalSlice";
 import { BaseComponent } from "../baseComponent";
 import CLIProcessor from "./CLIProcessor";
+import CommandRegistry from "./CommandRegistry";
+import { terminalCommands } from "./commands/terminalCommands";
 
 export default class Terminal extends BaseComponent {
 	private inputElement: HTMLInputElement;
@@ -31,6 +32,7 @@ export default class Terminal extends BaseComponent {
 	}
 
 	private addEventListeners() {
+		// When the terminal is clicked, focus the input
 		this.element.addEventListener("click", () => {
 			this.inputElement.focus();
 		});
@@ -61,13 +63,7 @@ export default class Terminal extends BaseComponent {
 			const inputtedCommand = this.CLIProcessor.findCommand(inputValue);
 
 			if (inputtedCommand) {
-				this.CLIProcessor.processCommand(inputtedCommand)
-					.then((result) => {
-						this.appendToHistory(result);
-					})
-					.catch((error) => {
-						this.appendToHistory(error);
-					});
+				this.CLIProcessor.processCommand(inputtedCommand);
 			} else {
 				if (inputValue) {
 					this.appendToHistory(`Command not found: ${inputValue}`);
@@ -102,4 +98,18 @@ export default class Terminal extends BaseComponent {
 			this.element.classList.remove("open");
 		}
 	}
+
+	public loadCommands() {
+		console.debug("Loading terminal commands...");
+		const registry = CommandRegistry.getInstance();
+
+		// Register commands
+		const allCommands = [...terminalCommands];
+
+		for (const command of allCommands) {
+			registry.addCommand(command);
+		}
+	}
 }
+
+

@@ -6,7 +6,10 @@ export class UIProcessor {
 
 	initialize() {
 		// Initialize UI components here
-		this.components.push(new Terminal("#terminal"));
+		const terminal = new Terminal("#terminal");
+		terminal.loadCommands();
+
+		this.components.push(terminal);
 	}
 
 	start() {

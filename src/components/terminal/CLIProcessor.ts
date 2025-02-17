@@ -1,36 +1,12 @@
-import type Command from "../../commands/Command";
-import { commandRegistry, getCommand } from "../../commands/CommandRegistry";
+import type CLICommand from "./CLICommand";
+import CommandRegistry from "./CommandRegistry";
 
 export default class CLIProcessor {
-	findCommand(commandText: string): Command | undefined {
-		const command = getCommand(commandText);
-
-		if (!command) {
-			console.log(`Command not found: ${commandText}`);
-			return;
-		}
-
-		return command;
+	findCommand(commandText: string): CLICommand | null {
+		return null;
 	}
 
-	async processCommand(command: Command): Promise<string> {
-		return command
-			.execute()
-			.then((result) => {
-				if (result === null || result === undefined) {
-					return Promise.reject("Command executed with no result.");
-				}
-
-				return Promise.resolve(result);
-			})
-			.catch((error) => {
-				console.error(error);
-				return Promise.reject(error);
-			});
-	}
-
-	autocompleteCommand(commandText: string): string {
-		console.log(commandRegistry);
-		return "";
+	processCommand(command: CLICommand) {
+		command.execute();
 	}
 }
