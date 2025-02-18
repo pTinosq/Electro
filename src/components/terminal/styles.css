@@ -29,12 +29,16 @@
 }
 
 #terminal-input {
-	width: 100%;
+	flex: 1;
 	border: none;
 	background: black;
 	color: white;
 	outline: none;
 	margin-top: auto;
+}
+
+#terminal-path {
+	font-size: 12px;
 }
 
 #terminal-history {
@@ -44,4 +48,18 @@
 	height: 100%;
 	overflow: auto;
 	color: #51ff51;
+}
+
+/* If the screen gets too small place the terminal input area 
+beneath the path */
+@media (max-width: 500px) {
+	.terminal-line {
+		flex-direction: column;
+		align-items: flex-start;
+	}
+
+	#terminal-input {
+		width: 100%;
+		margin-top: 5px;
+	}
 }

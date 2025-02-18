@@ -21,13 +21,15 @@ export default class Terminal extends BaseComponent {
 		this.historyElement = this.element.querySelector(
 			"#terminal-history",
 		) as HTMLElement;
-		this.pathElement = this.element.querySelector("#path") as HTMLElement;
+		this.pathElement = this.element.querySelector("#terminal-path") as HTMLElement;
 
 		if (!this.inputElement || !this.historyElement || !this.pathElement) {
 			throw new Error(
 				"Required terminal elements not found within the component.",
 			);
 		}
+
+		
 
 		this.addEventListeners();
 	}
@@ -62,9 +64,7 @@ export default class Terminal extends BaseComponent {
 			const formattedInputValue = `> ${inputValue}`;
 			this.appendToHistory(formattedInputValue);
 			this.inputElement.value = "";
-			console.debug("099329", inputTokens);
 			const command = this.commandRegistry.getCommand(inputTokens[0]);
-			console.debug("794829", inputTokens);
 
 			if (command) {
 				command.execute(this, ...(inputTokens.slice(1)));
@@ -142,6 +142,10 @@ export default class Terminal extends BaseComponent {
 		for (const command of allCommands) {
 			registry.addCommand(command);
 		}
+	}
+
+	public setPath(path: string) {
+		this.pathElement.innerText = `${path}>`;
 	}
 }
 
