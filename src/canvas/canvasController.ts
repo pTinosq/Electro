@@ -1,17 +1,18 @@
 import { TransformBuilder } from "./TransformBuilder";
-import {
-	DEFAULT_IMAGE_TRANSFORM,
-	type ImageTransform,
-} from "../types/ImageTransform";
+import { DEFAULT_IMAGE_TRANSFORM, type ImageTransform } from "../types/ImageTransform";
 import { drawImageToCanvas } from "./canvasUtils";
+
 export class CanvasController {
 	// Constants
 	public ZOOM_SENSITIVITY = 0.001;
 	public MIN_WIDTH = 100;
 	public MAX_WIDTH = 50000;
 
+	// Singleton instance
+	private static instance: CanvasController;
+
 	// Properties
-	private canvas: HTMLCanvasElement;
+	public canvas: HTMLCanvasElement;
 	private currentTransform: ImageTransform;
 	private currentImage: HTMLImageElement | undefined;
 
@@ -20,13 +21,29 @@ export class CanvasController {
 	private lastMouseX = 0;
 	private lastMouseY = 0;
 
-	constructor(canvas: HTMLCanvasElement) {
+	private constructor(canvas: HTMLCanvasElement) {
 		this.canvas = canvas;
 		this.currentTransform = { ...DEFAULT_IMAGE_TRANSFORM };
 		this.addListeners();
 	}
 
-	// Method to update the image and transform
+	/**
+	 * Returns the singleton instance of CanvasController.
+	 * The canvas must be provided on first initialization.
+	 */
+	public static getInstance(canvas?: HTMLCanvasElement): CanvasController {
+		if (!CanvasController.instance) {
+			if (!canvas) {
+				throw new Error("Canvas must be provided on first initialization.");
+			}
+			CanvasController.instance = new CanvasController(canvas);
+		}
+		return CanvasController.instance;
+	}
+
+	/**
+	 * Sets the image and applies a transformation.
+	 */
 	public setImage(image: HTMLImageElement, transform: ImageTransform): void {
 		this.currentImage = image;
 		this.currentTransform = transform;
@@ -96,10 +113,8 @@ export class CanvasController {
 		const mouseY = event.clientY - rect.top;
 
 		// Calculate mouse position relative to the image
-		const imageMouseX =
-			(mouseX - this.currentTransform.x) / this.currentTransform.width;
-		const imageMouseY =
-			(mouseY - this.currentTransform.y) / this.currentTransform.height;
+		const imageMouseX = (mouseX - this.currentTransform.x) / this.currentTransform.width;
+		const imageMouseY = (mouseY - this.currentTransform.y) / this.currentTransform.height;
 
 		const newWidth = this.currentTransform.width * zoomFactor;
 		const newHeight = this.currentTransform.height * zoomFactor;
@@ -146,5 +161,5 @@ export class CanvasController {
 		}
 	}
 
-	public start(): void {}
+	public start(): void { }
 }

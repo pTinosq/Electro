@@ -1,5 +1,5 @@
 import { initializeImageSourceListener } from "./listeners/imageSourceListener";
-import { loadImage } from "./image/imageLoader";
+import { loadImage } from "./utils/imageLoader";
 import { TransformBuilder } from "./canvas/TransformBuilder";
 import {
 	DEFAULT_IMAGE_TRANSFORM,
@@ -13,7 +13,7 @@ import { terminalKeybinds } from "./keybinds/keybinds/terminalKeybinds";
 
 // Canvas and related logic
 const canvas = document.getElementById("canvas") as HTMLCanvasElement;
-const canvasController = new CanvasController(canvas);
+const canvasController = CanvasController.getInstance(canvas);
 
 canvas.width = window.innerWidth;
 canvas.height = window.innerHeight;

@@ -3,6 +3,7 @@ import { setTerminalInputFocus } from "../../store/slices/terminalSlice";
 import { BaseComponent } from "../baseComponent";
 import CommandRegistry from "./CommandRegistry";
 import { electroCommands } from "./commands/electroCommands";
+import { imageCommands } from "./commands/imageCommands";
 import { terminalCommands } from "./commands/terminalCommands";
 
 export default class Terminal extends BaseComponent {
@@ -61,11 +62,12 @@ export default class Terminal extends BaseComponent {
 			const formattedInputValue = `> ${inputValue}`;
 			this.appendToHistory(formattedInputValue);
 			this.inputElement.value = "";
-
+			console.debug("099329", inputTokens);
 			const command = this.commandRegistry.getCommand(inputTokens[0]);
+			console.debug("794829", inputTokens);
 
 			if (command) {
-				command.execute(this, ...inputTokens.slice(1));
+				command.execute(this, ...(inputTokens.slice(1)));
 			} else {
 				if (inputTokens[0].trim() !== "") {
 					this.appendToHistory(`Command not found: ${inputTokens[0]}`);
@@ -131,7 +133,11 @@ export default class Terminal extends BaseComponent {
 		const registry = CommandRegistry.getInstance();
 
 		// Register commands
-		const allCommands = [...terminalCommands, ...electroCommands];
+		const allCommands = [
+			...terminalCommands,
+			...electroCommands,
+			...imageCommands
+		];
 
 		for (const command of allCommands) {
 			registry.addCommand(command);
