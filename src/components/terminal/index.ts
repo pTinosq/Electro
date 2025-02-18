@@ -2,6 +2,7 @@ import store from "../../store";
 import { setTerminalInputFocus } from "../../store/slices/terminalSlice";
 import { BaseComponent } from "../baseComponent";
 import CommandRegistry from "./CommandRegistry";
+import { electroCommands } from "./commands/electroCommands";
 import { terminalCommands } from "./commands/terminalCommands";
 
 export default class Terminal extends BaseComponent {
@@ -29,6 +30,7 @@ export default class Terminal extends BaseComponent {
 
 		this.addEventListeners();
 	}
+
 
 	private addEventListeners() {
 		// When the terminal is clicked, focus the input
@@ -63,7 +65,7 @@ export default class Terminal extends BaseComponent {
 			const command = this.commandRegistry.getCommand(inputTokens[0]);
 
 			if (command) {
-				command.execute(...inputTokens.slice(1));
+				command.execute(this, ...inputTokens.slice(1));
 			} else {
 				if (inputTokens[0].trim() !== "") {
 					this.appendToHistory(`Command not found: ${inputTokens[0]}`);
@@ -93,7 +95,7 @@ export default class Terminal extends BaseComponent {
 	}
 
 	// Appends a new entry to the terminal history
-	private appendToHistory(text: string) {
+	public appendToHistory(text: string) {
 		const newEntry = document.createElement("div");
 
 		// Add a placeholder if the text is empty
@@ -102,6 +104,11 @@ export default class Terminal extends BaseComponent {
 
 		// scroll to the bottom of history element
 		this.historyElement.scrollTo(0, this.historyElement.scrollHeight);
+	}
+
+	// Clears the terminal history
+	public clearHistory() {
+		this.historyElement.innerHTML = "";
 	}
 
 	protected updateUI() {
@@ -124,7 +131,7 @@ export default class Terminal extends BaseComponent {
 		const registry = CommandRegistry.getInstance();
 
 		// Register commands
-		const allCommands = [...terminalCommands];
+		const allCommands = [...terminalCommands, ...electroCommands];
 
 		for (const command of allCommands) {
 			registry.addCommand(command);

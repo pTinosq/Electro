@@ -1,15 +1,17 @@
+import type Terminal from ".";
+
 export default class CLICommand {
   name: string;
   description: string;
   commandString: string;
-  callback: (canExecute: boolean, ...args: string[]) => void;
+  callback: (terminal: Terminal, canExecute: boolean, ...args: string[]) => void;
   when: () => boolean;
 
   constructor(
     name: string,
     description: string,
     commandString: string,
-    callback: (isAllowed: boolean, ...args: string[]) => void,
+    callback: (terminal: Terminal, isAllowed: boolean, ...args: string[]) => void,
     when: () => boolean
   ) {
     this.name = name;
@@ -19,8 +21,8 @@ export default class CLICommand {
     this.when = when;
   }
 
-  execute(...args: string[]) {
+  execute(terminal: Terminal, ...args: string[]) {
     const isAllowed = this.when();
-    this.callback(isAllowed, ...args);
+    this.callback(terminal, isAllowed, ...args);
   }
 }

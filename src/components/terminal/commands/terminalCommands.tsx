@@ -1,28 +1,30 @@
-import { invoke } from "@tauri-apps/api/core";
+import store from "../../../store";
+import { setTerminalOpenState } from "../../../store/slices/terminalSlice";
 import CLICommand from "../CLICommand";
 
+// These commands handle the Electro terminal
 export const terminalCommands = [
   new CLICommand(
-    "test",
-    "Test command",
-    "test",
-    (isAllowed) => {
-      if (!isAllowed) {
-        console.log("Command is not allowed");
-      } else {
-        console.log("Test command executed");
-      }
+    "Close terminal",
+    "Close the terminal",
+    "close",
+    () => {
+      store.dispatch(setTerminalOpenState(false));
     },
-    () => Math.random() > 0.5
+    () => {
+      return store.getState().terminal.isOpen;
+    }
   ),
   new CLICommand(
-    "quit",
-    "Quit Electro",
-    "quit",
-    async () => {
-      console.log("Quitting Electro...");
-      await invoke("exit_app");
+    "Clear terminal",
+    "Clear the terminal",
+    "clear",
+    (terminal) => {
+      terminal.clearHistory();
+      store.dispatch(setTerminalOpenState(true));
     },
-    () => true
-  ),
+    () => {
+      return store.getState().terminal.isOpen;
+    }
+  )
 ];
