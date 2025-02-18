@@ -29,7 +29,7 @@ export default class Terminal extends BaseComponent {
 			);
 		}
 
-		
+
 
 		this.addEventListeners();
 	}
@@ -116,6 +116,7 @@ export default class Terminal extends BaseComponent {
 	protected updateUI() {
 		const terminalState = this.getState((state) => state.terminal);
 
+		// Reflect terminal open state
 		if (terminalState.isOpen) {
 			this.element.classList.add("open");
 
@@ -145,7 +146,7 @@ export default class Terminal extends BaseComponent {
 	}
 
 	public setPath(path: string) {
-		this.pathElement.innerText = `${path}>`;
+		this.pathElement.innerHTML = `${path}>`;
 	}
 }
 

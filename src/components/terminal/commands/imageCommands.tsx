@@ -3,7 +3,6 @@ import { loadImage } from "../../../utils/imageLoader";
 import { TransformBuilder } from "../../../canvas/TransformBuilder";
 import { CanvasController } from "../../../canvas/canvasController";
 import { DEFAULT_IMAGE_TRANSFORM } from "../../../types/ImageTransform";
-import { convertFileSrc } from "@tauri-apps/api/core";
 
 export const imageCommands = [
   new CLICommand(
@@ -20,9 +19,16 @@ export const imageCommands = [
         terminal.appendToHistory(`Loading image from ${filePath}...`);
         // Determine if the path is a URL or local file
         const isRemote = filePath.startsWith("http://") || filePath.startsWith("https://");
-        const resolvedPath = isRemote ? filePath : convertFileSrc(filePath);
+        // const resolvedPath = isRemote ? filePath : convertFileSrc(filePath);
 
-        const image = await loadImage(resolvedPath);
+        // const image = await loadImage(resolvedPath);
+        let image: HTMLImageElement;
+
+        if (isRemote) {
+          image = await loadImage(filePath, false);
+        } else {
+          image = await loadImage(filePath, true);
+        }
 
         const canvasController = CanvasController.getInstance();
 

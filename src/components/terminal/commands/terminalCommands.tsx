@@ -1,5 +1,6 @@
 import store from "../../../store";
-import { setCwd, setTerminalOpenState } from "../../../store/slices/terminalSlice";
+import { setTerminalOpenState } from "../../../store/slices/terminalSlice";
+import { setCwd } from "../../../utils/cwdUtils";
 import CLICommand from "../CLICommand";
 import { invoke } from "@tauri-apps/api/core";
 
@@ -58,7 +59,7 @@ export const terminalCommands = [
 
       try {
         const newPath = await invoke("change_cwd", { path }) as string;
-        store.dispatch(setCwd(newPath));
+        setCwd(newPath);
         terminal.appendToHistory(`Changed directory to: ${newPath}`);
       } catch (error) {
         terminal.appendToHistory(`Error: ${error}`);

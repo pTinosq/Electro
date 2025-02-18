@@ -1,13 +1,13 @@
 import { configureStore } from "@reduxjs/toolkit";
-import testStateReducer from "./slices/testStateSlice";
 import keybindRegistrySlice from "./slices/keybindSlice";
 import terminalSlice from "./slices/terminalSlice";
+import imageSlice from "./slices/imageSlice";
 
 const store = configureStore({
 	reducer: {
-		testState: testStateReducer,
 		keybindRegistry: keybindRegistrySlice,
 		terminal: terminalSlice,
+		image: imageSlice
 	},
 });
 

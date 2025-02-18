@@ -26,15 +26,18 @@ fn exit_app() {
 
 #[tauri::command]
 fn get_cwd() -> String {
-    println!(
-        "Current working directory: {:?}",
-        std::env::current_dir().unwrap()
-    );
-    std::env::current_dir()
-        .unwrap()
-        .to_str()
-        .unwrap()
-        .to_string()
+    match std::env::current_dir() {
+        Ok(path) => {
+            let path_str = path.to_string_lossy().to_string();
+            let clean_path = if path_str.starts_with(r"\\?\") {
+                path_str[4..].to_string() // Remove `\\?\` prefix
+            } else {
+                path_str
+            };
+            clean_path
+        }
+        Err(_) => "Failed to get current working directory".to_string(),
+    }
 }
 
 #[tauri::command]

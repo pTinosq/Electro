@@ -21,6 +21,9 @@ export class CanvasController {
 	private lastMouseX = 0;
 	private lastMouseY = 0;
 
+	// Event listeners
+	private eventTarget = new EventTarget();
+
 	private constructor(canvas: HTMLCanvasElement) {
 		this.canvas = canvas;
 		this.currentTransform = { ...DEFAULT_IMAGE_TRANSFORM };
@@ -52,7 +55,9 @@ export class CanvasController {
 		this.MAX_WIDTH = Math.max(image.width, image.height) * 100;
 
 		this.redraw();
+		this.dispatchEvent("imageLoad", image);
 	}
+
 
 	private addListeners(): void {
 		this.canvas.addEventListener("mousedown", this.onMouseDown.bind(this));
@@ -153,6 +158,27 @@ export class CanvasController {
 		const rect = this.canvas.getBoundingClientRect();
 		this.lastMouseX = event.clientX - rect.left;
 		this.lastMouseY = event.clientY - rect.top;
+	}
+
+	/**
+	 * Add an event listener.
+	 */
+	public addEventListener(type: "imageLoad", listener: (event: CustomEvent<HTMLImageElement>) => void): void {
+		this.eventTarget.addEventListener(type, listener as EventListener);
+	}
+
+	/**
+	 * Remove an event listener.
+	 */
+	public removeEventListener(type: "imageLoad", listener: (event: CustomEvent<HTMLImageElement>) => void): void {
+		this.eventTarget.removeEventListener(type, listener as EventListener);
+	}
+
+	/**
+	 * Dispatch an event.
+	 */
+	private dispatchEvent(type: "imageLoad", detail: HTMLImageElement): void {
+		this.eventTarget.dispatchEvent(new CustomEvent(type, { detail }));
 	}
 
 	private redraw(): void {

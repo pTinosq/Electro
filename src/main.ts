@@ -10,6 +10,8 @@ import { initializeDragDropListener } from "./listeners/dragDropListener";
 import { UIProcessor } from "./ui/UIProcessor";
 import KeybindRegistry from "./keybinds/KeybindRegistry";
 import { terminalKeybinds } from "./keybinds/keybinds/terminalKeybinds";
+import { setCwd } from "./utils/cwdUtils";
+import store from "./store";
 
 // Canvas and related logic
 const canvas = document.getElementById("canvas") as HTMLCanvasElement;
@@ -39,7 +41,7 @@ window.addEventListener("resize", () => {
 initializeImageSourceListener(async (imageUri) => {
 	try {
 		const defaultImage = "/src/assets/electro-default.jpg";
-		const image = await loadImage(imageUri || defaultImage);
+		const image = await loadImage(imageUri || defaultImage, false);
 
 		currentImage = image;
 		currentTransform = new TransformBuilder(DEFAULT_IMAGE_TRANSFORM)
@@ -56,7 +58,7 @@ initializeImageSourceListener(async (imageUri) => {
 // Drag and drop listener
 initializeDragDropListener(async (imageUri: string) => {
 	try {
-		const image = await loadImage(imageUri);
+		const image = await loadImage(imageUri, true);
 
 		currentImage = image;
 		currentTransform = new TransformBuilder(DEFAULT_IMAGE_TRANSFORM)
@@ -88,3 +90,5 @@ canvasController.start();
 const uiProcessor = new UIProcessor();
 uiProcessor.initialize();
 uiProcessor.start();
+
+
