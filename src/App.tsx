@@ -1,13 +1,17 @@
-import { useState } from "preact/hooks";
+import { useEffect, useState } from "preact/hooks";
+import Canvas from "./components/Canvas/Canvas";
+
+const DEFAULT_IMAGE = "/src/assets/electro-default.jpg";
 
 export default function App() {
-  const [count, setCount] = useState(0);
+  const [image, setImage] = useState<HTMLImageElement | null>(null);
 
-  return (
-    <div>
-      <h1>Electro (Preact Edition)</h1>
-      <p>Current count: {count}</p>
-      <button onClick={() => setCount(count + 1)} type={"button"}>Increment</button>
-    </div>
-  );
+  useEffect(() => {
+    // Load default image on mount
+    const img = new Image();
+    img.src = DEFAULT_IMAGE;
+    img.onload = () => setImage(img);
+  }, []);
+
+  return <Canvas image={image} />;
 }

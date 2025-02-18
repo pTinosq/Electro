@@ -1,8 +1,8 @@
 import CLICommand from "../CLICommand";
 import { loadImage } from "../../../utils/imageLoader";
-import { TransformBuilder } from "../../../canvas/TransformBuilder";
+import { TransformBuilder } from "../../Canvas/TransformBuilder";
 import { CanvasController } from "../../../canvas/canvasController";
-import { DEFAULT_IMAGE_TRANSFORM } from "../../../types/ImageTransform";
+import { DEFAULT_IMAGE_TRANSFORM } from "../../Canvas/ImageTransform";
 
 export const imageCommands = [
   new CLICommand(

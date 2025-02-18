@@ -1,6 +1,6 @@
-import { TransformBuilder } from "./TransformBuilder";
-import { DEFAULT_IMAGE_TRANSFORM, type ImageTransform } from "../types/ImageTransform";
-import { drawImageToCanvas } from "./canvasUtils";
+import { TransformBuilder } from "../components/Canvas/TransformBuilder";
+import { DEFAULT_IMAGE_TRANSFORM, type ImageTransform } from "../components/Canvas/ImageTransform";
+import { drawImageToCanvas } from "../components/Canvas/canvasUtils";
 
 export class CanvasController {
 	// Constants

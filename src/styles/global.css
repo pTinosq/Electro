@@ -3,6 +3,14 @@ body {
 	margin: 0;
 	padding: 0;
 	font-family: monospace;
+	font-size: 16px;
+	width: 100%;
+	height: 100%;
+}
+
+#app {
+	width: 100%;
+	height: 100%;
 }
 
 canvas {
