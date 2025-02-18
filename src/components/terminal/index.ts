@@ -36,7 +36,7 @@ export default class Terminal extends BaseComponent {
 			this.inputElement.focus();
 		});
 
-		this.inputElement.addEventListener("keyup", (e: KeyboardEvent) => {
+		this.inputElement.addEventListener("keydown", (e: KeyboardEvent) => {
 			this.handleInput(e);
 		});
 
@@ -50,6 +50,7 @@ export default class Terminal extends BaseComponent {
 	}
 
 	private handleInput(e: KeyboardEvent) {
+		// Submit the input when the user presses Enter
 		if (e.key === "Enter") {
 			const inputValue = this.inputElement.value.trim();
 			const inputTokens = inputValue.split(" ");
@@ -66,6 +67,26 @@ export default class Terminal extends BaseComponent {
 			} else {
 				if (inputTokens[0].trim() !== "") {
 					this.appendToHistory(`Command not found: ${inputTokens[0]}`);
+				}
+			}
+		}
+
+		// Autocomplete the input when the user presses Tab
+		if (e.key === "Tab") {
+			e.preventDefault();
+
+			// For now we'll only provide autocomplete for the first token
+			const inputValue = this.inputElement.value.trim();
+			const inputTokens = inputValue.split(" ");
+
+			if (inputTokens.length === 1 && inputTokens[0].trim() !== "") {
+				const commands = this.commandRegistry.autocompleteCommand(inputTokens[0]);
+
+				if (commands.length === 1) {
+					this.inputElement.value = commands[0];
+
+				} else if (commands.length > 1) {
+					this.appendToHistory(`${commands.join(", ")}`);
 				}
 			}
 		}

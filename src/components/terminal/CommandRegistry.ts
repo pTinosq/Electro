@@ -36,4 +36,10 @@ export default class CommandRegistry {
   listCommands(): CLICommand[] {
     return Array.from(this.commands.values());
   }
+
+  autocompleteCommand(commandString: string): string[] {
+    return Array.from(this.commands.keys()).filter((key) =>
+      key.startsWith(commandString)
+    );
+  }
 }

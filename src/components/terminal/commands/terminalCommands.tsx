@@ -24,5 +24,5 @@ export const terminalCommands = [
       await invoke("exit_app");
     },
     () => true
-  )
+  ),
 ];
