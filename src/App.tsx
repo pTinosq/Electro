@@ -1,17 +1,46 @@
-import { useEffect, useState } from "preact/hooks";
+import { useEffect } from "preact/hooks";
 import Canvas from "./components/Canvas/Canvas";
+import { listen } from "@tauri-apps/api/event";
+import { useImageStore } from "./stores/useImageStore";
+import { convertFileSrc } from "@tauri-apps/api/core";
 
 const DEFAULT_IMAGE = "/src/assets/electro-default.jpg";
 
-export default function App() {
-  const [image, setImage] = useState<HTMLImageElement | null>(null);
+interface DragDropEvent {
+  payload: {
+    paths: string[];
+    position: {
+      x: number;
+      y: number;
+    };
+  };
+}
 
+export default function App() {
+  const { loadedImage, setLoadedImage, setDefaultSrc } = useImageStore();
+
+  // Load default image on mount
   useEffect(() => {
-    // Load default image on mount
     const img = new Image();
     img.src = DEFAULT_IMAGE;
-    img.onload = () => setImage(img);
-  }, []);
+    img.onload = () => setLoadedImage(img);
 
-  return <Canvas image={image} />;
+    // Drag and drop listener
+    listen("tauri://drag-drop", (event) => {
+      const dragDropEvent = event as DragDropEvent;
+      const filePath = dragDropEvent.payload.paths[0];
+      setDefaultSrc(filePath);
+
+      const fileUrl = convertFileSrc(filePath);
+
+      const img = new Image();
+      img.src = fileUrl;
+      img.onload = () => setLoadedImage(img);
+    });
+
+  }, [setDefaultSrc, setLoadedImage]);
+
+
+
+  return <Canvas image={loadedImage} />;
 }

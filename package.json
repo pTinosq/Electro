@@ -17,7 +17,8 @@
     "@tauri-apps/plugin-cli": "^2.0.0",
     "@tauri-apps/plugin-shell": "^2",
     "preact": "^10.26.2",
-    "redux": "^5.0.1"
+    "redux": "^5.0.1",
+    "zustand": "^5.0.3"
   },
   "devDependencies": {
     "@babel/plugin-transform-react-jsx": "^7.25.9",

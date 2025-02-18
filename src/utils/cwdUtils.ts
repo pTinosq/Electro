@@ -1,5 +1,5 @@
 import { invoke } from "@tauri-apps/api/core";
-import store from "../store";
+import store from "../old.store";
 
 export interface SetCwdResult {
   success: boolean;

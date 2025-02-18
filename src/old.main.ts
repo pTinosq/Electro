@@ -5,13 +5,13 @@ import {
 	DEFAULT_IMAGE_TRANSFORM,
 	type ImageTransform,
 } from "./components/Canvas/ImageTransform";
-import { CanvasController } from "./canvas/canvasController";
+import { CanvasController } from "./old.canvas/canvasController";
 import { initializeDragDropListener } from "./listeners/dragDropListener";
 import { UIProcessor } from "./ui/UIProcessor";
 import KeybindRegistry from "./keybinds/KeybindRegistry";
 import { terminalKeybinds } from "./keybinds/keybinds/terminalKeybinds";
 import { setCwd } from "./utils/cwdUtils";
-import store from "./store";
+import store from "./old.store";
 
 // Canvas and related logic
 const canvas = document.getElementById("canvas") as HTMLCanvasElement;
