@@ -1,7 +1,7 @@
 import store from "../../../old.store";
 import { setTerminalOpenState } from "../../../old.store/slices/terminalSlice";
 import { setCwd } from "../../../utils/cwdUtils";
-import CLICommand from "../CLICommand";
+import CLICommand from "../../../commands/CLICommand";
 import { invoke } from "@tauri-apps/api/core";
 
 // These commands handle the Electro terminal

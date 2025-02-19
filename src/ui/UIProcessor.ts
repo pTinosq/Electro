@@ -1,6 +1,6 @@
 import { invoke } from "@tauri-apps/api/core";
 import type { BaseComponent } from "../components/baseComponent";
-import Terminal from "../components/terminal";
+import Terminal from "../components/Terminal";
 
 export class UIProcessor {
 	private components: BaseComponent[] = [];

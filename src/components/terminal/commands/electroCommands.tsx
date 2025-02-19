@@ -1,5 +1,5 @@
 import { invoke } from "@tauri-apps/api/core";
-import CLICommand from "../CLICommand";
+import CLICommand from "../../../commands/CLICommand";
 
 // These commands control the Electro app
 export const electroCommands = [

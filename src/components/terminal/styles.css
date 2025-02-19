@@ -1,5 +1,6 @@
 #terminal {
-	display: none;
+	display: flex;
+	flex-direction: column;
 	position: fixed;
 	height: 200px;
 	min-height: 75px;
@@ -13,19 +14,10 @@
 	box-sizing: border-box;
 }
 
-#terminal.open {
-	display: flex;
-	flex-direction: column;
-}
-
 .terminal-line {
 	display: flex;
 	width: 100%;
 	border-top: 1px dotted white;
-}
-
-.terminal span {
-	width: 1px;
 }
 
 #terminal-input {
@@ -35,6 +27,7 @@
 	color: white;
 	outline: none;
 	margin-top: auto;
+	font-size: 12px;
 }
 
 #terminal-path {

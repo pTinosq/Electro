@@ -1,3 +1,6 @@
+import { electroCommands } from "../components/Terminal/commands/electroCommands";
+import { imageCommands } from "../components/Terminal/commands/imageCommands";
+import { terminalCommands } from "../components/Terminal/commands/terminalCommands";
 import type CLICommand from "./CLICommand";
 
 export default class CommandRegistry {
@@ -17,7 +20,7 @@ export default class CommandRegistry {
 
   addCommand(command: CLICommand): void {
     if (this.commands.has(command.commandString)) {
-      throw new Error(`Command "${command.commandString}" already exists.`);
+      console.warn(`Command "${command.commandString}" already exists and will be overwritten.`);
     }
     this.commands.set(command.commandString, command);
   }
@@ -42,4 +45,20 @@ export default class CommandRegistry {
       key.startsWith(commandString)
     );
   }
+
+  public loadCommands() {
+    const registry = CommandRegistry.getInstance();
+
+    // Register commands
+    const allCommands = [
+      ...terminalCommands,
+      ...electroCommands,
+      ...imageCommands
+    ];
+
+    for (const command of allCommands) {
+      registry.addCommand(command);
+    }
+  }
+
 }

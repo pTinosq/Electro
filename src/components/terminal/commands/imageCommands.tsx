@@ -1,50 +1,45 @@
-import CLICommand from "../CLICommand";
-import { loadImage } from "../../../utils/imageLoader";
-import { TransformBuilder } from "../../Canvas/TransformBuilder";
-import { CanvasController } from "../../../old.canvas/canvasController";
-import { DEFAULT_IMAGE_TRANSFORM } from "../../Canvas/ImageTransform";
+import CLICommand from "../../../commands/CLICommand";
+import { useTerminalStore } from "../../../stores/useTerminalStore";
+import { convertFileSrc } from "@tauri-apps/api/core";
+import { useImageStore } from "../../../stores/useImageStore";
+
 
 export const imageCommands = [
   new CLICommand(
     "Load Image",
     "Loads an image from the specified file path",
     "load",
-    async (terminal, _isAllowed, filePath) => {
+    async (_isAllowed, filePath) => {
       if (!filePath || filePath.trim() === "") {
-        terminal.appendToHistory("Error: No file path specified.");
+        useTerminalStore.getState().addHistory("Error: No file path provided");
         return;
       }
 
       try {
-        terminal.appendToHistory(`Loading image from ${filePath}...`);
         // Determine if the path is a URL or local file
         const isRemote = filePath.startsWith("http://") || filePath.startsWith("https://");
-        // const resolvedPath = isRemote ? filePath : convertFileSrc(filePath);
-
-        // const image = await loadImage(resolvedPath);
-        let image: HTMLImageElement;
+        const image = new Image();
 
         if (isRemote) {
-          image = await loadImage(filePath, false);
+          // TODO: Set default src to $USER
+          useImageStore.getState().setDefaultSrc("C:");
+          image.src = filePath;
         } else {
-          image = await loadImage(filePath, true);
+          useImageStore.getState().setDefaultSrc(filePath);
+          image.src = convertFileSrc(filePath);
         }
 
-        const canvasController = CanvasController.getInstance();
+        image.onload = () => {
+          useTerminalStore.getState().addHistory(`Image loaded from ${filePath}`);
+          useImageStore.getState().setLoadedImage(image);
 
-        const transform = new TransformBuilder(DEFAULT_IMAGE_TRANSFORM)
-          .scaleToFit(canvasController.canvas, image)
-          .center(canvasController.canvas)
-          .build();
-
-        canvasController.setImage(image, transform);
-        terminal.appendToHistory("Image loaded successfully.");
+        };
       } catch (error) {
         if (error instanceof Error) {
-          terminal.appendToHistory(`Error loading image: ${error.message}`);
+          useTerminalStore.getState().addHistory(`Error loading image: ${error.message}`);
           console.error("Error loading image:", error);
         } else {
-          terminal.appendToHistory("Error loading image: Unknown error");
+          useTerminalStore.getState().addHistory("Error loading image: Unknown error");
           console.error("Error loading image: Unknown error", error);
         }
       }

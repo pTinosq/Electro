@@ -3,6 +3,9 @@ import Canvas from "./components/Canvas/Canvas";
 import { listen } from "@tauri-apps/api/event";
 import { useImageStore } from "./stores/useImageStore";
 import { convertFileSrc, invoke } from "@tauri-apps/api/core";
+import Terminal from "./components/Terminal/Terminal";
+import "./styles/normalize.css";
+import "./styles/global.css";
 
 const DEFAULT_IMAGE = "/src/assets/electro-default.jpg";
 
@@ -66,5 +69,8 @@ export default function App() {
 
 
 
-  return <Canvas image={loadedImage} />;
+  return <>
+    <Terminal />
+    <Canvas image={loadedImage} />
+  </>
 }
