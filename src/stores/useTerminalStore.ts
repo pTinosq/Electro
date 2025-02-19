@@ -22,6 +22,6 @@ export const useTerminalStore = create<TerminalState>((set) => ({
   setIsTerminalOpen: (isOpen) => set({
     isTerminalOpen: isOpen
   }),
-  clearHistory: () => set((state) => ({ history: [] })),
+  clearHistory: () => set(() => ({ history: [] })),
   setCwd: (cwd) => set({ cwd })
 }))

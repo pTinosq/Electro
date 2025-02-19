@@ -21,19 +21,22 @@ export const imageCommands = [
         const image = new Image();
 
         if (isRemote) {
-          // TODO: Set default src to $USER
-          useImageStore.getState().setDefaultSrc("C:");
           image.src = filePath;
         } else {
-          useImageStore.getState().setDefaultSrc(filePath);
           image.src = convertFileSrc(filePath);
         }
 
         image.onload = () => {
+          // TODO: Set default src to $USER
+          isRemote ? useImageStore.getState().setDefaultSrc("C:") : useImageStore.getState().setDefaultSrc(filePath);
+
           useTerminalStore.getState().addHistory(`Image loaded from ${filePath}`);
           useImageStore.getState().setLoadedImage(image);
-
         };
+
+        image.onerror = () => {
+          useTerminalStore.getState().addHistory(`Error loading image from '${filePath}'`);
+        }
       } catch (error) {
         if (error instanceof Error) {
           useTerminalStore.getState().addHistory(`Error loading image: ${error.message}`);

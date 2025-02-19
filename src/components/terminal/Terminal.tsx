@@ -4,8 +4,7 @@ import { useTerminalStore } from "../../stores/useTerminalStore";
 import CommandRegistry from "../../commands/CommandRegistry";
 
 export default function Terminal() {
-  const { addHistory, history } = useTerminalStore()
-  const [isOpen, setIsOpen] = useState(true);
+  const { addHistory, history, isTerminalOpen } = useTerminalStore()
   const inputRef = useRef<HTMLInputElement>(null);
   const terminalHistoryRef = useRef<HTMLDivElement>(null);
 
@@ -67,7 +66,7 @@ export default function Terminal() {
     inputRef.current?.focus();
   };
 
-  return (isOpen ? (
+  return (isTerminalOpen ? (
     <div id="terminal" onClick={handleTerminalClick}>
       <div ref={terminalHistoryRef} id="terminal-history">
         {history.map((line) => (
