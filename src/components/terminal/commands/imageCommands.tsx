@@ -30,7 +30,7 @@ export const imageCommands = [
           // TODO: Set default src to $USER
           isRemote ? useImageStore.getState().setDefaultSrc("C:") : useImageStore.getState().setDefaultSrc(filePath);
 
-          useTerminalStore.getState().addHistory(`Image loaded from ${filePath}`);
+          useTerminalStore.getState().addHistory(`Image loaded from '${filePath}'`);
           useImageStore.getState().setLoadedImage(image);
         };
 
