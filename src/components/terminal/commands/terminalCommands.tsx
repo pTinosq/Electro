@@ -3,6 +3,7 @@ import { setTerminalOpenState } from "../../../old.store/slices/terminalSlice";
 import { setCwd } from "../../../utils/cwdUtils";
 import CLICommand from "../../../commands/CLICommand";
 import { invoke } from "@tauri-apps/api/core";
+import { useTerminalStore } from "../../../stores/useTerminalStore";
 
 // These commands handle the Electro terminal
 export const terminalCommands = [
@@ -11,30 +12,29 @@ export const terminalCommands = [
     "Close the terminal",
     "close",
     () => {
-      store.dispatch(setTerminalOpenState(false));
+      useTerminalStore.getState().setIsTerminalOpen(false);
     },
     () => {
-      return store.getState().terminal.isOpen;
+      return useTerminalStore.getState().isTerminalOpen;
     }
   ),
   new CLICommand(
     "Clear terminal",
     "Clear the terminal",
     "clear",
-    (terminal) => {
-      terminal.clearHistory();
-      store.dispatch(setTerminalOpenState(true));
-    },
     () => {
-      return store.getState().terminal.isOpen;
-    }
+      useTerminalStore.getState().clearHistory();
+    },
+    () => true
+
   ),
   new CLICommand(
     "Get current working directory",
     "Get the current working directory",
     "cwd",
-    async (terminal) => {
-      terminal.appendToHistory(store.getState().terminal.cwd);
+    async () => {
+      const state = useTerminalStore.getState();
+      state.addHistory(`Current working directory: ${state.cwd}`);
     },
     () => true
   ),
@@ -42,7 +42,7 @@ export const terminalCommands = [
     "Launch file explorer",
     "Launches the file explorer in the specified directory",
     "explorer",
-    (_0, _1, path) => {
+    (_, path) => {
       invoke("open_file_explorer", { path });
     },
     () => true
@@ -51,18 +51,19 @@ export const terminalCommands = [
     "Change directory",
     "Change the current working directory",
     "cd",
-    async (terminal, _isAllowed, path) => {
+    async (_, path) => {
+      const store = useTerminalStore.getState();
       if (!path) {
-        terminal.appendToHistory("Error: No path provided");
+        store.addHistory("Error: No path provided");
         return;
       }
 
       try {
         const newPath = await invoke("change_cwd", { path }) as string;
-        setCwd(newPath);
-        terminal.appendToHistory(`Changed directory to: ${newPath}`);
+        store.setCwd(newPath);
+        store.addHistory(`Changed directory to: ${newPath}`);
       } catch (error) {
-        terminal.appendToHistory(`Error: ${error}`);
+        store.addHistory(`Error: ${error}`);
       }
     },
     () => true

@@ -45,7 +45,6 @@ export default function Terminal() {
         const commandToken = inputTokens?.[0];
         if (commandToken) {
           const command = CommandRegistry.getInstance().getCommand(commandToken);
-          console.debug("238075", command);
           if (command) {
             command.execute(...(inputTokens.slice(1)));
           } else {
