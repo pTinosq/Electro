@@ -16,7 +16,6 @@ interface TerminalState {
 export const useTerminalStore = create<TerminalState>((set) => ({
   history: [],
   isTerminalOpen: true,
-  // TODO: Get the current working directory
   cwd: "/",
   addHistory: (line) => set((state) => ({ history: [...state.history, line] })),
   setIsTerminalOpen: (isOpen) => set({

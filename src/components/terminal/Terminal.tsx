@@ -1,10 +1,10 @@
-import { useEffect, useRef, useState } from "preact/hooks";
+import { useEffect, useRef } from "preact/hooks";
 import "./styles.css";
 import { useTerminalStore } from "../../stores/useTerminalStore";
 import CommandRegistry from "../../commands/CommandRegistry";
 
 export default function Terminal() {
-  const { addHistory, history, isTerminalOpen } = useTerminalStore()
+  const { addHistory, history, isTerminalOpen, cwd } = useTerminalStore()
   const inputRef = useRef<HTMLInputElement>(null);
   const terminalHistoryRef = useRef<HTMLDivElement>(null);
 
@@ -34,7 +34,7 @@ export default function Terminal() {
         const inputTokens = inputValue?.split(" ");
 
         // Add a prompt to the input value
-        const formattedInputValue = `> ${inputValue}`;
+        const formattedInputValue = `${cwd}> ${inputValue}`;
         appendToHistory(formattedInputValue);
 
         if (inputRef.current) {
@@ -78,7 +78,7 @@ export default function Terminal() {
         ))}
       </div>
       <div class="terminal-line">
-        <span id="terminal-path">&gt; &nbsp;</span>
+        <span id="terminal-path">{cwd}&gt;&nbsp;</span>
         <input
           ref={inputRef}
           type="text"
