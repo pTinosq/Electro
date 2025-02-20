@@ -2,6 +2,7 @@ use std::env;
 use std::path::{Path, PathBuf};
 use tauri::{AppHandle, Emitter};
 use tauri_plugin_cli::CliExt;
+use std::fs;
 
 // This function will be called by the `tauri` runtime when the application is ready
 // Here we will parse the CLI arguments and emit them to the frontend
@@ -92,6 +93,26 @@ fn change_cwd(path: String) -> Result<String, String> {
     }
 }
 
+#[tauri::command]
+fn list_directory() -> Result<Vec<String>, String> {
+    match env::current_dir() {
+        Ok(path) => {
+            let entries = fs::read_dir(path).map_err(|_| "Failed to read directory".to_string())?;
+
+            let mut files_and_dirs = Vec::new();
+            for entry in entries {
+                if let Ok(entry) = entry {
+                    let file_name = entry.file_name();
+                    files_and_dirs.push(file_name.to_string_lossy().to_string());
+                }
+            }
+
+            Ok(files_and_dirs)
+        }
+        Err(_) => Err("Failed to get current working directory".to_string()),
+    }
+}
+
 // Main entry point
 #[cfg_attr(mobile, tauri::mobile_entry_point)]
 pub fn run() {
@@ -103,7 +124,8 @@ pub fn run() {
             exit_app,
             get_cwd,
             open_file_explorer,
-            change_cwd
+            change_cwd,
+            list_directory
         ])
         .run(tauri::generate_context!())
         .expect("error while running tauri application");

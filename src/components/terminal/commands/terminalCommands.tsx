@@ -1,6 +1,3 @@
-import store from "../../../old.store";
-import { setTerminalOpenState } from "../../../old.store/slices/terminalSlice";
-import { setCwd } from "../../../utils/cwdUtils";
 import CLICommand from "../../../commands/CLICommand";
 import { invoke } from "@tauri-apps/api/core";
 import { useTerminalStore } from "../../../stores/useTerminalStore";
@@ -74,6 +71,21 @@ export const terminalCommands = [
           variant: "error"
         });
       }
+    },
+    () => true
+  ),
+  new CLICommand(
+    "List directory contents",
+    "List the contents of the specified directory",
+    "ls",
+    async () => {
+      const dirs = await invoke("list_directory") as string[];
+      console.debug("107124", dirs);
+      useTerminalStore.getState().addHistory({
+        type: "output",
+        value: dirs.join(", ")
+      });
+
     },
     () => true
   ),
