@@ -1,11 +1,11 @@
 import { useEffect } from "preact/hooks";
-import Canvas from "./components/Canvas/Canvas";
+import Canvas from "./components/canvas/Canvas";
 import { listen } from "@tauri-apps/api/event";
 import { useImageStore } from "./stores/useImageStore";
 import { convertFileSrc, invoke } from "@tauri-apps/api/core";
-import Terminal from "./components/Terminal/Terminal";
 import "./styles/normalize.css";
 import "./styles/global.css";
+import Terminal from "./components/terminal/Terminal";
 
 const DEFAULT_IMAGE = "/src/assets/electro-default.jpg";
 

@@ -1,6 +1,6 @@
-import { electroCommandsCategory } from "../components/Terminal/commands/electroCommands";
-import { imageCommandsCategory } from "../components/Terminal/commands/imageCommands";
-import { terminalCommandsCategory } from "../components/Terminal/commands/terminalCommands";
+import { electroCommandsCategory } from "../components/terminal/commands/electroCommands";
+import { imageCommandsCategory } from "../components/terminal/commands/imageCommands";
+import { terminalCommandsCategory } from "../components/terminal/commands/terminalCommands";
 import type CLICommand from "./CLICommand";
 import type CLICommandCategory from "./CLICommandCategory";
 
