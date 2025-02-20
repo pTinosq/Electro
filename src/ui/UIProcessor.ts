@@ -1,12 +1,17 @@
+import { invoke } from "@tauri-apps/api/core";
 import type { BaseComponent } from "../components/baseComponent";
-import Terminal from "../components/terminal";
+import Terminal from "../components/Terminal";
 
 export class UIProcessor {
 	private components: BaseComponent[] = [];
 
 	initialize() {
 		// Initialize UI components here
-		this.components.push(new Terminal("#terminal"));
+		const terminal = new Terminal("#terminal");
+		terminal.loadCommands();
+		invoke("get_cwd").then((cwd) => terminal.setPath(cwd as string));
+
+		this.components.push(terminal);
 	}
 
 	start() {

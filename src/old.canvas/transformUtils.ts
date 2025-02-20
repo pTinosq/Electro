@@ -1,4 +1,4 @@
-import type { ImageTransform } from "../types/ImageTransform";
+import type { ImageTransform } from "../components/Canvas/ImageTransform";
 
 export function getCenteredTransform(
 	canvas: HTMLCanvasElement,

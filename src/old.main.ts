@@ -1,20 +1,19 @@
 import { initializeImageSourceListener } from "./listeners/imageSourceListener";
-import { loadImage } from "./image/imageLoader";
-import { TransformBuilder } from "./canvas/TransformBuilder";
+import { loadImage } from "./utils/imageLoader";
+import { TransformBuilder } from "./components/Canvas/TransformBuilder";
 import {
 	DEFAULT_IMAGE_TRANSFORM,
 	type ImageTransform,
-} from "./types/ImageTransform";
-import { CanvasController } from "./canvas/canvasController";
+} from "./components/Canvas/ImageTransform";
+import { CanvasController } from "./old.canvas/canvasController";
 import { initializeDragDropListener } from "./listeners/dragDropListener";
-import KeybindListener from "./keybinds/KeybindListener";
-import KeybindProcessor from "./keybinds/KeybindProcessor";
-import { loadAllCommands } from "./commands/loadCommands";
 import { UIProcessor } from "./ui/UIProcessor";
+import KeybindRegistry from "./keybinds/KeybindRegistry";
+import { terminalKeybinds } from "./keybinds/keybinds/terminalKeybinds";
 
 // Canvas and related logic
 const canvas = document.getElementById("canvas") as HTMLCanvasElement;
-const canvasController = new CanvasController(canvas);
+const canvasController = CanvasController.getInstance(canvas);
 
 canvas.width = window.innerWidth;
 canvas.height = window.innerHeight;
@@ -40,7 +39,7 @@ window.addEventListener("resize", () => {
 initializeImageSourceListener(async (imageUri) => {
 	try {
 		const defaultImage = "/src/assets/electro-default.jpg";
-		const image = await loadImage(imageUri || defaultImage);
+		const image = await loadImage(imageUri || defaultImage, false);
 
 		currentImage = image;
 		currentTransform = new TransformBuilder(DEFAULT_IMAGE_TRANSFORM)
@@ -57,7 +56,7 @@ initializeImageSourceListener(async (imageUri) => {
 // Drag and drop listener
 initializeDragDropListener(async (imageUri: string) => {
 	try {
-		const image = await loadImage(imageUri);
+		const image = await loadImage(imageUri, true);
 
 		currentImage = image;
 		currentTransform = new TransformBuilder(DEFAULT_IMAGE_TRANSFORM)
@@ -67,17 +66,19 @@ initializeDragDropListener(async (imageUri: string) => {
 
 		canvasController.setImage(image, currentTransform);
 	} catch (error) {
-		// TODO: Show error message to user
 		console.error("Error loading image:", error);
 	}
 });
 
 // Keybind logic
-const keybindProcessor = new KeybindProcessor();
-const keybindListener = new KeybindListener(keybindProcessor);
-console.log("Loading keybinds...");
-loadAllCommands();
-keybindListener.start();
+const keybindRegistry = KeybindRegistry.getInstance();
+const allKeybinds = [...terminalKeybinds];
+
+for (const keybind of allKeybinds) {
+	keybindRegistry.addKeybind(keybind);
+}
+
+keybindRegistry.registerListener();
 
 // Start the canvas controller
 canvasController.start();
@@ -86,3 +87,5 @@ canvasController.start();
 const uiProcessor = new UIProcessor();
 uiProcessor.initialize();
 uiProcessor.start();
+
+

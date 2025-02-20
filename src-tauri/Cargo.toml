@@ -27,3 +27,8 @@ chrono = "0.4.38"
 [target.'cfg(not(any(target_os = "android", target_os = "ios")))'.dependencies]
 tauri-plugin-cli = "2"
 
+# Enables dev tools in release mode
+# https://github.com/tauri-apps/tauri/discussions/3059#discussioncomment-1793205
+[profile.release.package.wry]
+debug = true
+debug-assertions = true

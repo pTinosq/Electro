@@ -14,10 +14,12 @@
     "noEmit": true,
 
     /* Linting */
-    "strict": true,
+    "strict": true, 
     "noUnusedLocals": true,
     "noUnusedParameters": true,
-    "noFallthroughCasesInSwitch": true
+    "noFallthroughCasesInSwitch": true,
+    "jsx": "react-jsx",
+    "jsxImportSource": "preact",
   },
   "include": ["src"]
 }

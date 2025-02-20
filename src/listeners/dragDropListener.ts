@@ -1,5 +1,4 @@
 import { listen } from "@tauri-apps/api/event";
-import { convertFileSrc } from "@tauri-apps/api/core";
 
 interface DragDropEvent {
 	payload: {
@@ -18,6 +17,6 @@ export function initializeDragDropListener(
 	listen("tauri://drag-drop", (event) => {
 		const dragDropEvent = event as DragDropEvent;
 		const imageUri = dragDropEvent.payload.paths[0];
-		callback(convertFileSrc(imageUri));
+		callback(imageUri);
 	});
 }

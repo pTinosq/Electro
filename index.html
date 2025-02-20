@@ -3,28 +3,13 @@
 
 <head>
   <meta charset="UTF-8" />
-  <link rel="stylesheet" href="/src/styles/normalize.css" />
-  <link rel="stylesheet" href="/src/styles/global.css" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Tauri App</title>
-  <script type="module" src="/src/main.ts" defer></script>
-
-  <!-- Load component styles -->
-  <link rel="stylesheet" href="/src/components/terminal/styles.css" />
+  <title>Electro</title>
 </head>
 
 <body>
-  <div id="terminal">
-    <div id="terminal-history">
-
-    </div>
-    <div class="terminal-line">
-      <span id="path">>&nbsp;</span>
-      <input type="text" id="terminal-input" autocapitalize="off" autocomplete="off" autocorrect="off"
-        spellcheck="false" />
-    </div>
-  </div>
-  <canvas id="canvas"></canvas>
+  <div id="app"></div>
+  <script type="module" src="/src/main.tsx"></script>
 </body>
 
 </html>

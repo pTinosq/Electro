@@ -1,4 +1,4 @@
-import type { ImageTransform } from "../types/ImageTransform";
+import type { ImageTransform } from "./ImageTransform";
 
 export class TransformBuilder {
 	private transform: ImageTransform;

@@ -1,14 +1,16 @@
-import type Command from "../../commands/Command";
-import store from "../../store";
-import { setTerminalInputFocus } from "../../store/slices/terminalSlice";
+import store from "../../old.store";
+import { setTerminalInputFocus } from "../../old.store/slices/terminalSlice";
 import { BaseComponent } from "../baseComponent";
-import CLIProcessor from "./CLIProcessor";
+import CommandRegistry from "../../commands/CommandRegistry";
+import { electroCommands } from "./commands/electroCommands";
+import { imageCommands } from "./commands/imageCommands";
+import { terminalCommands } from "./commands/terminalCommands";
 
 export default class Terminal extends BaseComponent {
 	private inputElement: HTMLInputElement;
 	private historyElement: HTMLElement;
 	private pathElement: HTMLElement;
-	private CLIProcessor: CLIProcessor = new CLIProcessor();
+	private commandRegistry: CommandRegistry = CommandRegistry.getInstance();
 
 	constructor(selector: string) {
 		super(selector);
@@ -19,7 +21,7 @@ export default class Terminal extends BaseComponent {
 		this.historyElement = this.element.querySelector(
 			"#terminal-history",
 		) as HTMLElement;
-		this.pathElement = this.element.querySelector("#path") as HTMLElement;
+		this.pathElement = this.element.querySelector("#terminal-path") as HTMLElement;
 
 		if (!this.inputElement || !this.historyElement || !this.pathElement) {
 			throw new Error(
@@ -27,15 +29,19 @@ export default class Terminal extends BaseComponent {
 			);
 		}
 
+
+
 		this.addEventListeners();
 	}
 
+
 	private addEventListeners() {
+		// When the terminal is clicked, focus the input
 		this.element.addEventListener("click", () => {
 			this.inputElement.focus();
 		});
 
-		this.inputElement.addEventListener("keyup", (e: KeyboardEvent) => {
+		this.inputElement.addEventListener("keydown", (e: KeyboardEvent) => {
 			this.handleInput(e);
 		});
 
@@ -49,35 +55,49 @@ export default class Terminal extends BaseComponent {
 	}
 
 	private handleInput(e: KeyboardEvent) {
+		// Submit the input when the user presses Enter
 		if (e.key === "Enter") {
 			const inputValue = this.inputElement.value.trim();
+			const inputTokens = inputValue.split(" ");
 
 			// Add a prompt to the input value
 			const formattedInputValue = `> ${inputValue}`;
 			this.appendToHistory(formattedInputValue);
 			this.inputElement.value = "";
+			const command = this.commandRegistry.getCommand(inputTokens[0]);
 
-			// Process the input value
-			const inputtedCommand = this.CLIProcessor.findCommand(inputValue);
-
-			if (inputtedCommand) {
-				this.CLIProcessor.processCommand(inputtedCommand)
-					.then((result) => {
-						this.appendToHistory(result);
-					})
-					.catch((error) => {
-						this.appendToHistory(error);
-					});
+			if (command) {
+				command.execute(this, ...(inputTokens.slice(1)));
 			} else {
-				if (inputValue) {
-					this.appendToHistory(`Command not found: ${inputValue}`);
+				if (inputTokens[0].trim() !== "") {
+					this.appendToHistory(`Command not found: ${inputTokens[0]}`);
+				}
+			}
+		}
+
+		// Autocomplete the input when the user presses Tab
+		if (e.key === "Tab") {
+			e.preventDefault();
+
+			// For now we'll only provide autocomplete for the first token
+			const inputValue = this.inputElement.value.trim();
+			const inputTokens = inputValue.split(" ");
+
+			if (inputTokens.length === 1 && inputTokens[0].trim() !== "") {
+				const commands = this.commandRegistry.autocompleteCommand(inputTokens[0]);
+
+				if (commands.length === 1) {
+					this.inputElement.value = commands[0];
+
+				} else if (commands.length > 1) {
+					this.appendToHistory(`${commands.join(", ")}`);
 				}
 			}
 		}
 	}
 
 	// Appends a new entry to the terminal history
-	private appendToHistory(text: string) {
+	public appendToHistory(text: string) {
 		const newEntry = document.createElement("div");
 
 		// Add a placeholder if the text is empty
@@ -88,9 +108,15 @@ export default class Terminal extends BaseComponent {
 		this.historyElement.scrollTo(0, this.historyElement.scrollHeight);
 	}
 
+	// Clears the terminal history
+	public clearHistory() {
+		this.historyElement.innerHTML = "";
+	}
+
 	protected updateUI() {
 		const terminalState = this.getState((state) => state.terminal);
 
+		// Reflect terminal open state
 		if (terminalState.isOpen) {
 			this.element.classList.add("open");
 
@@ -102,4 +128,26 @@ export default class Terminal extends BaseComponent {
 			this.element.classList.remove("open");
 		}
 	}
+
+	public loadCommands() {
+		console.debug("Loading terminal commands...");
+		const registry = CommandRegistry.getInstance();
+
+		// Register commands
+		const allCommands = [
+			...terminalCommands,
+			...electroCommands,
+			...imageCommands
+		];
+
+		for (const command of allCommands) {
+			registry.addCommand(command);
+		}
+	}
+
+	public setPath(path: string) {
+		this.pathElement.innerHTML = `${path}>`;
+	}
 }
+
+
