@@ -1,5 +1,5 @@
-import store from "../../store";
-import { setTerminalOpenState } from "../../store/slices/terminalSlice";
+import store from "../../old.store";
+import { setTerminalOpenState } from "../../old.store/slices/terminalSlice";
 import Keybind from "../Keybind";
 
 export const terminalKeybinds = [

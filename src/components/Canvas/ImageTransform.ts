@@ -5,6 +5,10 @@ export interface ImageTransform {
 	height: number;
 	offsetX: number;
 	offsetY: number;
+	minWidth?: number;
+	minHeight?: number;
+	maxWidth?: number;
+	maxHeight?: number;
 }
 
 export const DEFAULT_IMAGE_TRANSFORM: ImageTransform = {
@@ -14,4 +18,8 @@ export const DEFAULT_IMAGE_TRANSFORM: ImageTransform = {
 	height: 0,
 	offsetX: 0,
 	offsetY: 0,
+	minWidth: 0,
+	minHeight: 0,
+	maxWidth: 0,
+	maxHeight: 0,
 };

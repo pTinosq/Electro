@@ -1,4 +1,4 @@
-import store, { type RootState } from "../store";
+import store, { type RootState } from "../old.store";
 
 export abstract class BaseComponent {
 	protected element: HTMLElement;

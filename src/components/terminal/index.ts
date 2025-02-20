@@ -1,7 +1,7 @@
-import store from "../../store";
-import { setTerminalInputFocus } from "../../store/slices/terminalSlice";
+import store from "../../old.store";
+import { setTerminalInputFocus } from "../../old.store/slices/terminalSlice";
 import { BaseComponent } from "../baseComponent";
-import CommandRegistry from "./CommandRegistry";
+import CommandRegistry from "../../commands/CommandRegistry";
 import { electroCommands } from "./commands/electroCommands";
 import { imageCommands } from "./commands/imageCommands";
 import { terminalCommands } from "./commands/terminalCommands";

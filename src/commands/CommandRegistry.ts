@@ -1,8 +1,18 @@
+import { electroCommandsCategory } from "../components/Terminal/commands/electroCommands";
+import { imageCommandsCategory } from "../components/Terminal/commands/imageCommands";
+import { terminalCommandsCategory } from "../components/Terminal/commands/terminalCommands";
 import type CLICommand from "./CLICommand";
+import type CLICommandCategory from "./CLICommandCategory";
 
 export default class CommandRegistry {
   private static instance: CommandRegistry;
   private commands: Map<string, CLICommand>;
+  public static allCommands: CLICommandCategory[] = [
+    terminalCommandsCategory,
+    electroCommandsCategory,
+    imageCommandsCategory
+  ];
+
 
   private constructor() {
     this.commands = new Map();
@@ -17,7 +27,7 @@ export default class CommandRegistry {
 
   addCommand(command: CLICommand): void {
     if (this.commands.has(command.commandString)) {
-      throw new Error(`Command "${command.commandString}" already exists.`);
+      console.warn(`Command "${command.commandString}" already exists and will be overwritten.`);
     }
     this.commands.set(command.commandString, command);
   }
@@ -41,5 +51,15 @@ export default class CommandRegistry {
     return Array.from(this.commands.keys()).filter((key) =>
       key.startsWith(commandString)
     );
+  }
+
+  public loadCommands() {
+    const registry = CommandRegistry.getInstance();
+
+    for (const commandCategory of CommandRegistry.allCommands) {
+      for (const command of commandCategory.getCommands()) {
+        registry.addCommand(command);
+      }
+    }
   }
 }

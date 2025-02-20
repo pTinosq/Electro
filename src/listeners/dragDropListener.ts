@@ -1,5 +1,4 @@
 import { listen } from "@tauri-apps/api/event";
-import { convertFileSrc } from "@tauri-apps/api/core";
 
 interface DragDropEvent {
 	payload: {

@@ -1,17 +1,15 @@
 import { initializeImageSourceListener } from "./listeners/imageSourceListener";
 import { loadImage } from "./utils/imageLoader";
-import { TransformBuilder } from "./canvas/TransformBuilder";
+import { TransformBuilder } from "./components/Canvas/TransformBuilder";
 import {
 	DEFAULT_IMAGE_TRANSFORM,
 	type ImageTransform,
-} from "./types/ImageTransform";
-import { CanvasController } from "./canvas/canvasController";
+} from "./components/Canvas/ImageTransform";
+import { CanvasController } from "./old.canvas/canvasController";
 import { initializeDragDropListener } from "./listeners/dragDropListener";
 import { UIProcessor } from "./ui/UIProcessor";
 import KeybindRegistry from "./keybinds/KeybindRegistry";
 import { terminalKeybinds } from "./keybinds/keybinds/terminalKeybinds";
-import { setCwd } from "./utils/cwdUtils";
-import store from "./store";
 
 // Canvas and related logic
 const canvas = document.getElementById("canvas") as HTMLCanvasElement;
@@ -68,7 +66,6 @@ initializeDragDropListener(async (imageUri: string) => {
 
 		canvasController.setImage(image, currentTransform);
 	} catch (error) {
-		// TODO: Show error message to user
 		console.error("Error loading image:", error);
 	}
 });

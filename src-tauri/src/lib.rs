@@ -1,4 +1,5 @@
 use std::env;
+use std::fs;
 use std::path::{Path, PathBuf};
 use tauri::{AppHandle, Emitter};
 use tauri_plugin_cli::CliExt;
@@ -92,6 +93,31 @@ fn change_cwd(path: String) -> Result<String, String> {
     }
 }
 
+#[tauri::command]
+fn list_directory(path: String) -> Result<Vec<String>, String> {
+    let dir_path = Path::new(&path);
+
+    // Ensure the path exists and is a directory
+    if !dir_path.exists() {
+        return Err("Path does not exist".to_string());
+    }
+    if !dir_path.is_dir() {
+        return Err("Provided path is not a directory".to_string());
+    }
+
+    let entries = fs::read_dir(dir_path).map_err(|_| "Failed to read directory".to_string())?;
+
+    let mut files_and_dirs = Vec::new();
+    for entry in entries {
+        if let Ok(entry) = entry {
+            let file_name = entry.file_name();
+            files_and_dirs.push(file_name.to_string_lossy().to_string());
+        }
+    }
+
+    Ok(files_and_dirs)
+}
+
 // Main entry point
 #[cfg_attr(mobile, tauri::mobile_entry_point)]
 pub fn run() {
@@ -103,7 +129,8 @@ pub fn run() {
             exit_app,
             get_cwd,
             open_file_explorer,
-            change_cwd
+            change_cwd,
+            list_directory,
         ])
         .run(tauri::generate_context!())
         .expect("error while running tauri application");

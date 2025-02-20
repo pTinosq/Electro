@@ -1,5 +1,5 @@
 import { convertFileSrc } from "@tauri-apps/api/core";
-import store from "../store";
+import store from "../old.store";
 
 // Load an image from a URI and return a promise that resolves to the image element
 export function loadImage(originalImageUri: string, shouldConvertFileSrc?: boolean): Promise<HTMLImageElement> {
