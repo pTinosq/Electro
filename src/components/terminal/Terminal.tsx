@@ -8,10 +8,6 @@ export default function Terminal() {
   const inputRef = useRef<HTMLInputElement>(null);
   const terminalHistoryRef = useRef<HTMLDivElement>(null);
 
-  function appendToHistory(line: string) {
-    addHistory(line);
-  }
-
   // On mount, focus the input
   useEffect(() => {
     inputRef.current?.focus();
@@ -35,7 +31,7 @@ export default function Terminal() {
 
         // Add a prompt to the input value
         const formattedInputValue = `${cwd}> ${inputValue}`;
-        appendToHistory(formattedInputValue);
+        addHistory({ type: "input", value: formattedInputValue });
 
         if (inputRef.current) {
           inputRef.current.value = "";
@@ -48,10 +44,25 @@ export default function Terminal() {
             command.execute(...(inputTokens.slice(1)));
           } else {
             if (commandToken.trim() !== "") {
-              appendToHistory(`Command not found: ${commandToken}`);
+              addHistory({ type: "output", value: `Command not found: ${commandToken}` });
             }
           }
         }
+        break;
+      }
+      case "ArrowUp": {
+        // Prevent moving cursor to start of input
+        e.preventDefault();
+
+        // Filter history to only show input entries
+        const inputHistory = history.filter((entry) => entry.type === "input");
+        // Get the last input entry
+        const lastInput = inputHistory[inputHistory.length - 1];
+
+        if (lastInput && inputRef.current) {
+          inputRef.current.value = lastInput.value.split("> ")[1];
+        }
+
         break;
       }
     }
@@ -71,8 +82,8 @@ export default function Terminal() {
       <div ref={terminalHistoryRef} id="terminal-history">
         {history.map((line) => (
           <div key={Math.random()}>
-            <span>
-              {line}
+            <span class={`terminal-history-${line.variant || "default"}`}>
+              {line.value}
             </span>
           </div>
         ))}

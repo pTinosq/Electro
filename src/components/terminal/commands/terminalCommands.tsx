@@ -34,7 +34,10 @@ export const terminalCommands = [
     "cwd",
     async () => {
       const state = useTerminalStore.getState();
-      state.addHistory(`Current working directory: ${state.cwd}`);
+      state.addHistory({
+        type: "output",
+        value: `Current working directory: ${state.cwd}`
+      });
     },
     () => true
   ),
@@ -54,16 +57,22 @@ export const terminalCommands = [
     async (_, path) => {
       const store = useTerminalStore.getState();
       if (!path) {
-        store.addHistory("Error: No path provided");
+        store.addHistory({
+          type: "output",
+          value: "Error: No path provided"
+        });
         return;
       }
 
       try {
         const newPath = await invoke("change_cwd", { path }) as string;
         store.setCwd(newPath);
-        store.addHistory(`Changed directory to: ${newPath}`);
       } catch (error) {
-        store.addHistory(`Error: ${error}`);
+        store.addHistory({
+          type: "output",
+          value: `Error: ${error}`,
+          variant: "error"
+        });
       }
     },
     () => true

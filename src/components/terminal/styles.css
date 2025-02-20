@@ -44,6 +44,24 @@
 	color: #51ff51;
 }
 
+.terminal-history-default {
+	color: #e0e0e0;
+}
+
+.terminal-history-success {
+	color: #51ff51;
+}
+
+.terminal-history-warn {
+	color: #ffcc51;
+}
+
+.terminal-history-error {
+	color: #ff5151;
+}
+
+
+
 /* If the screen gets too small place the terminal input area 
 beneath the path */
 @media (max-width: 500px) {

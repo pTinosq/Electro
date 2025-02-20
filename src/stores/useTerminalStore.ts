@@ -1,13 +1,20 @@
 import { create } from "zustand";
 
+export interface TerminalHistoryEntry {
+  type: "input" | "output";
+  value: string;
+  variant?: "default" | "error" | "warn" | "success";
+}
+
+
 interface TerminalState {
   // Variables
-  history: string[];
+  history: TerminalHistoryEntry[];
   isTerminalOpen: boolean;
   cwd: string;
 
   // Methods
-  addHistory: (line: string) => void;
+  addHistory: (entry: TerminalHistoryEntry) => void;
   setIsTerminalOpen: (isOpen: boolean) => void;
   clearHistory: () => void;
   setCwd: (cwd: string) => void;
@@ -17,7 +24,7 @@ export const useTerminalStore = create<TerminalState>((set) => ({
   history: [],
   isTerminalOpen: true,
   cwd: "/",
-  addHistory: (line) => set((state) => ({ history: [...state.history, line] })),
+  addHistory: (entry) => set((state) => ({ history: [...state.history, entry] })),
   setIsTerminalOpen: (isOpen) => set({
     isTerminalOpen: isOpen
   }),

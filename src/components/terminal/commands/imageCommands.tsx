@@ -11,7 +11,11 @@ export const imageCommands = [
     "load",
     async (_isAllowed, filePath) => {
       if (!filePath || filePath.trim() === "") {
-        useTerminalStore.getState().addHistory("Error: No file path provided");
+        useTerminalStore.getState().addHistory({
+          type: "output",
+          value: "Usage: load <file path>",
+          variant: "warn"
+        });
         return;
       }
 
@@ -30,19 +34,35 @@ export const imageCommands = [
           // TODO: Set default src to $USER
           isRemote ? useImageStore.getState().setDefaultSrc("C:") : useImageStore.getState().setDefaultSrc(filePath);
 
-          useTerminalStore.getState().addHistory(`Image loaded from '${filePath}'`);
+          useTerminalStore.getState().addHistory({
+            type: "output",
+            value: `Image loaded from '${filePath}'`,
+            variant: "success"
+          });
           useImageStore.getState().setLoadedImage(image);
         };
 
         image.onerror = () => {
-          useTerminalStore.getState().addHistory(`Error loading image from '${filePath}'`);
+          useTerminalStore.getState().addHistory({
+            type: "output",
+            value: `Error loading image from '${filePath}'`,
+            variant: "error"
+          });
         }
       } catch (error) {
         if (error instanceof Error) {
-          useTerminalStore.getState().addHistory(`Error loading image: ${error.message}`);
+          useTerminalStore.getState().addHistory({
+            type: "output",
+            value: `Error loading image: ${error.message}`,
+            variant: "error"
+          })
           console.error("Error loading image:", error);
         } else {
-          useTerminalStore.getState().addHistory("Error loading image: Unknown error");
+          useTerminalStore.getState().addHistory({
+            type: "output",
+            value: "Error loading image: Unknown error",
+            variant: "error"
+          });
           console.error("Error loading image: Unknown error", error);
         }
       }

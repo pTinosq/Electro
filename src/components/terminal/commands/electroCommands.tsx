@@ -8,7 +8,6 @@ export const electroCommands = [
     "Quit Electro",
     "quit",
     async () => {
-      console.log("Quitting Electro...");
       await invoke("exit_app");
     },
     () => true
