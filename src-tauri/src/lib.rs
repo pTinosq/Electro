@@ -94,23 +94,28 @@ fn change_cwd(path: String) -> Result<String, String> {
 }
 
 #[tauri::command]
-fn list_directory() -> Result<Vec<String>, String> {
-    match env::current_dir() {
-        Ok(path) => {
-            let entries = fs::read_dir(path).map_err(|_| "Failed to read directory".to_string())?;
+fn list_directory(path: String) -> Result<Vec<String>, String> {
+    let dir_path = Path::new(&path);
 
-            let mut files_and_dirs = Vec::new();
-            for entry in entries {
-                if let Ok(entry) = entry {
-                    let file_name = entry.file_name();
-                    files_and_dirs.push(file_name.to_string_lossy().to_string());
-                }
-            }
-
-            Ok(files_and_dirs)
-        }
-        Err(_) => Err("Failed to get current working directory".to_string()),
+    // Ensure the path exists and is a directory
+    if !dir_path.exists() {
+        return Err("Path does not exist".to_string());
     }
+    if !dir_path.is_dir() {
+        return Err("Provided path is not a directory".to_string());
+    }
+
+    let entries = fs::read_dir(dir_path).map_err(|_| "Failed to read directory".to_string())?;
+
+    let mut files_and_dirs = Vec::new();
+    for entry in entries {
+        if let Ok(entry) = entry {
+            let file_name = entry.file_name();
+            files_and_dirs.push(file_name.to_string_lossy().to_string());
+        }
+    }
+
+    Ok(files_and_dirs)
 }
 
 // Main entry point

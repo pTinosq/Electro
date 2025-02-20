@@ -78,8 +78,8 @@ export const terminalCommands = [
     "List directory contents",
     "List the contents of the specified directory. Usage: ls <?path>",
     "ls",
-    async () => {
-      const dirs = await invoke("list_directory") as string[];
+    async (_, path = ".") => {
+      const dirs = await invoke("list_directory", { path }) as string[];
       useTerminalStore.getState().addHistory({
         type: "output",
         value: dirs.join(", ")
