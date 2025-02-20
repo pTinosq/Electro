@@ -4,10 +4,16 @@ import CommandRegistry from "./commands/CommandRegistry";
 import { invoke } from "@tauri-apps/api/core";
 import { useTerminalStore } from "./stores/useTerminalStore";
 import { homeDir } from "@tauri-apps/api/path";
+import KeybindRegistry from "./keybinds/KeybindRegistry";
 
-const commandRegistry = CommandRegistry.getInstance();
 // Load all CLI commands before rendering
+const commandRegistry = CommandRegistry.getInstance();
 commandRegistry.loadCommands();
+
+// Load all keybinds before rendering
+const keybindRegistry = KeybindRegistry.getInstance();
+keybindRegistry.loadKeybinds();
+keybindRegistry.registerListener();
 
 // Set CWD
 const homeDirectory = await homeDir();
