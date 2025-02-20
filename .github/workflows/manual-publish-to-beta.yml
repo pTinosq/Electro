@@ -33,7 +33,7 @@ jobs:
               owner: context.repo.owner,
               repo: context.repo.repo,
               tag_name: `v${process.env.PACKAGE_VERSION}-beta`,
-              name: `🧪Electro v${process.env.PACKAGE_VERSION} Beta`,
+              name: `🧪 Electro v${process.env.PACKAGE_VERSION} Beta`,
               body: '',
               draft: true,
               prerelease: true
