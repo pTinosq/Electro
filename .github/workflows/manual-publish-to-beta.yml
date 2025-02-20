@@ -3,7 +3,7 @@ name: "publish"
 on:
   push:
     branches:
-      - main
+      - beta
 
 jobs:
   create-release:
@@ -32,11 +32,11 @@ jobs:
             const { data } = await github.rest.repos.createRelease({
               owner: context.repo.owner,
               repo: context.repo.repo,
-              tag_name: `v${process.env.PACKAGE_VERSION}`,
-              name: `⚡Electro v${process.env.PACKAGE_VERSION}`,
+              tag_name: `v${process.env.PACKAGE_VERSION}-beta`,
+              name: `🧪Electro v${process.env.PACKAGE_VERSION} Beta`,
               body: '',
               draft: true,
-              prerelease: false
+              prerelease: true
             })
             return data.id
 
