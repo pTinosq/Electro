@@ -54,11 +54,9 @@ export default class CommandRegistry {
   }
 
   public loadCommands() {
-    const registry = CommandRegistry.getInstance();
-
     for (const commandCategory of CommandRegistry.allCommands) {
       for (const command of commandCategory.getCommands()) {
-        registry.addCommand(command);
+        this.addCommand(command);
       }
     }
   }

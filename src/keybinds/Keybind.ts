@@ -1,29 +1,26 @@
 export default class Keybind {
+  id: string;
   name: string;
-  shortcut: string;
-  description: string;
-  callback: (event: KeyboardEvent) => void;
+  shortcut: Uppercase<string>;
+  callback: (canExecute: boolean, event: KeyboardEvent, ...args: string[]) => void;
   when: () => boolean;
 
   constructor(
+    id: string,
     name: string,
-    shortcut: string,
-    description: string,
-    callback: (event: KeyboardEvent) => void,
-    when: () => boolean = () => true // Defaults to always executable
+    shortcut: Uppercase<string>,
+    callback: (isAllowed: boolean, event: KeyboardEvent, ...args: string[]) => void,
+    when: () => boolean
   ) {
+    this.id = id;
     this.name = name;
     this.shortcut = shortcut;
-    this.description = description;
     this.callback = callback;
     this.when = when;
   }
 
-  execute(event: KeyboardEvent) {
-    if (this.when()) {
-      this.callback(event);
-    } else {
-      console.warn(`Keybind "${this.shortcut}" cannot be executed due to unmet conditions.`);
-    }
+  execute(event: KeyboardEvent, ...args: string[]) {
+    const isAllowed = this.when();
+    this.callback(isAllowed, event, ...args);
   }
 }

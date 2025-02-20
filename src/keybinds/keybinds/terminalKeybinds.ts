@@ -1,32 +1,28 @@
-import store from "../../old.store";
-import { setTerminalOpenState } from "../../old.store/slices/terminalSlice";
+import { useTerminalStore } from "../../stores/useTerminalStore";
 import Keybind from "../Keybind";
 
 export const terminalKeybinds = [
+
   new Keybind(
+    "terminal.open",
     "Open terminal",
-    "t",
-    "Opens the terminal",
-    (e) => {
-      e.preventDefault();
-      store.dispatch(setTerminalOpenState(true));
+    "T",
+    () => {
+      useTerminalStore.setState({ isTerminalOpen: true });
     },
     () => {
-      // Do not open the terminal if it is already open
-      return !store.getState().terminal.isOpen;
+      return !useTerminalStore.getState().isTerminalOpen;
     }
   ),
   new Keybind(
+    "terminal.close",
     "Close terminal",
-    "Escape",
-    "Closes the terminal",
-    (e) => {
-      e.preventDefault();
-      store.dispatch(setTerminalOpenState(false));
+    "ESCAPE",
+    () => {
+      useTerminalStore.setState({ isTerminalOpen: false });
     },
     () => {
-      // Only close the terminal if it is open
-      return store.getState().terminal.isOpen;
+      return useTerminalStore.getState().isTerminalOpen;
     }
   ),
 ]
