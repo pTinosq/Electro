@@ -1,10 +1,11 @@
-import { useEffect, useRef } from "preact/hooks";
+import { useEffect, useRef, useState } from "preact/hooks";
 import "./styles.css";
 import { useTerminalStore } from "../../stores/useTerminalStore";
 import CommandRegistry from "../../commands/CommandRegistry";
 
 export default function Terminal() {
   const { addHistory, history, isTerminalOpen, cwd } = useTerminalStore()
+  const [historyIndex, setHistoryIndex] = useState<number>(-1);
   const inputRef = useRef<HTMLInputElement>(null);
   const terminalHistoryRef = useRef<HTMLDivElement>(null);
 
@@ -56,11 +57,28 @@ export default function Terminal() {
 
         // Filter history to only show input entries
         const inputHistory = history.filter((entry) => entry.type === "input");
-        // Get the last input entry
-        const lastInput = inputHistory[inputHistory.length - 1];
+        // Get the last input entry (compared to the current history index)
+        const lastInput = inputHistory[inputHistory.length - (historyIndex + 2)];
+        setHistoryIndex((prev) => Math.min(prev + 1, inputHistory.length - 1));
 
         if (lastInput && inputRef.current) {
           inputRef.current.value = lastInput.value.split("> ")[1];
+        }
+
+        break;
+      }
+      case "ArrowDown": {
+        // Prevent moving cursor to end of input
+        e.preventDefault();
+
+        // Filter history to only show input entries
+        const inputHistory = history.filter((entry) => entry.type === "input");
+        // Get the next input entry (compared to the current history index)
+        const nextInput = inputHistory[inputHistory.length - historyIndex];
+        setHistoryIndex((prev) => Math.max(prev - 1, -1));
+
+        if (nextInput && inputRef.current) {
+          inputRef.current.value = nextInput.value.split("> ")[1];
         }
 
         break;
