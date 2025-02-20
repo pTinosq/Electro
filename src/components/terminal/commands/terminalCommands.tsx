@@ -1,12 +1,12 @@
 import CLICommand from "../../../commands/CLICommand";
 import { invoke } from "@tauri-apps/api/core";
 import { useTerminalStore } from "../../../stores/useTerminalStore";
+import CLICommandCategory from "../../../commands/CLICommandCategory";
 
-// These commands handle the Electro terminal
 export const terminalCommands = [
   new CLICommand(
     "Close terminal",
-    "Close the terminal",
+    "Closes the terminal",
     "close",
     () => {
       useTerminalStore.getState().setIsTerminalOpen(false);
@@ -17,7 +17,7 @@ export const terminalCommands = [
   ),
   new CLICommand(
     "Clear terminal",
-    "Clear the terminal",
+    "Clears all terminal history",
     "clear",
     () => {
       useTerminalStore.getState().clearHistory();
@@ -40,7 +40,7 @@ export const terminalCommands = [
   ),
   new CLICommand(
     "Launch file explorer",
-    "Launches the file explorer in the specified directory",
+    "Launches the file explorer in the specified directory. Usage: explorer <path>",
     "explorer",
     (_, path) => {
       invoke("open_file_explorer", { path });
@@ -49,7 +49,7 @@ export const terminalCommands = [
   ),
   new CLICommand(
     "Change directory",
-    "Change the current working directory",
+    "Changes the current working directory. Usage: cd <path>",
     "cd",
     async (_, path) => {
       const store = useTerminalStore.getState();
@@ -76,11 +76,10 @@ export const terminalCommands = [
   ),
   new CLICommand(
     "List directory contents",
-    "List the contents of the specified directory",
+    "List the contents of the specified directory. Usage: ls <?path>",
     "ls",
     async () => {
       const dirs = await invoke("list_directory") as string[];
-      console.debug("107124", dirs);
       useTerminalStore.getState().addHistory({
         type: "output",
         value: dirs.join(", ")
@@ -90,3 +89,8 @@ export const terminalCommands = [
     () => true
   ),
 ];
+
+export const terminalCommandsCategory = new CLICommandCategory(
+  "Terminal",
+  terminalCommands
+)

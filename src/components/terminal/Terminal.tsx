@@ -5,7 +5,7 @@ import CommandRegistry from "../../commands/CommandRegistry";
 
 export default function Terminal() {
   const { addHistory, history, isTerminalOpen, cwd } = useTerminalStore()
-  const [historyIndex, setHistoryIndex] = useState<number>(-1);
+  const [_historyIndex, setHistoryIndex] = useState<number>(-1);
   const inputRef = useRef<HTMLInputElement>(null);
   const terminalHistoryRef = useRef<HTMLDivElement>(null);
 
@@ -44,7 +44,7 @@ export default function Terminal() {
 
       return newIndex;
     });
-  }, [history]); // Dependencies
+  }, [history]);
 
   const handleKeyDown = (e: KeyboardEvent) => {
     switch (e.key) {
@@ -82,6 +82,21 @@ export default function Terminal() {
         e.preventDefault();
         handleHistoryNavigation("down");
         break;
+      }
+      case "Tab": {
+        e.preventDefault();
+        // For now we'll only provide autocomplete for the first token
+        const inputValue = inputRef.current?.value.trim();
+        const inputToken = inputValue?.split(" ")[0];
+        if (inputToken) {
+          const commands = CommandRegistry.getInstance().autocompleteCommand(inputToken);
+          if (commands.length === 1 && inputRef.current) {
+            inputRef.current.value = commands[0];
+          } else if (commands.length > 1) {
+            addHistory({ type: "output", value: `${commands.join(", ")}` });
+          }
+        }
+
       }
     }
   }

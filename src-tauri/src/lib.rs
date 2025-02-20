@@ -1,8 +1,8 @@
 use std::env;
+use std::fs;
 use std::path::{Path, PathBuf};
 use tauri::{AppHandle, Emitter};
 use tauri_plugin_cli::CliExt;
-use std::fs;
 
 // This function will be called by the `tauri` runtime when the application is ready
 // Here we will parse the CLI arguments and emit them to the frontend
@@ -125,7 +125,7 @@ pub fn run() {
             get_cwd,
             open_file_explorer,
             change_cwd,
-            list_directory
+            list_directory,
         ])
         .run(tauri::generate_context!())
         .expect("error while running tauri application");

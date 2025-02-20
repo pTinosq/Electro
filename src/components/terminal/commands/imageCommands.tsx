@@ -2,12 +2,12 @@ import CLICommand from "../../../commands/CLICommand";
 import { useTerminalStore } from "../../../stores/useTerminalStore";
 import { convertFileSrc } from "@tauri-apps/api/core";
 import { useImageStore } from "../../../stores/useImageStore";
-
+import CLICommandCategory from "../../../commands/CLICommandCategory";
 
 export const imageCommands = [
   new CLICommand(
     "Load Image",
-    "Loads an image from the specified file path",
+    "Loads an image from the specified file path. Usage: load <file path>",
     "load",
     async (_isAllowed, filePath) => {
       if (!filePath || filePath.trim() === "") {
@@ -30,9 +30,8 @@ export const imageCommands = [
           image.src = convertFileSrc(filePath);
         }
 
-        image.onload = () => {
-          // TODO: Set default src to $USER
-          isRemote ? useImageStore.getState().setDefaultSrc("C:") : useImageStore.getState().setDefaultSrc(filePath);
+        image.onload = async () => {
+          useImageStore.getState().setDefaultSrc(filePath);
 
           useTerminalStore.getState().addHistory({
             type: "output",
@@ -70,3 +69,5 @@ export const imageCommands = [
     () => true
   )
 ];
+
+export const imageCommandsCategory = new CLICommandCategory("Image", imageCommands);

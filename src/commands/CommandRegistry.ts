@@ -1,11 +1,18 @@
-import { electroCommands } from "../components/Terminal/commands/electroCommands";
-import { imageCommands } from "../components/Terminal/commands/imageCommands";
-import { terminalCommands } from "../components/Terminal/commands/terminalCommands";
+import { electroCommandsCategory } from "../components/Terminal/commands/electroCommands";
+import { imageCommandsCategory } from "../components/Terminal/commands/imageCommands";
+import { terminalCommandsCategory } from "../components/Terminal/commands/terminalCommands";
 import type CLICommand from "./CLICommand";
+import type CLICommandCategory from "./CLICommandCategory";
 
 export default class CommandRegistry {
   private static instance: CommandRegistry;
   private commands: Map<string, CLICommand>;
+  public static allCommands: CLICommandCategory[] = [
+    terminalCommandsCategory,
+    electroCommandsCategory,
+    imageCommandsCategory
+  ];
+
 
   private constructor() {
     this.commands = new Map();
@@ -49,16 +56,10 @@ export default class CommandRegistry {
   public loadCommands() {
     const registry = CommandRegistry.getInstance();
 
-    // Register commands
-    const allCommands = [
-      ...terminalCommands,
-      ...electroCommands,
-      ...imageCommands
-    ];
-
-    for (const command of allCommands) {
-      registry.addCommand(command);
+    for (const commandCategory of CommandRegistry.allCommands) {
+      for (const command of commandCategory.getCommands()) {
+        registry.addCommand(command);
+      }
     }
   }
-
 }

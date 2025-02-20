@@ -66,7 +66,6 @@ initializeDragDropListener(async (imageUri: string) => {
 
 		canvasController.setImage(image, currentTransform);
 	} catch (error) {
-		// TODO: Show error message to user
 		console.error("Error loading image:", error);
 	}
 });
