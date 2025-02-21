@@ -60,8 +60,6 @@
 	color: #ff5151;
 }
 
-
-
 /* If the screen gets too small place the terminal input area 
 beneath the path */
 @media (max-width: 500px) {

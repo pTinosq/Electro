@@ -20,5 +20,4 @@ const homeDirectory = await homeDir();
 useTerminalStore.getState().setCwd(homeDirectory);
 invoke("change_cwd", { path: homeDirectory });
 
-
 render(<App />, document.getElementById("app") as HTMLElement);

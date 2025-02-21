@@ -7,7 +7,7 @@ const store = configureStore({
 	reducer: {
 		keybindRegistry: keybindRegistrySlice,
 		terminal: terminalSlice,
-		image: imageSlice
+		image: imageSlice,
 	},
 });
 

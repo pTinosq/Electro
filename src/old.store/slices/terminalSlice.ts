@@ -1,7 +1,6 @@
 import { createSlice, type PayloadAction } from "@reduxjs/toolkit";
 import { invoke } from "@tauri-apps/api/core";
 
-
 interface TerminalState {
 	isOpen: boolean;
 	isTerminalInputFocused: boolean;
@@ -11,7 +10,7 @@ interface TerminalState {
 const initialState: TerminalState = {
 	isOpen: false,
 	isTerminalInputFocused: false,
-	cwd: await invoke("get_cwd") ?? "/",
+	cwd: (await invoke("get_cwd")) ?? "/",
 };
 
 const terminalSlice = createSlice({
@@ -33,7 +32,11 @@ const terminalSlice = createSlice({
 	},
 });
 
-export const { setTerminalOpenState, toggleTerminal, setTerminalInputFocus, setCwd } =
-	terminalSlice.actions;
+export const {
+	setTerminalOpenState,
+	toggleTerminal,
+	setTerminalInputFocus,
+	setCwd,
+} = terminalSlice.actions;
 
 export default terminalSlice.reducer;

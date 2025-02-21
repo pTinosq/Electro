@@ -1,6 +1,5 @@
 import { createSlice, type PayloadAction } from "@reduxjs/toolkit";
 
-
 interface ImageState {
 	defaultSrc: string | null;
 	src: string | null;
@@ -20,13 +19,10 @@ const imageSlice = createSlice({
 		},
 		setSrc(state, action: PayloadAction<string>) {
 			state.src = action.payload;
-		}
+		},
 	},
 });
 
-export const {
-	setDefaultSrc,
-	setSrc,
-} = imageSlice.actions;
+export const { setDefaultSrc, setSrc } = imageSlice.actions;
 
 export default imageSlice.reducer;

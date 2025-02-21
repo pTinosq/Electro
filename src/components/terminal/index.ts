@@ -21,7 +21,9 @@ export default class Terminal extends BaseComponent {
 		this.historyElement = this.element.querySelector(
 			"#terminal-history",
 		) as HTMLElement;
-		this.pathElement = this.element.querySelector("#terminal-path") as HTMLElement;
+		this.pathElement = this.element.querySelector(
+			"#terminal-path",
+		) as HTMLElement;
 
 		if (!this.inputElement || !this.historyElement || !this.pathElement) {
 			throw new Error(
@@ -29,11 +31,8 @@ export default class Terminal extends BaseComponent {
 			);
 		}
 
-
-
 		this.addEventListeners();
 	}
-
 
 	private addEventListeners() {
 		// When the terminal is clicked, focus the input
@@ -67,7 +66,7 @@ export default class Terminal extends BaseComponent {
 			const command = this.commandRegistry.getCommand(inputTokens[0]);
 
 			if (command) {
-				command.execute(this, ...(inputTokens.slice(1)));
+				command.execute(this, ...inputTokens.slice(1));
 			} else {
 				if (inputTokens[0].trim() !== "") {
 					this.appendToHistory(`Command not found: ${inputTokens[0]}`);
@@ -84,11 +83,12 @@ export default class Terminal extends BaseComponent {
 			const inputTokens = inputValue.split(" ");
 
 			if (inputTokens.length === 1 && inputTokens[0].trim() !== "") {
-				const commands = this.commandRegistry.autocompleteCommand(inputTokens[0]);
+				const commands = this.commandRegistry.autocompleteCommand(
+					inputTokens[0],
+				);
 
 				if (commands.length === 1) {
 					this.inputElement.value = commands[0];
-
 				} else if (commands.length > 1) {
 					this.appendToHistory(`${commands.join(", ")}`);
 				}
@@ -137,7 +137,7 @@ export default class Terminal extends BaseComponent {
 		const allCommands = [
 			...terminalCommands,
 			...electroCommands,
-			...imageCommands
+			...imageCommands,
 		];
 
 		for (const command of allCommands) {
@@ -149,5 +149,3 @@ export default class Terminal extends BaseComponent {
 		this.pathElement.innerHTML = `${path}>`;
 	}
 }
-
-

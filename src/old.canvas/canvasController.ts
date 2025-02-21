@@ -1,5 +1,8 @@
 import { TransformBuilder } from "../components/Canvas/TransformBuilder";
-import { DEFAULT_IMAGE_TRANSFORM, type ImageTransform } from "../components/Canvas/ImageTransform";
+import {
+	DEFAULT_IMAGE_TRANSFORM,
+	type ImageTransform,
+} from "../components/Canvas/ImageTransform";
 import { drawImageToCanvas } from "../components/Canvas/canvasUtils";
 
 export class CanvasController {
@@ -57,7 +60,6 @@ export class CanvasController {
 		this.redraw();
 		this.dispatchEvent("imageLoad", image);
 	}
-
 
 	private addListeners(): void {
 		this.canvas.addEventListener("mousedown", this.onMouseDown.bind(this));
@@ -118,8 +120,10 @@ export class CanvasController {
 		const mouseY = event.clientY - rect.top;
 
 		// Calculate mouse position relative to the image
-		const imageMouseX = (mouseX - this.currentTransform.x) / this.currentTransform.width;
-		const imageMouseY = (mouseY - this.currentTransform.y) / this.currentTransform.height;
+		const imageMouseX =
+			(mouseX - this.currentTransform.x) / this.currentTransform.width;
+		const imageMouseY =
+			(mouseY - this.currentTransform.y) / this.currentTransform.height;
 
 		const newWidth = this.currentTransform.width * zoomFactor;
 		const newHeight = this.currentTransform.height * zoomFactor;
@@ -163,14 +167,20 @@ export class CanvasController {
 	/**
 	 * Add an event listener.
 	 */
-	public addEventListener(type: "imageLoad", listener: (event: CustomEvent<HTMLImageElement>) => void): void {
+	public addEventListener(
+		type: "imageLoad",
+		listener: (event: CustomEvent<HTMLImageElement>) => void,
+	): void {
 		this.eventTarget.addEventListener(type, listener as EventListener);
 	}
 
 	/**
 	 * Remove an event listener.
 	 */
-	public removeEventListener(type: "imageLoad", listener: (event: CustomEvent<HTMLImageElement>) => void): void {
+	public removeEventListener(
+		type: "imageLoad",
+		listener: (event: CustomEvent<HTMLImageElement>) => void,
+	): void {
 		this.eventTarget.removeEventListener(type, listener as EventListener);
 	}
 
@@ -187,5 +197,5 @@ export class CanvasController {
 		}
 	}
 
-	public start(): void { }
+	public start(): void {}
 }

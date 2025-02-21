@@ -87,5 +87,3 @@ canvasController.start();
 const uiProcessor = new UIProcessor();
 uiProcessor.initialize();
 uiProcessor.start();
-
-
