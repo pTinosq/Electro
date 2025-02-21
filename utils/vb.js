@@ -32,6 +32,17 @@ const updateJsonFile = (filePath, updater) => {
   }
 };
 
+const updateTomlFile = (filePath, updater) => {
+  try {
+    const toml = readFileSync(filePath, "utf8");
+    const updatedToml = updater(toml);
+    writeFileSync(filePath, updatedToml, "utf8");
+    console.log(`Updated ${filePath}`);
+  } catch (error) {
+    console.error(`Error updating ${filePath}:`, error);
+  }
+}
+
 (async () => {
   const newVersion = await askVersion();
   rl.close();
@@ -46,6 +57,10 @@ const updateJsonFile = (filePath, updater) => {
   });
   updateJsonFile("./src-tauri/tauri.conf.json", (json) => {
     json.version = newVersion
+  });
+  updateTomlFile("./src-tauri/Cargo.toml", (toml) => {
+    return toml.replace(/version = "\d+\.\d+\.\d+"/, `version = "${newVersion
+      }"`);
   });
 
   console.log(`Version updated to ${newVersion}`);
