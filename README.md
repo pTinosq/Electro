@@ -6,6 +6,10 @@
 
 ![GitHub release](https://img.shields.io/github/v/release/pTinosq/Electro)
 ![GitHub release date](https://img.shields.io/github/release-date/pTinosq/Electro)
+![GitHub last commit](https://img.shields.io/github/last-commit/pTinosq/Electro)
+![GitHub issues](https://img.shields.io/github/issues/pTinosq/Electro)
+![GitHub pull requests](https://img.shields.io/github/issues-pr/pTinosq/Electro)
+
 
 ## Features
 
