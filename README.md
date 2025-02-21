@@ -6,7 +6,6 @@
 
 ![GitHub release](https://img.shields.io/github/v/release/pTinosq/Electro)
 ![GitHub release date](https://img.shields.io/github/release-date/pTinosq/Electro)
-![example workflow](https://github.com/github/docs/actions/workflows/main.yml/badge.svg)
 
 ## Features
 
