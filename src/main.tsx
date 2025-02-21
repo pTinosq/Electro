@@ -16,8 +16,11 @@ keybindRegistry.loadKeybinds();
 keybindRegistry.registerListener();
 
 // Set CWD
-const homeDirectory = await homeDir();
-useTerminalStore.getState().setCwd(homeDirectory);
-invoke("change_cwd", { path: homeDirectory });
+homeDir().then(
+  (homeDir) => {
+    useTerminalStore.getState().setCwd(homeDir);
+    invoke("change_cwd", { path: homeDir });
+  }
+)
 
 render(<App />, document.getElementById("app") as HTMLElement);
