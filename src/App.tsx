@@ -6,8 +6,11 @@ import { convertFileSrc, invoke } from "@tauri-apps/api/core";
 import "./styles/normalize.css";
 import "./styles/global.css";
 import Terminal from "./components/terminal/Terminal";
+import { useTerminalStore } from "./stores/useTerminalStore";
+import { normalizeFilePath } from "./utils/normalizeFilePaths";
 
-const DEFAULT_IMAGE = "/src/assets/electro-default.jpg";
+const DEFAULT_IMAGE_PATH = "assets/electro-default.jpg";
+const DEV_DEFAULT_IMAGE_PATH = "/src/assets/electro-default.jpg";
 
 interface DragDropEvent {
 	payload: {
@@ -27,26 +30,36 @@ interface ImageSourceEvent {
 	};
 }
 
+const IS_DEV_MODE = import.meta.env.DEV;
+
+
 export default function App() {
 	const { loadedImage, setLoadedImage, setDefaultSrc } = useImageStore();
 
 	// Load default image on mount
 	useEffect(() => {
-		const img = new Image();
-		img.src = DEFAULT_IMAGE;
-		img.onload = () => setLoadedImage(img);
+		const loadImage = async (path: string) => {
+			const fileUrl = IS_DEV_MODE ? path : convertFileSrc(path);
+			const img = new Image();
+			img.src = fileUrl;
+			img.onload = () => setLoadedImage(img);
+		};
+
+		// Load the default image
+		loadImage(
+			IS_DEV_MODE ? DEV_DEFAULT_IMAGE_PATH : DEFAULT_IMAGE_PATH
+		);
 
 		// Drag and drop listener
 		listen("tauri://drag-drop", (event) => {
 			const dragDropEvent = event as DragDropEvent;
-			const filePath = dragDropEvent.payload.paths[0];
+			const filePath = normalizeFilePath(dragDropEvent.payload.paths[0]);
+
+			const fileDirectory = filePath.split("/").slice(0, -1).join("/");
+			useTerminalStore.getState().setCwd(fileDirectory);
+
 			setDefaultSrc(filePath);
-
-			const fileUrl = convertFileSrc(filePath);
-
-			const img = new Image();
-			img.src = fileUrl;
-			img.onload = () => setLoadedImage(img);
+			loadImage(filePath);
 		});
 
 		listen("image-source", (event: ImageSourceEvent) => {
@@ -54,12 +67,7 @@ export default function App() {
 			if (!filePath) return;
 
 			setDefaultSrc(filePath);
-
-			const fileUrl = convertFileSrc(filePath);
-
-			const img = new Image();
-			img.src = fileUrl;
-			img.onload = () => setLoadedImage(img);
+			loadImage(filePath);
 		}).then(() => {
 			invoke("on_image_source_listener_ready");
 		});

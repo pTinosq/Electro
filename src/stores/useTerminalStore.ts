@@ -1,3 +1,4 @@
+import { invoke } from "@tauri-apps/api/core";
 import { create } from "zustand";
 
 export interface TerminalHistoryEntry {
@@ -30,5 +31,8 @@ export const useTerminalStore = create<TerminalState>((set) => ({
 			isTerminalOpen: isOpen,
 		}),
 	clearHistory: () => set(() => ({ history: [] })),
-	setCwd: (cwd) => set({ cwd }),
+	setCwd: async (cwd) => {
+		await invoke("change_cwd", { path: cwd });
+		set({ cwd })
+	},
 }));

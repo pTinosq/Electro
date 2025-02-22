@@ -3,6 +3,7 @@ import { useTerminalStore } from "../../../stores/useTerminalStore";
 import { convertFileSrc } from "@tauri-apps/api/core";
 import { useImageStore } from "../../../stores/useImageStore";
 import CLICommandCategory from "../../../commands/CLICommandCategory";
+import { normalizeFilePath } from "../../../utils/normalizeFilePaths";
 
 export const imageCommands = [
 	new CLICommand(
@@ -23,29 +24,42 @@ export const imageCommands = [
 				// Determine if the path is a URL or local file
 				const isRemote =
 					filePath.startsWith("http://") || filePath.startsWith("https://");
+
+				// Normalize the file path
+				let normalizedFilePath: string;
+				if (isRemote) {
+					normalizedFilePath = filePath;
+				} else {
+					normalizedFilePath = normalizeFilePath(filePath);
+				}
+
 				const image = new Image();
 
 				if (isRemote) {
-					image.src = filePath;
+					image.src = normalizedFilePath;
 				} else {
-					image.src = convertFileSrc(filePath);
+					image.src = convertFileSrc(normalizedFilePath);
 				}
 
 				image.onload = async () => {
-					useImageStore.getState().setDefaultSrc(filePath);
+					useImageStore.getState().setDefaultSrc(normalizedFilePath);
 
 					useTerminalStore.getState().addHistory({
 						type: "output",
-						value: `Image loaded from '${filePath}'`,
+						value: `Image loaded from '${normalizedFilePath}'`,
 						variant: "success",
 					});
 					useImageStore.getState().setLoadedImage(image);
+					if (!isRemote) {
+						// Set the current working directory to the directory of the loaded file
+						useTerminalStore.getState().setCwd(normalizedFilePath.split("/").slice(0, -1).join("/"));
+					}
 				};
 
 				image.onerror = () => {
 					useTerminalStore.getState().addHistory({
 						type: "output",
-						value: `Error loading image from '${filePath}'`,
+						value: `Error loading image from '${normalizedFilePath}'`,
 						variant: "error",
 					});
 				};

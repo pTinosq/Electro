@@ -1,9 +1,4 @@
-import {
-	useCallback,
-	useEffect,
-	useRef,
-	useState,
-} from "preact/hooks";
+import { useCallback, useEffect, useRef, useState } from "preact/hooks";
 import "./styles.css";
 import { useTerminalStore } from "../../stores/useTerminalStore";
 import CommandRegistry from "../../commands/CommandRegistry";

@@ -42,6 +42,9 @@
       "nsis": {
         "installerHooks": "./windows/hooks.nsi"
       }
+    },
+    "resources": {
+      "../src/assets/electro-default.jpg": "assets/electro-default.jpg"
     }
   },
   "plugins": {
