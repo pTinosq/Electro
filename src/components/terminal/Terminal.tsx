@@ -1,7 +1,6 @@
 import {
 	useCallback,
 	useEffect,
-	useLayoutEffect,
 	useRef,
 	useState,
 } from "preact/hooks";
