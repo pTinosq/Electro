@@ -62,8 +62,11 @@ export const terminalCommands = [
 			}
 
 			try {
+				console.debug("277924", "path", path);
 				const newPath = (await invoke("change_cwd", { path })) as string;
+				console.debug("765393", "newPath", newPath);
 				const normalizedNewPath = normalizeFilePath(newPath);
+				console.debug("893469", "normalizedNewPath", normalizedNewPath);
 				store.setCwd(normalizedNewPath);
 			} catch (error) {
 				store.addHistory({

@@ -2,6 +2,7 @@ import { useCallback, useEffect, useRef, useState } from "preact/hooks";
 import "./styles.css";
 import { useTerminalStore } from "../../stores/useTerminalStore";
 import CommandRegistry from "../../commands/CommandRegistry";
+import { parseCommandInput } from "../../utils/parseCommandInput";
 
 export default function Terminal() {
 	const { addHistory, history, isTerminalOpen, cwd } = useTerminalStore();
@@ -55,9 +56,8 @@ export default function Terminal() {
 		switch (e.key) {
 			case "Enter": {
 				const inputValue = inputRef.current?.value.trim();
-				const inputTokens = inputValue?.split(" ");
+				const inputTokens = inputValue ? parseCommandInput(inputValue) : [];
 
-				// Add a prompt to the input value
 				const formattedInputValue = `${cwd}> ${inputValue}`;
 				addHistory({ type: "input", value: formattedInputValue });
 
@@ -65,19 +65,16 @@ export default function Terminal() {
 					inputRef.current.value = "";
 				}
 
-				const commandToken = inputTokens?.[0];
+				const commandToken = inputTokens[0];
 				if (commandToken) {
-					const command =
-						CommandRegistry.getInstance().getCommand(commandToken);
+					const command = CommandRegistry.getInstance().getCommand(commandToken);
 					if (command) {
 						command.execute(...inputTokens.slice(1));
 					} else {
-						if (commandToken.trim() !== "") {
-							addHistory({
-								type: "output",
-								value: `Command not found: ${commandToken}`,
-							});
-						}
+						addHistory({
+							type: "output",
+							value: `Command not found: ${commandToken}`,
+						});
 					}
 				}
 				break;
