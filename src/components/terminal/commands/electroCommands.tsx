@@ -63,6 +63,19 @@ export const electroCommands = [
 		},
 		() => true,
 	),
+	new CLICommand(
+		"Version",
+		"Displays the version of Electro",
+		"version",
+		async () => {
+			const version = await invoke("get_version");
+			useTerminalStore.getState().addHistory({
+				type: "output",
+				value: `Electro version: ${version}`,
+			});
+		},
+		() => true,
+	)
 ];
 
 export const electroCommandsCategory = new CLICommandCategory(

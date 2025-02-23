@@ -4,6 +4,11 @@ use std::path::{Path, PathBuf};
 use tauri::{AppHandle, Emitter};
 use tauri_plugin_cli::CliExt;
 
+#[tauri::command]
+fn get_version() -> String {
+    env!("CARGO_PKG_VERSION").to_string()
+}
+
 // This function will be called by the `tauri` runtime when the application is ready
 // Here we will parse the CLI arguments and emit them to the frontend
 #[tauri::command]
@@ -131,6 +136,7 @@ pub fn run() {
             open_file_explorer,
             change_cwd,
             list_directory,
+            get_version
         ])
         .run(tauri::generate_context!())
         .expect("error while running tauri application");
