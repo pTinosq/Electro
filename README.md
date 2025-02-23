@@ -65,10 +65,21 @@ The most helpful keybind of all is `t`, which opens the terminal. From there, yo
 
 ## Contributing
 
-Want to improve Electro? Contributions are welcome!  
+Want to improve Electro? Contributions are welcome!
 
 - **Report bugs** or suggest features on the [issues page](https://github.com/pTinosq/Electro/issues).
 - **Submit a pull request** with your improvements.
+
+Developers might find the following information useful:
+
+| Tech stack         | Technology        |
+| ------------------ | ----------------- |
+| Frontend framework | Preact (ts)       |
+| Backend framework  | Tauri v2.0 (Rust) |
+| Package manager    | npm               |
+| State management   | Zustand           |
+| Styling            | Vanilla CSS       |
+
 
 ## License
 
