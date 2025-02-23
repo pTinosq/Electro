@@ -32,7 +32,6 @@ interface ImageSourceEvent {
 
 const IS_DEV_MODE = import.meta.env.DEV;
 
-
 export default function App() {
 	const { loadedImage, setLoadedImage, setDefaultSrc } = useImageStore();
 
@@ -46,9 +45,7 @@ export default function App() {
 		};
 
 		// Load the default image
-		loadImage(
-			IS_DEV_MODE ? DEV_DEFAULT_IMAGE_PATH : DEFAULT_IMAGE_PATH
-		);
+		loadImage(IS_DEV_MODE ? DEV_DEFAULT_IMAGE_PATH : DEFAULT_IMAGE_PATH);
 
 		// Drag and drop listener
 		listen("tauri://drag-drop", (event) => {

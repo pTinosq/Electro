@@ -33,6 +33,6 @@ export const useTerminalStore = create<TerminalState>((set) => ({
 	clearHistory: () => set(() => ({ history: [] })),
 	setCwd: async (cwd) => {
 		await invoke("change_cwd", { path: cwd });
-		set({ cwd })
+		set({ cwd });
 	},
 }));

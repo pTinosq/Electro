@@ -52,7 +52,9 @@ export const imageCommands = [
 					useImageStore.getState().setLoadedImage(image);
 					if (!isRemote) {
 						// Set the current working directory to the directory of the loaded file
-						useTerminalStore.getState().setCwd(normalizedFilePath.split("/").slice(0, -1).join("/"));
+						useTerminalStore
+							.getState()
+							.setCwd(normalizedFilePath.split("/").slice(0, -1).join("/"));
 					}
 				};
 
