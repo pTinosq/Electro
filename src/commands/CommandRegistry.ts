@@ -5,59 +5,60 @@ import type CLICommand from "./CLICommand";
 import type CLICommandCategory from "./CLICommandCategory";
 
 export default class CommandRegistry {
-  private static instance: CommandRegistry;
-  private commands: Map<string, CLICommand>;
-  public static allCommands: CLICommandCategory[] = [
-    terminalCommandsCategory,
-    electroCommandsCategory,
-    imageCommandsCategory
-  ];
+	private static instance: CommandRegistry;
+	private commands: Map<string, CLICommand>;
+	public static allCommands: CLICommandCategory[] = [
+		terminalCommandsCategory,
+		electroCommandsCategory,
+		imageCommandsCategory,
+	];
 
+	private constructor() {
+		this.commands = new Map();
+	}
 
-  private constructor() {
-    this.commands = new Map();
-  }
+	static getInstance(): CommandRegistry {
+		if (!CommandRegistry.instance) {
+			CommandRegistry.instance = new CommandRegistry();
+		}
+		return CommandRegistry.instance;
+	}
 
-  static getInstance(): CommandRegistry {
-    if (!CommandRegistry.instance) {
-      CommandRegistry.instance = new CommandRegistry();
-    }
-    return CommandRegistry.instance;
-  }
+	addCommand(command: CLICommand): void {
+		if (this.commands.has(command.commandString)) {
+			console.warn(
+				`Command "${command.commandString}" already exists and will be overwritten.`,
+			);
+		}
+		this.commands.set(command.commandString, command);
+	}
 
-  addCommand(command: CLICommand): void {
-    if (this.commands.has(command.commandString)) {
-      console.warn(`Command "${command.commandString}" already exists and will be overwritten.`);
-    }
-    this.commands.set(command.commandString, command);
-  }
+	removeCommand(commandString: string): void {
+		if (!this.commands.has(commandString)) {
+			throw new Error(`Command "${commandString}" not found.`);
+		}
+		this.commands.delete(commandString);
+	}
 
-  removeCommand(commandString: string): void {
-    if (!this.commands.has(commandString)) {
-      throw new Error(`Command "${commandString}" not found.`);
-    }
-    this.commands.delete(commandString);
-  }
+	getCommand(commandString: string): CLICommand | undefined {
+		return this.commands.get(commandString);
+	}
 
-  getCommand(commandString: string): CLICommand | undefined {
-    return this.commands.get(commandString);
-  }
+	listCommands(): CLICommand[] {
+		return Array.from(this.commands.values());
+	}
 
-  listCommands(): CLICommand[] {
-    return Array.from(this.commands.values());
-  }
+	autocompleteCommand(commandString: string): string[] {
+		return Array.from(this.commands.keys()).filter((key) =>
+			key.startsWith(commandString),
+		);
+	}
 
-  autocompleteCommand(commandString: string): string[] {
-    return Array.from(this.commands.keys()).filter((key) =>
-      key.startsWith(commandString)
-    );
-  }
-
-  public loadCommands() {
-    for (const commandCategory of CommandRegistry.allCommands) {
-      for (const command of commandCategory.getCommands()) {
-        this.addCommand(command);
-      }
-    }
-  }
+	public loadCommands() {
+		for (const commandCategory of CommandRegistry.allCommands) {
+			for (const command of commandCategory.getCommands()) {
+				this.addCommand(command);
+			}
+		}
+	}
 }

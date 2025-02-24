@@ -190,5 +190,21 @@ NoOwn:
 !endif # !FileAssociation_INCLUDED
 
 !macro NSIS_HOOK_POSTINSTALL
+  ; https://developer.mozilla.org/en-US/docs/Web/Media/Guides/Formats/Image_types
   ${registerExtension} "$INSTDIR\electro.exe" ".png" "PNG_File"
+  ${registerExtension} "$INSTDIR\electro.exe" ".apng" "APNG_File"
+  ${registerExtension} "$INSTDIR\electro.exe" ".avif" "AVIF_File"
+  ${registerExtension} "$INSTDIR\electro.exe" ".gif" "GIF_File"
+  ${registerExtension} "$INSTDIR\electro.exe" ".jpg" "JPG_File"
+  ${registerExtension} "$INSTDIR\electro.exe" ".jpeg" "JPEG_File"
+  ${registerExtension} "$INSTDIR\electro.exe" ".jfif" "JFIF_File"
+  ${registerExtension} "$INSTDIR\electro.exe" ".pjpeg" "PJPEG_File"
+  ${registerExtension} "$INSTDIR\electro.exe" ".pjp" "PJP_File"
+  ${registerExtension} "$INSTDIR\electro.exe" ".svg" "SVG_File"
+  ${registerExtension} "$INSTDIR\electro.exe" ".webp" "WEBP_File"
+  ${registerExtension} "$INSTDIR\electro.exe" ".bmp" "BMP_File"
+  ${registerExtension} "$INSTDIR\electro.exe" ".ico" "ICO_File"
+  ${registerExtension} "$INSTDIR\electro.exe" ".cur" "CUR_File"
+  ${registerExtension} "$INSTDIR\electro.exe" ".tif" "TIF_File"
+  ${registerExtension} "$INSTDIR\electro.exe" ".tiff" "TIFF_File"
 !macroend

@@ -1,7 +1,7 @@
 {
-  "name": "electro",
+  "name": "Electro",
   "private": true,
-  "version": "0.2.0",
+  "version": "0.5.1",
   "type": "module",
   "scripts": {
     "dev": "vite",
@@ -9,7 +9,8 @@
     "preview": "vite preview",
     "tauri": "tauri",
     "format": "biome format --write ./src",
-    "lint": "biome lint ./src"
+    "lint": "biome lint ./src",
+    "vb": "node utils/vb.js"
   },
   "dependencies": {
     "@reduxjs/toolkit": "^2.5.0",

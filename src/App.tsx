@@ -6,71 +6,74 @@ import { convertFileSrc, invoke } from "@tauri-apps/api/core";
 import "./styles/normalize.css";
 import "./styles/global.css";
 import Terminal from "./components/terminal/Terminal";
+import { useTerminalStore } from "./stores/useTerminalStore";
+import { normalizeFilePath } from "./utils/normalizeFilePaths";
 
-const DEFAULT_IMAGE = "/src/assets/electro-default.jpg";
+const DEFAULT_IMAGE_PATH = "assets/electro-default.jpg";
+const DEV_DEFAULT_IMAGE_PATH = "/src/assets/electro-default.jpg";
 
 interface DragDropEvent {
-  payload: {
-    paths: string[];
-    position: {
-      x: number;
-      y: number;
-    };
-  };
+	payload: {
+		paths: string[];
+		position: {
+			x: number;
+			y: number;
+		};
+	};
 }
 
 interface ImageSourceEvent {
-  payload: {
-    source: {
-      value: string;
-    }
-  };
+	payload: {
+		source: {
+			value: string;
+		};
+	};
 }
 
+const IS_DEV_MODE = import.meta.env.DEV;
 
 export default function App() {
-  const { loadedImage, setLoadedImage, setDefaultSrc } = useImageStore();
+	const { loadedImage, setLoadedImage, setDefaultSrc } = useImageStore();
 
-  // Load default image on mount
-  useEffect(() => {
-    const img = new Image();
-    img.src = DEFAULT_IMAGE;
-    img.onload = () => setLoadedImage(img);
+	// Load default image on mount
+	useEffect(() => {
+		const loadImage = async (path: string) => {
+			const fileUrl = IS_DEV_MODE ? path : convertFileSrc(path);
+			const img = new Image();
+			img.src = fileUrl;
+			img.onload = () => setLoadedImage(img);
+		};
 
-    // Drag and drop listener
-    listen("tauri://drag-drop", (event) => {
-      const dragDropEvent = event as DragDropEvent;
-      const filePath = dragDropEvent.payload.paths[0];
-      setDefaultSrc(filePath);
+		// Load the default image
+		loadImage(IS_DEV_MODE ? DEV_DEFAULT_IMAGE_PATH : DEFAULT_IMAGE_PATH);
 
-      const fileUrl = convertFileSrc(filePath);
+		// Drag and drop listener
+		listen("tauri://drag-drop", (event) => {
+			const dragDropEvent = event as DragDropEvent;
+			const filePath = normalizeFilePath(dragDropEvent.payload.paths[0]);
 
-      const img = new Image();
-      img.src = fileUrl;
-      img.onload = () => setLoadedImage(img);
-    });
+			const fileDirectory = filePath.split("/").slice(0, -1).join("/");
+			useTerminalStore.getState().setCwd(fileDirectory);
 
-    listen("image-source", (event: ImageSourceEvent) => {
-      const filePath = event.payload.source.value;
-      if (!filePath) return;
+			setDefaultSrc(filePath);
+			loadImage(filePath);
+		});
 
-      setDefaultSrc(filePath);
+		listen("image-source", (event: ImageSourceEvent) => {
+			const filePath = event.payload.source.value;
+			if (!filePath) return;
 
-      const fileUrl = convertFileSrc(filePath);
+			setDefaultSrc(filePath);
+			loadImage(filePath);
+		}).then(() => {
+			invoke("on_image_source_listener_ready");
+		});
+	}, [setDefaultSrc, setLoadedImage]);
 
-      const img = new Image();
-      img.src = fileUrl;
-      img.onload = () => setLoadedImage(img);
-    }).then(() => {
-      invoke("on_image_source_listener_ready");
-    });
-
-  }, [setDefaultSrc, setLoadedImage]);
-
-
-
-  return <>
-    <Terminal />
-    <Canvas image={loadedImage} />
-  </>
+	return (
+		<>
+			<Terminal />
+			<Canvas image={loadedImage} />
+		</>
+	);
 }
