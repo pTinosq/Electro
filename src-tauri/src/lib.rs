@@ -3,6 +3,9 @@ use std::fs;
 use std::path::{Path, PathBuf};
 use tauri::{AppHandle, Emitter};
 use tauri_plugin_cli::CliExt;
+/*
+This file should definitely be abstracted into separate modules but it works for now so I'm leaving it as is.
+*/
 
 #[tauri::command]
 fn get_version() -> String {
