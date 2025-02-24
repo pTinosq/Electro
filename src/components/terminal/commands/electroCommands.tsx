@@ -75,7 +75,7 @@ export const electroCommands = [
 			});
 		},
 		() => true,
-	)
+	),
 ];
 
 export const electroCommandsCategory = new CLICommandCategory(
