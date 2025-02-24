@@ -14,7 +14,7 @@ Thank you for your interest in contributing to Electro! This project is designed
 3. **Set Upstream Remote** – Add the original Electro repository as an upstream remote:
 
    ```sh
-   git remote add upstream https://github.com/ElectroOrg/Electro.git
+   git remote add upstream https://github.com/pTinosq/Electro.git
    ```
 
 4. **Create a Branch** – Work on your changes in a feature branch:
