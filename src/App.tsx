@@ -11,6 +11,7 @@ import { normalizeFilePath } from "./utils/normalizeFilePaths";
 
 const DEFAULT_IMAGE_PATH = "assets/electro-default.jpg";
 const DEV_DEFAULT_IMAGE_PATH = "/src/assets/electro-default.jpg";
+const IS_DEV_MODE = import.meta.env.DEV;
 
 interface DragDropEvent {
 	payload: {
@@ -30,13 +31,11 @@ interface ImageSourceEvent {
 	};
 }
 
-const IS_DEV_MODE = import.meta.env.DEV;
-
 export default function App() {
 	const { loadedImage, setLoadedImage, setDefaultSrc } = useImageStore();
 
-	// Load default image on mount
 	useEffect(() => {
+		// Load the default Electro image on mount
 		const loadImage = async (path: string) => {
 			const fileUrl = IS_DEV_MODE ? path : convertFileSrc(path);
 			const img = new Image();
@@ -47,7 +46,7 @@ export default function App() {
 		// Load the default image
 		loadImage(IS_DEV_MODE ? DEV_DEFAULT_IMAGE_PATH : DEFAULT_IMAGE_PATH);
 
-		// Drag and drop listener
+		// Start up the drag-drop listener
 		listen("tauri://drag-drop", (event) => {
 			const dragDropEvent = event as DragDropEvent;
 			const filePath = normalizeFilePath(dragDropEvent.payload.paths[0]);
@@ -59,6 +58,7 @@ export default function App() {
 			loadImage(filePath);
 		});
 
+		// This listener is for when Electro is opened from the command line w/ an image path as the argument
 		listen("image-source", (event: ImageSourceEvent) => {
 			const filePath = event.payload.source.value;
 			if (!filePath) return;
