@@ -157,7 +157,8 @@ export default function Canvas({ image }: CanvasProps) {
 					newWidth < (prev.minWidth ?? 0) ||
 					newWidth > (prev.maxWidth ?? Number.POSITIVE_INFINITY)
 				) {
-					return prev; // Don’t zoom beyond min/max
+					// Don’t zoom beyond min/max
+					return prev;
 				}
 
 				const newX = mouseX - ((mouseX - prev.x) * newWidth) / prev.width;
