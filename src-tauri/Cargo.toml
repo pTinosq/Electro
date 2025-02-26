@@ -1,6 +1,6 @@
 [package]
 name = "Electro"
-version = "0.5.2"
+version = "0.6.1"
 description = "A lightweight & blazingly-fast image viewer with a built-in terminal"
 authors = ["pTinosq"]
 edition = "2021"
