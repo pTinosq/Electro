@@ -1,5 +1,5 @@
 import { create } from "zustand";
-import { readDir } from '@tauri-apps/plugin-fs';
+import { readDir } from "@tauri-apps/plugin-fs";
 import { CircularFileList } from "../utils/CircularFileList";
 import { SUPPORTED_FILE_EXTENSIONS } from "../main";
 
@@ -29,11 +29,13 @@ export const useImageStore = create<ImageState>((set) => ({
 				// Only show files
 				.filter((path) => path.isFile)
 				// Only show files with supported file extensions
-				.filter((path) => SUPPORTED_FILE_EXTENSIONS.includes((path.name.split('.').pop() || '')))
+				.filter((path) =>
+					SUPPORTED_FILE_EXTENSIONS.includes(path.name.split(".").pop() || ""),
+				)
 				// Push the file paths to the CDLL
-				.map((path) => CDLL.push(`${imageDirectory}/${path.name}`))
+				.map((path) => CDLL.push(`${imageDirectory}/${path.name}`));
 
 			set({ siblingImagePaths: CDLL });
 		});
-	}
+	},
 }));

@@ -10,7 +10,9 @@ export const imageKeybinds = [
 		"ARROWLEFT",
 		(isAllowed) => {
 			if (!isAllowed) return;
-			const previousImage = useImageStore.getState().siblingImagePaths.previous()
+			const previousImage = useImageStore
+				.getState()
+				.siblingImagePaths.previous();
 
 			if (previousImage) {
 				const image = new Image();
@@ -18,11 +20,10 @@ export const imageKeybinds = [
 				image.onload = () => {
 					useImageStore.getState().setDefaultSrc(previousImage);
 					useImageStore.getState().setLoadedImage(image);
-				}
+				};
 			}
 		},
-		() => !useTerminalStore.getState().isTerminalInputFocused
-
+		() => !useTerminalStore.getState().isTerminalInputFocused,
 	),
 	new Keybind(
 		"image.next",
@@ -30,7 +31,7 @@ export const imageKeybinds = [
 		"ARROWRIGHT",
 		(isAllowed) => {
 			if (!isAllowed) return;
-			const nextImage = useImageStore.getState().siblingImagePaths.next()
+			const nextImage = useImageStore.getState().siblingImagePaths.next();
 
 			if (nextImage) {
 				const image = new Image();
@@ -38,10 +39,9 @@ export const imageKeybinds = [
 				image.onload = () => {
 					useImageStore.getState().setDefaultSrc(nextImage);
 					useImageStore.getState().setLoadedImage(image);
-				}
+				};
 			}
 		},
-		() => !useTerminalStore.getState().isTerminalInputFocused
-
+		() => !useTerminalStore.getState().isTerminalInputFocused,
 	),
 ];

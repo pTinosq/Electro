@@ -31,7 +31,8 @@ export const useTerminalStore = create<TerminalState>((set) => ({
 	addHistory: (entry) =>
 		set((state) => ({ history: [...state.history, entry] })),
 	setIsTerminalOpen: (isOpen) => set({ isTerminalOpen: isOpen }),
-	setIsTerminalInputFocused: (isFocused: boolean) => set({ isTerminalInputFocused: isFocused }),
+	setIsTerminalInputFocused: (isFocused: boolean) =>
+		set({ isTerminalInputFocused: isFocused }),
 	clearHistory: () => set(() => ({ history: [] })),
 	setCwd: async (cwd) => {
 		await invoke("change_cwd", { path: cwd });

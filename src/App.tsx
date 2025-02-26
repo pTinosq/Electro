@@ -32,8 +32,9 @@ interface ImageSourceEvent {
 }
 
 export default function App() {
-	const { loadedImage, setLoadedImage, setDefaultSrc, loadSiblingImagePaths } = useImageStore();
-	const { setCwd } = useTerminalStore()
+	const { loadedImage, setLoadedImage, setDefaultSrc, loadSiblingImagePaths } =
+		useImageStore();
+	const { setCwd } = useTerminalStore();
 	useEffect(() => {
 		// Load the default Electro image on mount
 		const loadImage = async (path: string) => {
@@ -69,7 +70,6 @@ export default function App() {
 
 			setDefaultSrc(filePath);
 			loadImage(convertFileSrc(filePath));
-
 		}).then(() => {
 			invoke("on_image_source_listener_ready");
 		});
