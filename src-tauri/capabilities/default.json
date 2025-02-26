@@ -8,6 +8,8 @@
   "permissions": [
     "core:default",
     "shell:allow-open",
-    "core:resources:default"
+    "core:resources:default",
+    "fs:read-all",
+    "fs:write-all"
   ]
 }
