@@ -10,6 +10,14 @@
     "shell:allow-open",
     "core:resources:default",
     "fs:read-all",
-    "fs:write-all"
+    "fs:write-all",
+    {
+      "identifier": "fs:scope",
+      "allow": [
+        {
+          "path": "*/**"
+        }
+      ]
+    }
   ]
 }

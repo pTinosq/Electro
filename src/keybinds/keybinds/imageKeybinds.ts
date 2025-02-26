@@ -1,4 +1,5 @@
-import { useTerminalStore } from "../../stores/useTerminalStore";
+import { convertFileSrc } from "@tauri-apps/api/core";
+import { useImageStore } from "../../stores/useImageStore";
 import Keybind from "../Keybind";
 
 export const imageKeybinds = [
@@ -7,7 +8,16 @@ export const imageKeybinds = [
 		"Previous image",
 		"ARROWLEFT",
 		() => {
-			console.log("Previous image");
+			const previousImage = useImageStore.getState().siblingImagePaths.previous()
+
+			if (previousImage) {
+				const image = new Image();
+				image.src = convertFileSrc(previousImage);
+				image.onload = () => {
+					useImageStore.getState().setDefaultSrc(previousImage);
+					useImageStore.getState().setLoadedImage(image);
+				}
+			}
 		},
 		() => {
 			return true;
@@ -18,7 +28,16 @@ export const imageKeybinds = [
 		"Next image",
 		"ARROWRIGHT",
 		() => {
-			console.log("Next image");
+			const nextImage = useImageStore.getState().siblingImagePaths.next()
+
+			if (nextImage) {
+				const image = new Image();
+				image.src = convertFileSrc(nextImage);
+				image.onload = () => {
+					useImageStore.getState().setDefaultSrc(nextImage);
+					useImageStore.getState().setLoadedImage(image);
+				}
+			}
 		},
 		() => {
 			return true;

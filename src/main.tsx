@@ -6,6 +6,23 @@ import { homeDir } from "@tauri-apps/api/path";
 import KeybindRegistry from "./keybinds/KeybindRegistry";
 import { normalizeFilePath } from "./utils/normalizeFilePaths";
 
+export const SUPPORTED_FILE_EXTENSIONS = [
+	"png",
+	"apng",
+	"avif",
+	"gif",
+	"jpg",
+	"jpeg",
+	"jfif",
+	"pjpeg",
+	"pjp",
+	"svg",
+	"webp",
+	"bmp",
+	"ico",
+	"cur",
+];
+
 // Load all CLI commands before rendering
 const commandRegistry = CommandRegistry.getInstance();
 commandRegistry.loadCommands();
