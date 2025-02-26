@@ -205,6 +205,4 @@ NoOwn:
   ${registerExtension} "$INSTDIR\electro.exe" ".bmp" "BMP_File"
   ${registerExtension} "$INSTDIR\electro.exe" ".ico" "ICO_File"
   ${registerExtension} "$INSTDIR\electro.exe" ".cur" "CUR_File"
-  ${registerExtension} "$INSTDIR\electro.exe" ".tif" "TIF_File"
-  ${registerExtension} "$INSTDIR\electro.exe" ".tiff" "TIFF_File"
 !macroend

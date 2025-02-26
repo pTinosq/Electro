@@ -32,8 +32,9 @@ interface ImageSourceEvent {
 }
 
 export default function App() {
-	const { loadedImage, setLoadedImage, setDefaultSrc } = useImageStore();
-
+	const { loadedImage, setLoadedImage, setDefaultSrc, loadSiblingImagePaths } =
+		useImageStore();
+	const { setCwd } = useTerminalStore();
 	useEffect(() => {
 		// Load the default Electro image on mount
 		const loadImage = async (path: string) => {
@@ -52,23 +53,27 @@ export default function App() {
 			const filePath = normalizeFilePath(dragDropEvent.payload.paths[0]);
 
 			const fileDirectory = filePath.split("/").slice(0, -1).join("/");
-			useTerminalStore.getState().setCwd(fileDirectory);
+			loadSiblingImagePaths(fileDirectory);
+			setCwd(fileDirectory);
 
 			setDefaultSrc(filePath);
-			loadImage(filePath);
+			loadImage(convertFileSrc(filePath));
 		});
 
 		// This listener is for when Electro is opened from the command line w/ an image path as the argument
 		listen("image-source", (event: ImageSourceEvent) => {
-			const filePath = event.payload.source.value;
+			const filePath = normalizeFilePath(event.payload.source.value);
 			if (!filePath) return;
 
+			const fileDirectory = filePath.split("/").slice(0, -1).join("/");
+			loadSiblingImagePaths(fileDirectory);
+
 			setDefaultSrc(filePath);
-			loadImage(filePath);
+			loadImage(convertFileSrc(filePath));
 		}).then(() => {
 			invoke("on_image_source_listener_ready");
 		});
-	}, [setDefaultSrc, setLoadedImage]);
+	}, [setDefaultSrc, setLoadedImage, setCwd, loadSiblingImagePaths]);
 
 	return (
 		<>

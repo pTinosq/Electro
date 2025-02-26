@@ -4,7 +4,7 @@ version = 4
 
 [[package]]
 name = "Electro"
-version = "0.5.1"
+version = "0.5.2"
 dependencies = [
  "chrono",
  "serde",
@@ -12,6 +12,7 @@ dependencies = [
  "tauri",
  "tauri-build",
  "tauri-plugin-cli",
+ "tauri-plugin-fs",
  "tauri-plugin-shell",
 ]
 
@@ -3440,6 +3441,29 @@ dependencies = [
  "tauri",
  "tauri-plugin",
  "thiserror 1.0.69",
+]
+
+[[package]]
+name = "tauri-plugin-fs"
+version = "2.2.0"
+source = "registry+https://github.com/rust-lang/crates.io-index"
+checksum = "a1a1edf18000f02903a7c2e5997fb89aca455ecbc0acc15c6535afbb883be223"
+dependencies = [
+ "anyhow",
+ "dunce",
+ "glob",
+ "percent-encoding",
+ "schemars",
+ "serde",
+ "serde_json",
+ "serde_repr",
+ "tauri",
+ "tauri-plugin",
+ "tauri-utils",
+ "thiserror 2.0.3",
+ "toml 0.8.2",
+ "url",
+ "uuid",
 ]
 
 [[package]]
