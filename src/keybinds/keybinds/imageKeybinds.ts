@@ -1,13 +1,15 @@
 import { convertFileSrc } from "@tauri-apps/api/core";
 import { useImageStore } from "../../stores/useImageStore";
 import Keybind from "../Keybind";
+import { useTerminalStore } from "../../stores/useTerminalStore";
 
 export const imageKeybinds = [
 	new Keybind(
 		"image.previous",
 		"Previous image",
 		"ARROWLEFT",
-		() => {
+		(isAllowed) => {
+			if (!isAllowed) return;
 			const previousImage = useImageStore.getState().siblingImagePaths.previous()
 
 			if (previousImage) {
@@ -19,15 +21,15 @@ export const imageKeybinds = [
 				}
 			}
 		},
-		() => {
-			return true;
-		},
+		() => !useTerminalStore.getState().isTerminalInputFocused
+
 	),
 	new Keybind(
 		"image.next",
 		"Next image",
 		"ARROWRIGHT",
-		() => {
+		(isAllowed) => {
+			if (!isAllowed) return;
 			const nextImage = useImageStore.getState().siblingImagePaths.next()
 
 			if (nextImage) {
@@ -39,8 +41,7 @@ export const imageKeybinds = [
 				}
 			}
 		},
-		() => {
-			return true;
-		},
+		() => !useTerminalStore.getState().isTerminalInputFocused
+
 	),
 ];

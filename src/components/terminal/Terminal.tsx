@@ -5,7 +5,7 @@ import CommandRegistry from "../../commands/CommandRegistry";
 import { parseCommandInput } from "../../utils/parseCommandInput";
 
 export default function Terminal() {
-	const { addHistory, history, isTerminalOpen, cwd } = useTerminalStore();
+	const { addHistory, history, isTerminalOpen, cwd, setIsTerminalInputFocused } = useTerminalStore();
 	const [_historyIndex, setHistoryIndex] = useState<number>(-1);
 	const inputRef = useRef<HTMLInputElement>(null);
 	const terminalHistoryRef = useRef<HTMLDivElement>(null);
@@ -138,6 +138,12 @@ export default function Terminal() {
 					autocorrect="off"
 					spellcheck={false}
 					onKeyDown={handleKeyDown}
+					onBlur={
+						() => setIsTerminalInputFocused(false)
+					}
+					onFocus={
+						() => setIsTerminalInputFocused(true)
+					}
 				/>
 			</div>
 		</div>
