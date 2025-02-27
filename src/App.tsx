@@ -38,9 +38,8 @@ export default function App() {
 	useEffect(() => {
 		// Load the default Electro image on mount
 		const loadImage = async (path: string) => {
-			const fileUrl = IS_DEV_MODE ? path : convertFileSrc(path);
 			const img = new Image();
-			img.src = fileUrl;
+			img.src = convertFileSrc(path);
 			img.onload = () => setLoadedImage(img);
 		};
 
@@ -57,7 +56,7 @@ export default function App() {
 			setCwd(fileDirectory);
 
 			setDefaultSrc(filePath);
-			loadImage(convertFileSrc(filePath));
+			loadImage(filePath);
 		});
 
 		// This listener is for when Electro is opened from the command line w/ an image path as the argument
@@ -69,7 +68,7 @@ export default function App() {
 			loadSiblingImagePaths(fileDirectory);
 
 			setDefaultSrc(filePath);
-			loadImage(convertFileSrc(filePath));
+			loadImage(filePath);
 		}).then(() => {
 			invoke("on_image_source_listener_ready");
 		});
