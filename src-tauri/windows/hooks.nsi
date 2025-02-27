@@ -189,20 +189,34 @@ NoOwn:
  
 !endif # !FileAssociation_INCLUDED
 
+Function PostInstallHook
+    MessageBox MB_YESNO "Set Electro as the default image viewer?" IDYES continue_installation IDNO skip_registration
+
+    continue_installation:
+    ; Register File Associations
+    ${RegisterExtension} "$INSTDIR\electro.exe" ".png" "PNG_File"
+    ${RegisterExtension} "$INSTDIR\electro.exe" ".apng" "APNG_File"
+    ${RegisterExtension} "$INSTDIR\electro.exe" ".avif" "AVIF_File"
+    ${RegisterExtension} "$INSTDIR\electro.exe" ".gif" "GIF_File"
+    ${RegisterExtension} "$INSTDIR\electro.exe" ".jpg" "JPG_File"
+    ${RegisterExtension} "$INSTDIR\electro.exe" ".jpeg" "JPEG_File"
+    ${RegisterExtension} "$INSTDIR\electro.exe" ".jfif" "JFIF_File"
+    ${RegisterExtension} "$INSTDIR\electro.exe" ".pjpeg" "PJPEG_File"
+    ${RegisterExtension} "$INSTDIR\electro.exe" ".pjp" "PJP_File"
+    ${RegisterExtension} "$INSTDIR\electro.exe" ".svg" "SVG_File"
+    ${RegisterExtension} "$INSTDIR\electro.exe" ".webp" "WEBP_File"
+    ${RegisterExtension} "$INSTDIR\electro.exe" ".bmp" "BMP_File"
+    ${RegisterExtension} "$INSTDIR\electro.exe" ".ico" "ICO_File"
+    ${RegisterExtension} "$INSTDIR\electro.exe" ".cur" "CUR_File"
+
+    Goto end_messagebox
+
+    skip_registration:
+    DetailPrint "Skipping file association registration."
+
+    end_messagebox:
+FunctionEnd
+
 !macro NSIS_HOOK_POSTINSTALL
-  ; https://developer.mozilla.org/en-US/docs/Web/Media/Guides/Formats/Image_types
-  ${registerExtension} "$INSTDIR\electro.exe" ".png" "PNG_File"
-  ${registerExtension} "$INSTDIR\electro.exe" ".apng" "APNG_File"
-  ${registerExtension} "$INSTDIR\electro.exe" ".avif" "AVIF_File"
-  ${registerExtension} "$INSTDIR\electro.exe" ".gif" "GIF_File"
-  ${registerExtension} "$INSTDIR\electro.exe" ".jpg" "JPG_File"
-  ${registerExtension} "$INSTDIR\electro.exe" ".jpeg" "JPEG_File"
-  ${registerExtension} "$INSTDIR\electro.exe" ".jfif" "JFIF_File"
-  ${registerExtension} "$INSTDIR\electro.exe" ".pjpeg" "PJPEG_File"
-  ${registerExtension} "$INSTDIR\electro.exe" ".pjp" "PJP_File"
-  ${registerExtension} "$INSTDIR\electro.exe" ".svg" "SVG_File"
-  ${registerExtension} "$INSTDIR\electro.exe" ".webp" "WEBP_File"
-  ${registerExtension} "$INSTDIR\electro.exe" ".bmp" "BMP_File"
-  ${registerExtension} "$INSTDIR\electro.exe" ".ico" "ICO_File"
-  ${registerExtension} "$INSTDIR\electro.exe" ".cur" "CUR_File"
+    Call PostInstallHook
 !macroend
