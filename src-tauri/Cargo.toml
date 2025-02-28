@@ -1,6 +1,6 @@
 [package]
 name = "Electro"
-version = "0.5.2"
+version = "0.6.3"
 description = "A lightweight & blazingly-fast image viewer with a built-in terminal"
 authors = ["pTinosq"]
 edition = "2021"
@@ -23,6 +23,7 @@ tauri-plugin-shell = "2"
 serde = { version = "1", features = ["derive"] }
 serde_json = "1"
 chrono = "0.4.38"
+tauri-plugin-fs = "2"
 
 [target.'cfg(not(any(target_os = "android", target_os = "ios")))'.dependencies]
 tauri-plugin-cli = "2"

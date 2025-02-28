@@ -1,10 +1,14 @@
 import type Keybind from "./Keybind";
+import { imageKeybinds } from "./keybinds/imageKeybinds";
 import { terminalKeybinds } from "./keybinds/terminalKeybinds";
 
 export default class KeybindRegistry {
 	private static instance: KeybindRegistry;
 	private keybinds: Map<string, Keybind>;
-	public static allKeybinds: Keybind[] = [...terminalKeybinds];
+	public static allKeybinds: Keybind[] = [
+		...terminalKeybinds,
+		...imageKeybinds,
+	];
 
 	private constructor() {
 		this.keybinds = new Map();

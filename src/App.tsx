@@ -8,9 +8,9 @@ import "./styles/global.css";
 import Terminal from "./components/terminal/Terminal";
 import { useTerminalStore } from "./stores/useTerminalStore";
 import { normalizeFilePath } from "./utils/normalizeFilePaths";
-
-const DEFAULT_IMAGE_PATH = "assets/electro-default.jpg";
+import { resolveResource } from '@tauri-apps/api/path';
 const DEV_DEFAULT_IMAGE_PATH = "/src/assets/electro-default.jpg";
+const DEFAULT_IMAGE_PATH = "assets/electro-default.jpg";
 const IS_DEV_MODE = import.meta.env.DEV;
 
 interface DragDropEvent {
@@ -32,19 +32,27 @@ interface ImageSourceEvent {
 }
 
 export default function App() {
-	const { loadedImage, setLoadedImage, setDefaultSrc } = useImageStore();
-
+	const { loadedImage, setLoadedImage, setDefaultSrc, loadSiblingImagePaths } =
+		useImageStore();
+	const { setCwd } = useTerminalStore();
 	useEffect(() => {
 		// Load the default Electro image on mount
 		const loadImage = async (path: string) => {
-			const fileUrl = IS_DEV_MODE ? path : convertFileSrc(path);
 			const img = new Image();
-			img.src = fileUrl;
-			img.onload = () => setLoadedImage(img);
+			img.src = path;
+			img.onload = () => {
+				setLoadedImage(img)
+			};
 		};
 
 		// Load the default image
-		loadImage(IS_DEV_MODE ? DEV_DEFAULT_IMAGE_PATH : DEFAULT_IMAGE_PATH);
+		if (IS_DEV_MODE) {
+			loadImage(DEV_DEFAULT_IMAGE_PATH);
+		} else {
+			resolveResource(DEFAULT_IMAGE_PATH).then((path) => {
+				loadImage(convertFileSrc(path));
+			});
+		}
 
 		// Start up the drag-drop listener
 		listen("tauri://drag-drop", (event) => {
@@ -52,23 +60,27 @@ export default function App() {
 			const filePath = normalizeFilePath(dragDropEvent.payload.paths[0]);
 
 			const fileDirectory = filePath.split("/").slice(0, -1).join("/");
-			useTerminalStore.getState().setCwd(fileDirectory);
+			loadSiblingImagePaths(fileDirectory);
+			setCwd(fileDirectory);
 
 			setDefaultSrc(filePath);
-			loadImage(filePath);
+			loadImage(convertFileSrc(filePath));
 		});
 
 		// This listener is for when Electro is opened from the command line w/ an image path as the argument
 		listen("image-source", (event: ImageSourceEvent) => {
-			const filePath = event.payload.source.value;
+			const filePath = normalizeFilePath(event.payload.source.value);
 			if (!filePath) return;
 
+			const fileDirectory = filePath.split("/").slice(0, -1).join("/");
+			loadSiblingImagePaths(fileDirectory);
+
 			setDefaultSrc(filePath);
-			loadImage(filePath);
+			loadImage(convertFileSrc(filePath));
 		}).then(() => {
 			invoke("on_image_source_listener_ready");
 		});
-	}, [setDefaultSrc, setLoadedImage]);
+	}, [setDefaultSrc, setLoadedImage, setCwd, loadSiblingImagePaths]);
 
 	return (
 		<>

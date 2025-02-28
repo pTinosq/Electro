@@ -52,6 +52,10 @@ export const imageCommands = [
 					useImageStore.getState().setLoadedImage(image);
 					if (!isRemote) {
 						// Set the current working directory to the directory of the loaded file
+						const cwd = normalizedFilePath.split("/").slice(0, -1).join("/");
+
+						useImageStore.getState().loadSiblingImagePaths(cwd);
+
 						useTerminalStore
 							.getState()
 							.setCwd(normalizedFilePath.split("/").slice(0, -1).join("/"));
