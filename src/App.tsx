@@ -8,9 +8,9 @@ import "./styles/global.css";
 import Terminal from "./components/terminal/Terminal";
 import { useTerminalStore } from "./stores/useTerminalStore";
 import { normalizeFilePath } from "./utils/normalizeFilePaths";
-
-const DEFAULT_IMAGE_PATH = "assets/electro-default.jpg";
+import { resolveResource } from '@tauri-apps/api/path';
 const DEV_DEFAULT_IMAGE_PATH = "/src/assets/electro-default.jpg";
+const DEFAULT_IMAGE_PATH = "assets/electro-default.jpg";
 const IS_DEV_MODE = import.meta.env.DEV;
 
 interface DragDropEvent {
@@ -39,12 +39,20 @@ export default function App() {
 		// Load the default Electro image on mount
 		const loadImage = async (path: string) => {
 			const img = new Image();
-			img.src = convertFileSrc(path);
-			img.onload = () => setLoadedImage(img);
+			img.src = path;
+			img.onload = () => {
+				setLoadedImage(img)
+			};
 		};
 
 		// Load the default image
-		loadImage(IS_DEV_MODE ? DEV_DEFAULT_IMAGE_PATH : DEFAULT_IMAGE_PATH);
+		if (IS_DEV_MODE) {
+			loadImage(DEV_DEFAULT_IMAGE_PATH);
+		} else {
+			resolveResource(DEFAULT_IMAGE_PATH).then((path) => {
+				loadImage(convertFileSrc(path));
+			});
+		}
 
 		// Start up the drag-drop listener
 		listen("tauri://drag-drop", (event) => {
@@ -56,7 +64,7 @@ export default function App() {
 			setCwd(fileDirectory);
 
 			setDefaultSrc(filePath);
-			loadImage(filePath);
+			loadImage(convertFileSrc(filePath));
 		});
 
 		// This listener is for when Electro is opened from the command line w/ an image path as the argument
@@ -68,7 +76,7 @@ export default function App() {
 			loadSiblingImagePaths(fileDirectory);
 
 			setDefaultSrc(filePath);
-			loadImage(filePath);
+			loadImage(convertFileSrc(filePath));
 		}).then(() => {
 			invoke("on_image_source_listener_ready");
 		});
