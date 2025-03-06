@@ -11,7 +11,7 @@
     "format": "biome format --write ./src",
     "lint": "biome lint ./src",
     "vb": "node utils/vb.js",
-    "build:macos": "tauri build -- --bundles app"
+    "build:macos": "tauri build --bundles app"
   },
   "dependencies": {
     "@reduxjs/toolkit": "^2.5.0",

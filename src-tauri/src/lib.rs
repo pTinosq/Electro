@@ -1,6 +1,7 @@
 use std::env;
 use std::fs;
 use std::path::{Path, PathBuf};
+use std::sync::Arc;
 use std::sync::Mutex;
 use tauri::{AppHandle, Emitter, Manager};
 
@@ -10,7 +11,7 @@ This file should definitely be abstracted into separate modules but it works for
 
 #[derive(Default)]
 struct AppState {
-    opened_image_source: Mutex<String>,
+    opened_image_sources: Arc<Mutex<Vec<String>>>,
 }
 
 #[tauri::command]
@@ -39,11 +40,15 @@ fn on_image_source_listener_ready(app: AppHandle) {
     #[cfg(target_os = "macos")]
     {
         let state = app.state::<AppState>();
-        let opened_image_source = state.opened_image_source.lock().unwrap();
-        // remove the `file://` prefix
-        let formatted_source = opened_image_source.replace("file://", "");
+        let opened_image_sources = state.opened_image_sources.lock().unwrap();
 
-        app.emit("image-source", formatted_source)
+        // Remove `file://` prefix from all URLs
+        let formatted_sources: Vec<String> = opened_image_sources
+            .iter()
+            .map(|url| url.replace("file://", ""))
+            .collect();
+
+        app.emit("image-source", formatted_sources)
             .unwrap_or_else(|err| eprintln!("Emit error: {:?}", err));
     }
 }
@@ -170,12 +175,8 @@ pub fn run() {
             // MacOS specific event listener for when the app is opened with an image
             if let tauri::RunEvent::Opened { urls } = event {
                 let state = app.state::<AppState>();
-                let mut opened_image_source = state.opened_image_source.lock().unwrap();
-                *opened_image_source = urls
-                    .iter()
-                    .map(|x| x.to_string())
-                    .collect::<Vec<String>>()
-                    .join(", ");
+                let mut opened_image_sources = state.opened_image_sources.lock().unwrap();
+                *opened_image_sources = urls.iter().map(|x| x.to_string()).collect();
             }
         });
 }

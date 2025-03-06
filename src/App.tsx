@@ -28,7 +28,7 @@ interface ImageSourceEvent {
 		source: {
 			value: string;
 		};
-	} | string;
+	} | string[];
 }
 
 export default function App() {
@@ -69,9 +69,10 @@ export default function App() {
 
 		// This listener is for when Electro is opened from the command line w/ an image path as the argument
 		listen("image-source", (event: ImageSourceEvent) => {
+			console.log(event)
 			let filePath: string;
-			if (typeof event.payload === "string") {
-				filePath = normalizeFilePath(event.payload);
+			if (Array.isArray(event.payload)) {
+				filePath = normalizeFilePath(event.payload[0]);
 			}
 			else {
 				filePath = normalizeFilePath(event.payload.source.value);
