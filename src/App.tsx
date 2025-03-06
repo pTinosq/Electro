@@ -8,7 +8,7 @@ import "./styles/global.css";
 import Terminal from "./components/terminal/Terminal";
 import { useTerminalStore } from "./stores/useTerminalStore";
 import { normalizeFilePath } from "./utils/normalizeFilePaths";
-import { resolveResource } from '@tauri-apps/api/path';
+import { resolveResource } from "@tauri-apps/api/path";
 const DEV_DEFAULT_IMAGE_PATH = "/src/assets/electro-default.jpg";
 const DEFAULT_IMAGE_PATH = "assets/electro-default.jpg";
 const IS_DEV_MODE = import.meta.env.DEV;
@@ -24,11 +24,13 @@ interface DragDropEvent {
 }
 
 interface ImageSourceEvent {
-	payload: {
-		source: {
-			value: string;
-		};
-	} | string[];
+	payload:
+		| {
+				source: {
+					value: string;
+				};
+		  }
+		| string[];
 }
 
 export default function App() {
@@ -41,7 +43,7 @@ export default function App() {
 			const img = new Image();
 			img.src = path;
 			img.onload = () => {
-				setLoadedImage(img)
+				setLoadedImage(img);
 			};
 		};
 
@@ -69,12 +71,12 @@ export default function App() {
 
 		// This listener is for when Electro is opened from the command line w/ an image path as the argument
 		listen("image-source", (event: ImageSourceEvent) => {
-			console.log(event)
 			let filePath: string;
 			if (Array.isArray(event.payload)) {
+				const payload = event.payload;
+				if (payload.length === 0) return;
 				filePath = normalizeFilePath(event.payload[0]);
-			}
-			else {
+			} else {
 				filePath = normalizeFilePath(event.payload.source.value);
 			}
 			if (!filePath) return;
