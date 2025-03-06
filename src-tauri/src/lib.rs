@@ -1,11 +1,17 @@
 use std::env;
 use std::fs;
 use std::path::{Path, PathBuf};
-use tauri::{AppHandle, Emitter};
-use tauri_plugin_cli::CliExt;
+use std::sync::Mutex;
+use tauri::{AppHandle, Emitter, Manager};
+
 /*
 This file should definitely be abstracted into separate modules but it works for now so I'm leaving it as is.
 */
+
+#[derive(Default)]
+struct AppState {
+    opened_image_source: Mutex<String>,
+}
 
 #[tauri::command]
 fn get_version() -> String {
@@ -16,15 +22,29 @@ fn get_version() -> String {
 // Here we will parse the CLI arguments and emit them to the frontend
 #[tauri::command]
 fn on_image_source_listener_ready(app: AppHandle) {
-    match app.cli().matches() {
-        Ok(matches) => {
-            app.emit("image-source", &matches.args)
-                .unwrap_or_else(|err| eprintln!("Emit error: {:?}", err));
-        }
+    #[cfg(target_os = "windows")]
+    {
+        match app.cli().matches() {
+            Ok(matches) => {
+                app.emit("image-source", &matches.args)
+                    .unwrap_or_else(|err| eprintln!("Emit error: {:?}", err));
+            }
 
-        Err(_) => {
-            eprintln!("Error while parsing CLI arguments");
+            Err(_) => {
+                eprintln!("Error while parsing CLI arguments");
+            }
         }
+    }
+
+    #[cfg(target_os = "macos")]
+    {
+        let state = app.state::<AppState>();
+        let opened_image_source = state.opened_image_source.lock().unwrap();
+        // remove the `file://` prefix
+        let formatted_source = opened_image_source.replace("file://", "");
+
+        app.emit("image-source", formatted_source)
+            .unwrap_or_else(|err| eprintln!("Emit error: {:?}", err));
     }
 }
 
@@ -126,10 +146,12 @@ fn list_directory(path: String) -> Result<Vec<String>, String> {
     Ok(files_and_dirs)
 }
 
-// Main entry point
 #[cfg_attr(mobile, tauri::mobile_entry_point)]
 pub fn run() {
+    let app_state = AppState::default();
+
     tauri::Builder::default()
+        .manage(app_state)
         .plugin(tauri_plugin_fs::init())
         .plugin(tauri_plugin_shell::init())
         .plugin(tauri_plugin_cli::init())
@@ -142,6 +164,18 @@ pub fn run() {
             list_directory,
             get_version
         ])
-        .run(tauri::generate_context!())
-        .expect("error while running tauri application");
+        .build(tauri::generate_context!())
+        .expect("error while running tauri application")
+        .run(|app, event| {
+            // MacOS specific event listener for when the app is opened with an image
+            if let tauri::RunEvent::Opened { urls } = event {
+                let state = app.state::<AppState>();
+                let mut opened_image_source = state.opened_image_source.lock().unwrap();
+                *opened_image_source = urls
+                    .iter()
+                    .map(|x| x.to_string())
+                    .collect::<Vec<String>>()
+                    .join(", ");
+            }
+        });
 }

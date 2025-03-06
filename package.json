@@ -1,7 +1,7 @@
 {
   "name": "Electro",
   "private": true,
-  "version": "0.6.3",
+  "version": "0.7.0",
   "type": "module",
   "scripts": {
     "dev": "vite",
@@ -10,7 +10,8 @@
     "tauri": "tauri",
     "format": "biome format --write ./src",
     "lint": "biome lint ./src",
-    "vb": "node utils/vb.js"
+    "vb": "node utils/vb.js",
+    "build:macos": "tauri build -- --bundles app"
   },
   "dependencies": {
     "@reduxjs/toolkit": "^2.5.0",
