@@ -3,7 +3,11 @@ use std::fs;
 use std::path::{Path, PathBuf};
 use std::sync::Arc;
 use std::sync::Mutex;
-use tauri::{AppHandle, Emitter, Manager};
+use tauri::{AppHandle, Emitter};
+#[cfg(target_os = "macos")]
+use tauri::Manager;
+
+use tauri_plugin_cli::CliExt;
 
 /*
 This file should definitely be abstracted into separate modules but it works for now so I'm leaving it as is.
@@ -173,10 +177,13 @@ pub fn run() {
         .expect("error while running tauri application")
         .run(|app, event| {
             // MacOS specific event listener for when the app is opened with an image
-            if let tauri::RunEvent::Opened { urls } = event {
-                let state = app.state::<AppState>();
-                let mut opened_image_sources = state.opened_image_sources.lock().unwrap();
-                *opened_image_sources = urls.iter().map(|x| x.to_string()).collect();
+            #[cfg(target_os = "macos")]
+            {
+                if let tauri::RunEvent::Opened { urls } = event {
+                    let state = app.state::<AppState>();
+                    let mut opened_image_sources = state.opened_image_sources.lock().unwrap();
+                    *opened_image_sources = urls.iter().map(|x| x.to_string()).collect();
+                }
             }
         });
 }
