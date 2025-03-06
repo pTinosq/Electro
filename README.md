@@ -84,3 +84,14 @@ Developers might find the following information useful:
 ## License
 
 Electro is licensed under the GPL-3.0 license. See the [LICENSE](./LICENSE) file for more information.
+
+## Get in touch
+
+## Get in Touch
+
+Have questions, feedback, or just want to connect? Reach out through the following channels:
+
+- 💬 **Join the discussion** on [GitHub Discussions](https://github.com/pTinosq/Electro/discussions)  
+- 🐦 **Follow updates** on [X (Twitter)](https://x.com/pTinosq)  
+
+We'd love to hear your thoughts and ideas on Electro! 🚀
