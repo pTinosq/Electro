@@ -43,6 +43,27 @@ const updateTomlFile = (filePath, updater) => {
   }
 }
 
+const updateInfoPlist = (filePath, newVersion) => {
+  try {
+    let plist = readFileSync(filePath, "utf8");
+
+    const plist_bundle_version = plist.replace(
+      /(<key>CFBundleVersion<\/key>\s*<string>)([^<]+)(<\/string>\s*<key>[^<]+<\/key>)/,
+      `$1${newVersion}$3`
+    );
+
+    const plist_short_version = plist_bundle_version.replace(
+      /(<key>CFBundleShortVersionString<\/key>\s*<string>)([^<]+)(<\/string>)/,
+      `$1${newVersion}$3`
+    );
+
+    writeFileSync(filePath, plist_short_version, "utf8");
+    console.log(`Updated ${filePath}`);
+  } catch (error) {
+    console.error(`Error updating ${filePath}:`, error);
+  }
+};
+
 (async () => {
   const newVersion = await askVersion();
   rl.close();
@@ -62,6 +83,7 @@ const updateTomlFile = (filePath, updater) => {
     return toml.replace(/version = "\d+\.\d+\.\d+"/, `version = "${newVersion
       }"`);
   });
+  updateInfoPlist("./src-tauri/info.plist", newVersion);
 
   console.log(`Version updated to ${newVersion}`);
 })();
