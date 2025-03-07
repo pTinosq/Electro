@@ -1,7 +1,7 @@
 {
   "$schema": "https://schema.tauri.app/config/2",
   "productName": "Electro",
-  "version": "0.7.1",
+  "version": "0.6.3",
   "identifier": "com.pTinosq.electro",
   "build": {
     "beforeDevCommand": "npm run dev",
