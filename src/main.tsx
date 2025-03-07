@@ -4,7 +4,7 @@ import CommandRegistry from "./commands/CommandRegistry";
 import { useTerminalStore } from "./stores/useTerminalStore";
 import { homeDir } from "@tauri-apps/api/path";
 import KeybindRegistry from "./keybinds/KeybindRegistry";
-import { normalizeFilePath } from "./utils/normalizeFilePaths";
+import { normalizeFilePath } from "./utils/pathUtils";
 
 export const SUPPORTED_FILE_EXTENSIONS = [
 	"png",
@@ -34,8 +34,9 @@ keybindRegistry.registerListener();
 
 // Set CWD
 homeDir().then((homeDir) => {
-	const normalziedHomeDir = normalizeFilePath(homeDir);
-	useTerminalStore.getState().setCwd(normalziedHomeDir);
+	normalizeFilePath(homeDir).then((normalziedHomeDir) => {
+		useTerminalStore.getState().setCwd(normalziedHomeDir);
+	});
 });
 
 render(<App />, document.getElementById("app") as HTMLElement);

@@ -2,7 +2,7 @@ import CLICommand from "../../../commands/CLICommand";
 import { invoke } from "@tauri-apps/api/core";
 import { useTerminalStore } from "../../../stores/useTerminalStore";
 import CLICommandCategory from "../../../commands/CLICommandCategory";
-import { normalizeFilePath } from "../../../utils/normalizeFilePaths";
+import { normalizeFilePath } from "../../../utils/pathUtils";
 
 export const terminalCommands = [
 	new CLICommand(
@@ -63,8 +63,9 @@ export const terminalCommands = [
 
 			try {
 				const newPath = (await invoke("change_cwd", { path })) as string;
-				const normalizedNewPath = normalizeFilePath(newPath);
-				store.setCwd(normalizedNewPath);
+				normalizeFilePath(newPath).then((normalizedNewPath) => {
+					store.setCwd(normalizedNewPath);
+				});
 			} catch (error) {
 				store.addHistory({
 					type: "output",
