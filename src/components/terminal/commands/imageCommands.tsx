@@ -3,7 +3,8 @@ import { useTerminalStore } from "../../../stores/useTerminalStore";
 import { convertFileSrc } from "@tauri-apps/api/core";
 import { useImageStore } from "../../../stores/useImageStore";
 import CLICommandCategory from "../../../commands/CLICommandCategory";
-import { normalizeFilePath } from "../../../utils/normalizeFilePaths";
+import { normalizeFilePath, resolvePath } from "../../../utils/pathUtils";
+import { homeDir, isAbsolute } from "@tauri-apps/api/path"; // For user home directory
 
 export const imageCommands = [
 	new CLICommand(
@@ -20,71 +21,70 @@ export const imageCommands = [
 				return;
 			}
 
+			const imageStore = useImageStore.getState();
+			const terminalStore = useTerminalStore.getState();
+
 			try {
-				// Determine if the path is a URL or local file
+				// Check if the path is remote (URL)
 				const isRemote =
 					filePath.startsWith("http://") || filePath.startsWith("https://");
 
-				// Normalize the file path
-				let normalizedFilePath: string;
+				let resolvedFilePath: string;
+
 				if (isRemote) {
-					normalizedFilePath = filePath;
+					resolvedFilePath = filePath;
 				} else {
-					normalizedFilePath = normalizeFilePath(filePath);
+					const cwd = terminalStore.cwd;
+					const absolute = await isAbsolute(filePath);
+
+					resolvedFilePath = absolute
+						? await normalizeFilePath(filePath)
+						: await resolvePath(cwd, filePath); // Resolve relative paths
 				}
 
+				// Create the image element and set the source
 				const image = new Image();
-
-				if (isRemote) {
-					image.src = normalizedFilePath;
-				} else {
-					image.src = convertFileSrc(normalizedFilePath);
-				}
+				image.src = isRemote
+					? resolvedFilePath
+					: convertFileSrc(resolvedFilePath);
 
 				image.onload = async () => {
-					useImageStore.getState().setDefaultSrc(normalizedFilePath);
+					if (!isRemote) {
+						const fileDirectory = resolvedFilePath
+							.split("/")
+							.slice(0, -1)
+							.join("/");
+						imageStore.loadSiblingImagePaths(fileDirectory);
+						terminalStore.setCwd(fileDirectory);
+					} else {
+						// Set CWD to user's home directory for remote images
+						terminalStore.setCwd(await homeDir());
+					}
 
-					useTerminalStore.getState().addHistory({
+					imageStore.setDefaultSrc(resolvedFilePath);
+
+					terminalStore.addHistory({
 						type: "output",
-						value: `Image loaded from '${normalizedFilePath}'`,
+						value: `Image loaded from '${resolvedFilePath}'`,
 						variant: "success",
 					});
-					useImageStore.getState().setLoadedImage(image);
-					if (!isRemote) {
-						// Set the current working directory to the directory of the loaded file
-						const cwd = normalizedFilePath.split("/").slice(0, -1).join("/");
-
-						useImageStore.getState().loadSiblingImagePaths(cwd);
-
-						useTerminalStore
-							.getState()
-							.setCwd(normalizedFilePath.split("/").slice(0, -1).join("/"));
-					}
+					imageStore.setLoadedImage(image);
 				};
 
 				image.onerror = () => {
-					useTerminalStore.getState().addHistory({
+					terminalStore.addHistory({
 						type: "output",
-						value: `Error loading image from '${normalizedFilePath}'`,
+						value: `Error loading image from '${resolvedFilePath}'`,
 						variant: "error",
 					});
 				};
 			} catch (error) {
-				if (error instanceof Error) {
-					useTerminalStore.getState().addHistory({
-						type: "output",
-						value: `Error loading image: ${error.message}`,
-						variant: "error",
-					});
-					console.error("Error loading image:", error);
-				} else {
-					useTerminalStore.getState().addHistory({
-						type: "output",
-						value: "Error loading image: Unknown error",
-						variant: "error",
-					});
-					console.error("Error loading image: Unknown error", error);
-				}
+				terminalStore.addHistory({
+					type: "output",
+					value: `Error loading image: ${error instanceof Error ? error.message : "Unknown error"}`,
+					variant: "error",
+				});
+				console.error("Error loading image:", error);
 			}
 		},
 		() => true,
