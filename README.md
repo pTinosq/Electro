@@ -4,83 +4,30 @@
 
 # Electro - A lightweight & blazingly-fast image viewer
 
-![GitHub release](https://img.shields.io/github/v/release/pTinosq/Electro)
-![GitHub release date](https://img.shields.io/github/release-date/pTinosq/Electro)
-![GitHub last commit](https://img.shields.io/github/last-commit/pTinosq/Electro)
-![GitHub issues](https://img.shields.io/github/issues/pTinosq/Electro)
-![GitHub pull requests](https://img.shields.io/github/issues-pr/pTinosq/Electro)
+Electro is no longer maintained and has been archived as of 29/06/2025.
 
+## Why is Electro being archived?
 
-## Features
+The primary goal of Electro was to build an image viewer which aligns with the following two core principles:
+1. Be as fast as you can be
+2. Be free and open source. Forever.
 
-### 👀 Overview
+I spent months experimenting with different languages - Go, C++, C#, Rust, TypeScript - chasing performance gains and refining things down to the millisecond. After three months of building in private, I realised I should probably find out whether anyone actually wanted what I was making. So I pushed myself to strip things back, build a super minimal version of Electro, and just release it.
 
-| Feature                                     | Electro | Default Image Viewer |
-| ------------------------------------------- | ------- | -------------------- |
-| ⚡ Ultra-fast performance                    | ✅       | ❌                    |
-| 🧑‍💻 Developer-first experience                | ✅       | ❌                    |
-| 🚀 Built-in command terminal                 | ✅       | ❌                    |
-| 🌍 Open-source                               | ✅       | ❌ (probably)         |
-| ⛓️‍💥 View local & web-hosted images instantly | ✅       | ❌                    |
+To my surprise, the response was immediate. Within days, hundreds of people across the world were using Electro, sharing kind words, mentioning issues, and contributing feedback. That support meant the world to me, and it gave me the motivation to dive deeper into GPU rendering, Rust internals, and low-level image processing.
 
-### ⚡ Ultra-fast performance
+Then finals arrived. I had to put everything on hold. Every waking hour went into my final university project or prepping for exams. I told myself I'd return to Electro once things settled down. Exams ended, and I found myself with one month of freedom before starting a new job. I knew it was going to be intense, so instead of burning that time on a side project, I chose to travel, spend time with friends, and enjoy the last chapter of uni life. No regrets :)
 
-Electro is built with Rust, and designed with sheer performance in mind. Everything is designed to be as fast as possible, so you can view images without any loading times or lag.
+Fast forward to now - I've started work, my days are completely packed, and I've had to accept that keeping Electro alive just isn't feasible right now. I told myself that I would pick it back up on weekends, but today, as I sat down to revisit the codebase, I came across [this Reddit post](https://www.reddit.com/r/rust/comments/1jhecge/i_built_a_gpuaccelerated_image_viewer_with_iced/) by [ggand0](https://github.com/ggand0). Three months ago, right around the time I paused development, he released ViewSkater - a GPU-accelerated image viewer that is blazingly fast, cross-platform, free, and open source.
 
-### 🧑‍💻 Developer-first experience
+In short, it's everything I wanted Electro to be.
 
-Built by developers for developers; Electro is extremely lightweight, fast, and has a terminal built-in!
+Rather than trying to compete or one-up an already incredible project, I'd rather acknowledge great work when I see it and point Electro's users in the right direction. [ViewSkater](https://viewskater.com/) is the real deal, and I'm genuinely happy to see someone else push this vision further than I had the chance to.
 
-### 🚀 Built-in command terminal
+Thanks to everyone who supported Electro. It was a blast while it lasted. ViewSkater to the moon! 🚀🚀🚀
 
-Electro includes a custom built-in terminal with custom commands to ensure 10x productivity. (Press `t` to open the terminal!)
+## So what's next?
 
-### 🌍 Open-source
+Well, ideally the company I work for exits, I become a trillionaire, and I donate all my money to [Battersea Dogs and Cats Home](https://www.battersea.org.uk/). I'm kidding (or am I?).
+There's nothing planned for Electro, but if you're looking for a blazing-fast image viewer to use or contribute to, head over to [ViewSkater's repo](https://github.com/ggand0/viewskater/). It deserves your attention.
 
-Electro is open-source, and will always be open-source. You can view the source code, contribute, and even build your own version of Electro!
-
-### ⛓️‍💥 View local & web-hosted images instantly
-
-No need to download images to view them! Electro supports loading images from the web, so you can view them without needing to download anything.
-
-## Installation
-
-1. Download the latest release from the [releases page](https://github.com/pTinosq/Electro/releases)
-2. Run the installer
-3. That's it! You're ready to go - just open an image with Electro!
-
-## Getting Started
-
-When running the installer, Electro should automatically set itself as the default image viewer. Open an image with Electro to get started!
-
-The most helpful keybind of all is `t`, which opens the terminal. From there, you can begin exploring the terminal commands with `help`.
-
-## Screenshots
-
-ℹ️ **Screenshots may not reflect the latest version.**  
-⚠️ **GIFs do not capture Electro's full performance - expect even smoother results in real use.**
-
-![Electro Terminal Help Screenshot](./.github/README_content/electro_terminal_help.png)
-![Electro Example GIF](./.github/README_content/electro_example.gif)
-
-## Contributing
-
-Want to improve Electro? Contributions are welcome!
-
-- **Report bugs** or suggest features on the [issues page](https://github.com/pTinosq/Electro/issues).
-- **Submit a pull request** with your improvements.
-
-Developers might find the following information useful:
-
-| Tech stack         | Technology        |
-| ------------------ | ----------------- |
-| Frontend framework | Preact (ts)       |
-| Backend framework  | Tauri v2.0 (Rust) |
-| Package manager    | npm               |
-| State management   | Zustand           |
-| Styling            | Vanilla CSS       |
-
-
-## License
-
-Electro is licensed under the GPL-3.0 license. See the [LICENSE](./LICENSE) file for more information.
